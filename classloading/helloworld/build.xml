@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<project name="com.kylin.msc.helloworld" default="deploy" basedir="."> 
+    <property name="build.home" value="${basedir}/build" />
+    <property name="resource.dir" value="${basedir}/resources" />
+    <property name="target.dir" value="${basedir}/target" />
+    <property name="dependency.dir" value="${basedir}/target/dependency" />
+    <property file="${basedir}/build.properties"/>
+    <property name="build.dir" value="${build.home}/${build.profile}" />
+
+    <target name="validateproperties" >
+        <echo>build parameter output</echo>
+        <echo>build.home: ${build.home}</echo>
+	<echo>build.dir: ${build.dir}</echo>
+    </target> 
+
+    <target name="clean" depends="validateproperties">
+        <delete dir="${build.home}" />
+    </target>
+
+    <target name="prepare" depends="clean">
+        <mkdir dir="${build.dir}" />
+    </target> 
+
+    <target name="deploy" depends="prepare">
+        
+	<copy todir="${build.dir}" >
+	    <fileset dir="${dependency.dir}" includes="jboss-modules-1.1.2.GA.jar"/>
+	</copy>	
+
+        <mkdir dir="${build.dir}/modules" />
+	<mkdir dir="${build.dir}/bin" />
+
+	<copy todir="${build.dir}/modules" >
+            <fileset dir="${resource.dir}/modules" includes="**"/>
+        </copy>
+
+	<copy todir="${build.dir}/modules/com/kylin/msc/helloworld/main" >
+            <fileset dir="${target.dir}" includes="msc-helloworld.jar"/>
+        </copy>	
+
+    </target>
+</project> 
