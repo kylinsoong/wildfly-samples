@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="com.kylin.msc.helloworld" default="deploy" basedir="."> 
+<project name="org.jboss.modules.quickstart" default="deploy" basedir="."> 
     <property name="build.home" value="${basedir}/build" />
     <property name="resource.dir" value="${basedir}/resources" />
     <property name="target.dir" value="${basedir}/target" />
@@ -10,7 +10,7 @@
     <target name="validateproperties" >
         <echo>build parameter output</echo>
         <echo>build.home: ${build.home}</echo>
-	<echo>build.dir: ${build.dir}</echo>
+		<echo>build.dir: ${build.dir}</echo>
     </target> 
 
     <target name="clean" depends="validateproperties">
@@ -21,22 +21,28 @@
         <mkdir dir="${build.dir}" />
     </target> 
 
-    <target name="deploy" depends="prepare">
-        
-	<copy todir="${build.dir}" >
-	    <fileset dir="${dependency.dir}" includes="jboss-modules-1.1.2.GA.jar"/>
-	</copy>	
+    <target name="deploy" depends="prepare">      
+		<copy todir="${build.dir}" >
+		    <fileset dir="${dependency.dir}" includes="jboss-modules-${modules.version}.jar"/>
+		</copy>	
 
-        <mkdir dir="${build.dir}/modules" />
-	<mkdir dir="${build.dir}/bin" />
-
-	<copy todir="${build.dir}/modules" >
+		<mkdir dir="${build.dir}/modules" />
+		<mkdir dir="${build.dir}/bin" />
+	
+		<copy todir="${build.dir}/modules" >
             <fileset dir="${resource.dir}/modules" includes="**"/>
         </copy>
+    	
+    	<copy todir="${build.dir}/bin" >
+    		<fileset dir="${resource.dir}/bin" includes="**"/>
+    	</copy>
 
-	<copy todir="${build.dir}/modules/com/kylin/msc/helloworld/main" >
-            <fileset dir="${target.dir}" includes="msc-helloworld.jar"/>
+		<copy todir="${build.dir}/modules/system/layers/base/org/jboss/modules/quickstart/main" >
+            <fileset dir="${target.dir}" includes="modules-quickstart.jar"/>
         </copy>	
-
+    	
+    	<echo>chmod 777 *.sh under ${build.dir}/bin</echo>
+    	<chmod dir="${build.dir}/bin" perm="ugo+rx" includes="*.sh"/>
     </target>
+	
 </project> 

@@ -1,0 +1,27 @@
+Build Modular Class Loading QuickStart
+--------------------------------------
+
+* Run below commands as an order
+----
+cd wildfly-architecture/classloading/quickstart/
+----
+
+----
+mvn clean dependency:copy-dependencies install
+----
+
+----
+ant deploy
+----
+
+* build/QuickStart folder will be generated, we treat this as home folder
+
+* we can use 2 ways to start quickstart test, use `org.jboss.modules.quickstart` as example:
+----
+java -jar jboss-modules-1.3.0.Beta3.jar -mp modules org.jboss.modules.quickstart
+----
+
+Alternatively, in QuickStart/bin folder use start scripts as below:
+----
+./quickstart.sh
+----
