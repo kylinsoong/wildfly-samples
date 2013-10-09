@@ -6,8 +6,8 @@
     <groupId>org.jboss.modules</groupId>
     <artifactId>modules-parent</artifactId>
     <version>1.0</version>
-    <name>Parent</name>
-    <description>Parent of Modular Class Loading</description>
+    <name>Service Module Loader Parent</name>
+    <description>Service Module Loader Parent</description>
     <packaging>pom</packaging>
 
     <url>https://github.com/kylinsoong</url>
@@ -18,6 +18,7 @@
 
     <modules>
         <module>quickstart</module>
+        <module>loadprops</module>
     </modules>
 
 </project>

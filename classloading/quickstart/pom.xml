@@ -7,8 +7,8 @@
    <artifactId>modules-quickstart</artifactId>
    <version>1.0</version>
    <packaging>jar</packaging>
-   <name>Modular Class Loading</name>
-   <description>Modular Class Loading QuickStart </description>
+   <name>Service Module Loader QuickStart</name>
+   <description>Service Module Loader QuickStart</description>
 
    <url>https://github.com/kylinsoong</url>
 
