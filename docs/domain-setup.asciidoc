@@ -1,0 +1,77 @@
+Create a Management User in domain controller side
+--------------------------------------------------
+
+* Use add user script create a Management User as below:
+----
+[kylin@unused bin]$ ./add-user.sh 
+
+What type of user do you wish to add? 
+ a) Management User (mgmt-users.properties) 
+ b) Application User (application-users.properties)
+(a): 
+
+Enter the details of the new user to add.
+Realm (ManagementRealm) : 
+Username : admin123
+Password : 
+Re-enter Password : 
+About to add user 'admin123' for realm 'ManagementRealm'
+Is this correct yes/no? yes
+Added user 'admin123' to file '/home/kylin/work/jboss-eap-6.1/standalone/configuration/mgmt-users.properties'
+Added user 'admin123' to file '/home/kylin/work/jboss-eap-6.1/domain/configuration/mgmt-users.properties'
+Is this new user going to be used for one AS process to connect to another AS process? 
+e.g. for a slave host controller connecting to the master or for a Remoting connection for server to server EJB calls.
+yes/no? yes
+To represent the user add the following to the server-identities definition <secret value="UmVkSGF0MSE=" />
+----
+
+* start domain controller as below:
+----
+./standalone.sh -b 10.66.218.46 -bmanagement=10.66.218.46
+----
+
+Host controller side
+--------------------
+
+* change <domain-controller> as below
+----
+<domain-controller>
+       <!-- Alternative remote domain controller configuration with a host and port -->
+       <remote host="${jboss.domain.master.address}" port="${jboss.domain.master.port:9999}" username="admin123" security-realm="ManagementRealm"/>
+</domain-controller>
+----
+
+* add <server-identities> in security-realm as below
+----
+    <management>
+        <security-realms>
+            <security-realm name="ManagementRealm">
+                <server-identities>
+                    <secret value="UmVkSGF0MSE=" />
+                </server-identities>
+----
+
+* make sure the host name are unique
+----
+<host name="slave" 
+----
+
+* make sure server name are unique
+----
+    <servers>
+        <server name="server-four" group="main-server-group">
+        </server>
+        <server name="server-five" group="main-server-group" auto-start="true">
+            <socket-bindings port-offset="150"/>
+        </server>
+        <server name="server-six" group="other-server-group" auto-start="false">
+            <socket-bindings port-offset="250"/>
+        </server>
+    </servers>
+----
+
+* start host controller as below:
+----
+./domain.sh -Djboss.domain.master.address=10.66.218.46
+----
+
