@@ -19,6 +19,7 @@
     <modules>
         <module>classloading</module>
         <module>msc</module>
+	<module>virtual-directory-mapping</module>
     </modules>
 
 </project>
