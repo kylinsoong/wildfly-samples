@@ -3,53 +3,46 @@
 
 * Step-1). create an interface as following:
 ~~~
-public interface TestMBean
-  {
-      public void setMessage(String message);
-      public String getMessage();
-  }
+public interface TestMBean {
+	public void setMessage(String message);
+	public String getMessage();
+}
 ~~~
 
 * Step-2). Create an implementation class of above interface along with start() and stop() additional methods.
 ~~~
-public class Test implements TestMBean
-  {
-      boolean flag=true;
-      public String Message;
+public class Test implements TestMBean {
 
-      public Test()
-      {
-         System.out.println(" TestMBean is activated...inside Test() constructor--setting default Message=Hello");;
-      }
+	public String Message;
 
-      public void setMessage(String Message)
-      {
-          System.out.println("nt Server Watch Message is set to : "+Message);
-          this.Message=Message;
-      }
+	public Test() {
+		System.out.println(" TestMBean is activated...inside Test() constructor, Message: " + Message);
+	}
 
-      public String getMessage()
-      {
-          System.out.println(" Server Watch Message is set to : "+Message);
-          return this.Message;
-      }
+	public void setMessage(String Message) {
+		System.out.println(" Server Watch Message is set to : " + Message);
+		this.Message = Message;
+	}
 
-     public void start() throws Exception
-      {
-            System.out.println("Starting start() Test invoked");
-            Message="JBoss";
-      }
+	public String getMessage() {
+		System.out.println(" Server Watch Message is set to : " + Message);
+		return this.Message;
+	}
 
-     public void stop() throws Exception
-      {
-            System.out.println("Stopping stop() Test  invoked");
-      }
-  }
+	public void start() throws Exception {
+		System.out.println(" Starting start() Test invoked");
+	}
+
+	public void stop() throws Exception {
+		System.out.println(" Stopping stop() Test  invoked");
+	}
+
+}
 ~~~
 
-* Step3). Compile above classes and place it inside test.sar
+* Step3). Compile above classes and place it inside mbean-test.sar
 
-* Step4). Add a jboss-service.xml inside test.sar/META-INF as following:
+* Step4). Add a jboss-service.xml inside mbean-test.sar/META-INF as following:
 ~~~
 <?xml version="1.0" encoding="UTF-8"?>
 <server xmlns="urn:jboss:service:7.0"

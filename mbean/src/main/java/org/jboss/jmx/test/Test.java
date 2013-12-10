@@ -2,11 +2,10 @@ package org.jboss.jmx.test;
 
 public class Test implements TestMBean {
 
-	boolean flag = true;
 	public String Message;
 
 	public Test() {
-		System.out.println(" TestMBean is activated...inside Test() constructor--setting default Message=Hello");
+		System.out.println(" TestMBean is activated...inside Test() constructor, Message: " + Message);
 	}
 
 	public void setMessage(String Message) {
@@ -20,12 +19,11 @@ public class Test implements TestMBean {
 	}
 
 	public void start() throws Exception {
-		System.out.println("Starting start() Test invoked");
-		Message = "JBoss";
+		System.out.println(" Starting start() Test invoked");
 	}
 
 	public void stop() throws Exception {
-		System.out.println("Stopping stop() Test  invoked");
+		System.out.println(" Stopping stop() Test  invoked");
 	}
 
 }
