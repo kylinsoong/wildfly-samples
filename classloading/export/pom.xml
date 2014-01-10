@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.jboss.modules</groupId>
-    <artifactId>modules-parent</artifactId>
+    <artifactId>modules-export</artifactId>
     <version>1.0</version>
-    <name>Service Module Loader Parent</name>
-    <description>Service Module Loader Parent</description>
+    <name>Service Module Loader export Parent</name>
+    <description>Service Module Loader export Parent</description>
     <packaging>pom</packaging>
 
     <url>https://github.com/kylinsoong</url>
@@ -17,9 +17,10 @@
     </properties>
 
     <modules>
-        <module>quickstart</module>
-        <module>loadprops</module>
-	<module>export</module>
+        <module>A</module>
+        <module>B</module>
+	<module>C</module>
+	<module>dist</module>
     </modules>
 
 </project>

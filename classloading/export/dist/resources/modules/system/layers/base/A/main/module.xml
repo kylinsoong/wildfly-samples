@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.1" name="A">
+
+	<main-class name="org.jboss.modules.export.a.Main" />
+
+	<resources>
+		<resource-root path="A.jar" />
+	</resources>
+
+	<dependencies>
+		<module name="B" />
+	</dependencies>
+</module>
