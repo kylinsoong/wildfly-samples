@@ -17,7 +17,7 @@
     </properties>
 
     <modules>
-        <module>classloading</module>
+        <module>modules</module>
         <module>msc</module>
 	<module>virtual-directory-mapping</module>
 	<module>mbean</module>
