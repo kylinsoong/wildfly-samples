@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<project name="org.jboss.modules.layers" default="deploy" basedir="."> 
+
+
+<target name="clean">
+        <delete dir="${basedir}/test" />
+       <delete file="${basedir}/modules-sar.sar"/>
+    </target>
+
+    <target name="deploy" depends="clean">      
+	
+		<copy todir="${basedir}" >
+            <fileset dir="${basedir}/modules" includes="**"/>
+        </copy>
+    	
+    	
+    	
+		<copy todir="${basedir}/test/org/jboss/test/main" >
+            <fileset dir="${basedir}/cast/target" includes="modules-cast.jar"/>
+        </copy>	
+
+<copy todir="${basedir}" >
+            <fileset dir="${basedir}/sar/target" includes="modules-sar.jar"/>
+        </copy>
+    
+<rename src="${basedir}/modules-sar.jar" dest="${basedir}/modules-sar.sar"/>
+	
+    </target>
+	
+</project> 
+
