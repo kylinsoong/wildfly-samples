@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.kylin.wildfly</groupId>
-    <artifactId>wildfly-architecture</artifactId>
+    <groupId>org.wildfly</groupId>
+    <artifactId>wildfly-undertow</artifactId>
     <version>1.0</version>
     <name>Parent</name>
-    <description>Parent of WildFly Architecture</description>
+    <description>Parent of WildFly undertow</description>
     <packaging>pom</packaging>
 
     <url>https://github.com/kylinsoong</url>
@@ -17,12 +17,7 @@
     </properties>
 
     <modules>
-        <module>modules</module>
-        <module>msc</module>
-	<module>virtual-directory-mapping</module>
-	<module>mbean</module>
-	<module>sanbox</module>
-	<module>undertow</module>
+        <module>quickstart</module>
     </modules>
 
 </project>
