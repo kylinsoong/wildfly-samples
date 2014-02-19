@@ -1,2 +1,25 @@
 git clone git@github.com:undertow-io/undertow.git
 
+mvn clean install dependency:copy-dependencies
+
+1. HelloWorldServer
+
+    java -cp target/dependency/*:target/undertow-quickstart.jar org.wildfly.undertow.quickstart.HelloWorldServer
+    
+    http://localhost:8080/
+    
+2. ServletServer
+
+   java -cp target/dependency/*:target/undertow-quickstart.jar org.wildfly.undertow.quickstart.servlet.ServletServer
+   
+   http://localhost:8080/myapp/messageServlet
+   http://localhost:8080/myapp/myServlet
+   
+3. ChatServer
+
+    java -cp target/dependency/*:target/undertow-quickstart.jar org.wildfly.undertow.quickstart.chat.ChatServer
+    
+    
+
+
+
