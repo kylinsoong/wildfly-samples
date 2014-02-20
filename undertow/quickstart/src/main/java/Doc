@@ -15,6 +15,10 @@ mvn clean install dependency:copy-dependencies
    http://localhost:8080/myapp/messageServlet
    http://localhost:8080/myapp/myServlet
    
+3. WebSocketServer
+
+    java -cp target/dependency/*:target/undertow-quickstart.jar org.wildfly.undertow.quickstart.websockets.WebSocketServer
+   
 3. ChatServer
 
     java -cp target/dependency/*:target/undertow-quickstart.jar org.wildfly.undertow.quickstart.chat.ChatServer
