@@ -23,7 +23,6 @@
 	<module>mbean</module>
 	<module>sanbox</module>
 	<module>undertow</module>
-	<module>bug-1056344</module>
     </modules>
 
 </project>

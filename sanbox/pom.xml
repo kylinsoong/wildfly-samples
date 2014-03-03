@@ -18,6 +18,7 @@
 
     <modules>
         <module>wfly-2920</module>
+	<module>rem3-179</module>
     </modules>
 
 </project>
