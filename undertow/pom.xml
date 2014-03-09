@@ -18,6 +18,7 @@
 
     <modules>
         <module>quickstart</module>
+	<module>chat</module>
     </modules>
 
 </project>
