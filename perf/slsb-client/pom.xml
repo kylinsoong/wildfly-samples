@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.wildfly.perf</groupId>
+	<artifactId>wildfly-perf-slsb-client</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
+	<name>JBoss 7/WildFly Cluster Demo Stateless Session Bean Client</name>
+	<description>JBoss 7/WildFly Cluster Demo Stateless Session Bean Client</description>
+
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.wildfly.perf</groupId>
+			<artifactId>wildfly-perf-slsb</artifactId>
+			<version>1.0</version>
+		</dependency>
+		
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- Enforce Java 1.6 -->
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
+
+</project>

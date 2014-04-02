@@ -23,6 +23,7 @@
 	<module>mbean</module>
 	<module>sanbox</module>
 	<module>undertow</module>
+	<module>perf</module>
     </modules>
 
 </project>

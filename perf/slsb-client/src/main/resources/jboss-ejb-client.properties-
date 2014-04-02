@@ -1,0 +1,11 @@
+# This is used for no cluster EJB client configuration
+
+remote.connectionprovider.create.options.org.xnio.Options.SSL_ENABLED=false
+
+remote.connections=default
+
+remote.connection.default.host=10.66.192.215
+remote.connection.default.port = 4447
+remote.connection.default.connect.options.org.xnio.Options.SASL_POLICY_NOANONYMOUS=false 
+remote.connection.default.username=democlient
+remote.connection.default.password=password1!
