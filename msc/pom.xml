@@ -19,6 +19,7 @@
     <modules>
         <module>acme</module>
 	<module>singleton</module>
+	<module>quickstart</module>
     </modules>
 
 </project>
