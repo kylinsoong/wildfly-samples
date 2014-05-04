@@ -9,7 +9,7 @@ public class Startup {
 
 	public static void main(String[] args) {
 		
-		ServiceContainer serviceContainer = ServiceContainer.Factory.create();
+		ServiceContainer serviceContainer = ServiceContainer.Factory.create("JBoss MSC");
 		Service<MyServiceManager> service = new MyService(new MyServiceManager());
 		ServiceBuilder<MyServiceManager> builder = serviceContainer.addService(MyService.SERVICE, service);
 		ServiceController<MyServiceManager> controller = builder.install();

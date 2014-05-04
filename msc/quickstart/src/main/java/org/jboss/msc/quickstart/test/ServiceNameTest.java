@@ -1,10 +1,24 @@
 package org.jboss.msc.quickstart.test;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.jboss.msc.service.ServiceName;
 
 public class ServiceNameTest {
 
 	public static void main(String[] args) {
+		ServiceName a = ServiceName.JBOSS.append("one");
+		ServiceName b = ServiceName.JBOSS.append("one", "two");
+		List<ServiceName> list = new ArrayList<ServiceName>();
+		list.add(b);
+		list.add(a);
+		System.out.println(list);
+		Collections.sort(list);
+		System.out.println(list);
 		
 		System.out.println(ServiceName.of("one"));
 		System.out.println(ServiceName.of("one", "two"));
