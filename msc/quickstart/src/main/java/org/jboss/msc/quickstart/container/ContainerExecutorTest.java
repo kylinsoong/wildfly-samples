@@ -2,11 +2,18 @@ package org.jboss.msc.quickstart.container;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 
+ *  java -cp target/msc-quickstart.jar -agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=y org.jboss.msc.quickstart.container.ContainerExecutorTest
+ * 
+ * @author kylin
+ *
+ */
 public class ContainerExecutorTest {
 
 	public static void main(String[] args) {
 		
-		ContainerExecutor executor = new ContainerExecutor(8, 8, 2, TimeUnit.MINUTES);
+		ContainerExecutor executor = new ContainerExecutor(2, 4, 2, TimeUnit.MINUTES);
 		for (int i = 0 ; i < 100 ; i ++) {
 			executor.execute(new Task(i + 1));
 		}

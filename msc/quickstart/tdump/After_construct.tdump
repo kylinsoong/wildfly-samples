@@ -1,0 +1,95 @@
+2014-05-05 10:34:17
+Full thread dump Java HotSpot(TM) Server VM (23.21-b01 mixed mode):
+
+"Attach Listener" daemon prio=10 tid=0x6b803c00 nid=0x1fb8 waiting on condition [0x00000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+	- None
+
+"Service Thread" daemon prio=10 tid=0x6bcf2400 nid=0x1e9d runnable [0x00000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+	- None
+
+"C2 CompilerThread1" daemon prio=10 tid=0x6bcf0800 nid=0x1e9c waiting on condition [0x00000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+	- None
+
+"C2 CompilerThread0" daemon prio=10 tid=0x6bcee800 nid=0x1e9b waiting on condition [0x00000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+	- None
+
+"JDWP Command Reader" daemon prio=10 tid=0x6ba00800 nid=0x1e98 runnable [0x00000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+	- None
+
+"JDWP Event Helper Thread" daemon prio=10 tid=0x6bcecc00 nid=0x1e90 runnable [0x00000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+	- None
+
+"JDWP Transport Listener: dt_socket" daemon prio=10 tid=0x6bcea400 nid=0x1e8f runnable [0x00000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+	- None
+
+"Signal Dispatcher" daemon prio=10 tid=0x6bce2000 nid=0x1e8e runnable [0x00000000]
+   java.lang.Thread.State: RUNNABLE
+
+   Locked ownable synchronizers:
+	- None
+
+"Finalizer" daemon prio=10 tid=0x6bca8000 nid=0x1e8d in Object.wait() [0x6f07d000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on <0x9e185698> (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:135)
+	- locked <0x9e185698> (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:151)
+	at java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:189)
+
+   Locked ownable synchronizers:
+	- None
+
+"Reference Handler" daemon prio=10 tid=0x6bca6400 nid=0x1e8c in Object.wait() [0x6bb7d000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.wait(Native Method)
+	- waiting on <0x9e185270> (a java.lang.ref.Reference$Lock)
+	at java.lang.Object.wait(Object.java:503)
+	at java.lang.ref.Reference$ReferenceHandler.run(Reference.java:133)
+	- locked <0x9e185270> (a java.lang.ref.Reference$Lock)
+
+   Locked ownable synchronizers:
+	- None
+
+"main" prio=10 tid=0xb6a07000 nid=0x1e86 runnable [0xb6b70000]
+   java.lang.Thread.State: RUNNABLE
+	at org.jboss.msc.quickstart.container.ContainerExecutorTest.main(ContainerExecutorTest.java:17)
+
+   Locked ownable synchronizers:
+	- None
+
+"VM Thread" prio=10 tid=0x6bca0800 nid=0x1e8b runnable 
+
+"GC task thread#0 (ParallelGC)" prio=10 tid=0xb6a10c00 nid=0x1e87 runnable 
+
+"GC task thread#1 (ParallelGC)" prio=10 tid=0xb6a12400 nid=0x1e88 runnable 
+
+"GC task thread#2 (ParallelGC)" prio=10 tid=0xb6a13c00 nid=0x1e89 runnable 
+
+"GC task thread#3 (ParallelGC)" prio=10 tid=0xb6a15000 nid=0x1e8a runnable 
+
+"VM Periodic Task Thread" prio=10 tid=0x6bcf4800 nid=0x1e9e waiting on condition 
+
+JNI global references: 1013
+
