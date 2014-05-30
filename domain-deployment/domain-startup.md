@@ -147,4 +147,18 @@ Process Controller 和 Host Controller 属于不同的 JVM，Process Controller 
         <resource-root path="jboss-as-host-controller-7.2.0.Final-redhat-8.jar"/>
 ~~~
 
-如上，我们可以在 `org.jboss.as.host.controller.Main` 中设定断点，继续调试 Host Controller 启动。
+如上，我们可以在 `org.jboss.as.host.controller.Main` 中设定断点，继续调试 Host Controller 启动，如下
+
+![Host Controller Main](img/host-controller-main.png)
+
+`org.jboss.as.host.controller.Main` 中传入的参数如下：
+
+~~~
+-mp, /home/kylin/work/eap/jboss-eap-6.1/modules, 
+--pc-address, 127.0.0.1, 
+--pc-port, 45210, 
+-default-jvm, /usr/java/jdk1.7.0_21/bin/java, 
+-Djboss.home.dir=/home/kylin/work/eap/jboss-eap-6.1
+~~~
+
+> 注意，如前面分析，这些参数是从 Process Controller 传递过来的，且通过代码调试显示这些参数与之前分析的相同。
