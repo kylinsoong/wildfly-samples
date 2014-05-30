@@ -24,6 +24,7 @@
 	<module>sanbox</module>
 	<module>undertow</module>
 	<module>perf</module>
+	<module>domain-deployment</module>
     </modules>
 
 </project>

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.wildfly.samples</groupId>
+	<artifactId>wildfly-domain-deployment</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
+	<name>JBoss 7/WildFly Domain Deployment</name>
+	<description>JBoss 7/WildFly Domain Deployment</description>
+
+	<url>https://github.com/kylinsoong</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<compiler.plugin.version>2.3.1</compiler.plugin.version>
+		<maven.compiler.target>1.6</maven.compiler.target>
+		<maven.compiler.source>1.6</maven.compiler.source>
+	</properties>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jboss.as</groupId>
+			<artifactId>jboss-as-process-controller</artifactId>
+			<version>7.2.0.Final-redhat-8</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${compiler.plugin.version}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
