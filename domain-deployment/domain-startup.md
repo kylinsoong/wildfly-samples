@@ -1,6 +1,23 @@
 # 概述
 
-JBoss 7/WildFly 以 domain 模式启动时会启动多个 JVM，本文主要研究 domain 模式下是如何启动多个 JVM 的。
+JBoss 7/WildFly 以 domain 模式启动时会启动多个 JVM，例如如下通过启动脚本启动 domain 模式：
+
+~~~
+./domain.sh
+~~~
+
+启动后我们查看进程：
+
+~~~
+[kylin@localhost tdump]$ jps -l
+23655 /home/kylin/work/eap/jboss-eap-6.1/jboss-modules.jar
+23671 /home/kylin/work/eap/jboss-eap-6.1/jboss-modules.jar
+23736 /home/kylin/work/eap/jboss-eap-6.1/jboss-modules.jar
+~~~
+
+我们可以发现 domain 模式启动时会启动后，有三个进程（对应三个JVM）运行。本文主要研究 domain 模式下是如何启动多个 JVM 的。
+
+> `jboss-modules.jar` 是 JBoss 底层类加载机制，用于启动一个 JVM
 
 # 从启动脚本开始
 
@@ -79,7 +96,18 @@ HOST_CONTROLLER_JAVA_OPTS="$HOST_CONTROLLER_JAVA_OPTS -agentlib:jdwp=transport=d
 
 下图描述 domain 模式启动的过程：
 
-![Domain mode startup process]()
+![Domain mode startup process](img/domain-startup-origin.png)
+
+根据上图描述，我们将 domain 模式启动描述为以下步骤:
+
+* 通过启动脚本 `domain.sh` 启动 *Process Controller* JVM，*Process Controller* 启动后监听于端口 0，该段口等待 Host Controller JVM 连接
+
+* Process Controller 启动 Host Controller，我们随后详细介绍 Process Controller 如何启动 Host Controller
+
+* Host Controller 启动后，首先解析 `host.xml` 文件，获取要启动 Server 信息，并与 Process Controller 建立 TCP 连接，将启动 Server 的信息发送给 Process Controller
+
+* Process Controller 根据 Host Controller 发送的 Server 信息，启动相关的 Server
+
 
 # Process Controller 如何启动 Host Controller
 
@@ -162,3 +190,21 @@ Process Controller 和 Host Controller 属于不同的 JVM，Process Controller 
 ~~~
 
 > 注意，如前面分析，这些参数是从 Process Controller 传递过来的，且通过代码调试显示这些参数与之前分析的相同。
+
+# Process Controller 启动 Server
+
+Process Controller 启动 Server 过程完全类似，只是要启动的 Server 信息是通过 Host Controller传递过来的，传递过来的 ProcessBuilder 传入的参数如下：
+
+~~~
+/usr/java/jdk1.7.0_21/bin/java, -D[Server:server-one], 
+-XX:PermSize=256m, -XX:MaxPermSize=256m, -Xms1303m, -Xmx1303m, -server, -D[Host Controller]=true, 
+-Djava.awt.headless=true, -Djboss.modules.system.pkgs=org.jboss.byteman, -Djboss.home.dir=/home/kylin/work/eap/jboss-eap-6.1, 
+-Djava.net.preferIPv4Stack=true, -Djboss.server.log.dir=/home/kylin/work/eap/jboss-eap-6.1/domain/servers/server-one/log, 
+-Djboss.server.temp.dir=/home/kylin/work/eap/jboss-eap-6.1/domain/servers/server-one/tmp, 
+-Djboss.server.data.dir=/home/kylin/work/eap/jboss-eap-6.1/domain/servers/server-one/data, 
+-Dlogging.configuration=file:/home/kylin/work/eap/jboss-eap-6.1/domain/servers/server-one/data/logging.properties, 
+-jar, /home/kylin/work/eap/jboss-eap-6.1/jboss-modules.jar, 
+-mp, /home/kylin/work/eap/jboss-eap-6.1/modules, -jaxpmodule, javax.xml.jaxp-provider, org.jboss.as.server
+~~~
+
+通过 `org.jboss.as.server` 我们可以找到 Server JVM 启动的 Main 方法为 `org.jboss.as.server.DomainServerMain`
