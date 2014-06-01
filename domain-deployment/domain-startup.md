@@ -102,12 +102,11 @@ HOST_CONTROLLER_JAVA_OPTS="$HOST_CONTROLLER_JAVA_OPTS -agentlib:jdwp=transport=d
 
 * 通过启动脚本 `domain.sh` 启动 *Process Controller* JVM，*Process Controller* 启动后监听于端口 0，该段口等待 Host Controller JVM 连接
 
-* Process Controller 启动 Host Controller，我们随后详细介绍 Process Controller 如何启动 Host Controller
-
-* Host Controller 启动后，首先解析 `host.xml` 文件，获取要启动 Server 信息，并与 Process Controller 建立 TCP 连接，将启动 Server 的信息发送给 Process Controller
+* Process Controller 启动 Host Controller，我们随后详细介绍 Process Controller 如何启动 Host Controller, Host Controller 启动后，首先解析 `host.xml` 文件，获取要启动 Server 信息，并与 Process Controller 建立 TCP 连接，将启动 Server 的信息发送给 Process Controller
 
 * Process Controller 根据 Host Controller 发送的 Server 信息，启动相关的 Server
 
+> 如上图，我们可以看到三个 JVM 启动的 Main 方法分别位于三个不同的 module 中： `org.jboss.as.process-controller` (对应的 Main 方法为 `org.jboss.as.process.Main`), `org.jboss.as.host-controller ` (对应的 Main 方法为 `org.jboss.as.host.controller.Main`), `org.jboss.as.server` (对应的 Main 方法为 `org.jboss.as.server.DomainServerMain`)。
 
 # Process Controller 如何启动 Host Controller
 
