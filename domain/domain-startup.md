@@ -133,7 +133,7 @@ Process Controller 和 Host Controller 属于不同的 JVM，Process Controller 
 	}
 ~~~
 
-[点击查看完整代码](src/main/java/org/wildfly/domain/test/PCStartHC.java)
+[点击查看完整代码](domain-deployment/src/main/java/org/wildfly/domain/test/PCStartHC.java)
 
 运行如上代码输出JBoss EAP 6.1 所使用的 JBoss Module 的版本号：
 
@@ -207,3 +207,71 @@ Process Controller 启动 Server 过程完全类似，只是要启动的 Server 
 ~~~
 
 通过 `org.jboss.as.server` 我们可以找到 Server JVM 启动的 Main 方法为 `org.jboss.as.server.DomainServerMain`
+
+# 如何理解 PC，HC，Server
+
+PC 是指 Process Controller，HC 是指 Host Controller（与 HC 相对应的是 Domain Controller，简称 DC），Server 指的是 JBoss 服务器。
+
+从功能层面来说，PC 用来启动和停止 HC 和 Server，且PC 启动停止 Server 首先需要得到 HC 发来的指令，domain 模式启动完成后会启动如下线程用来停止 HC 和 Servers
+
+~~~
+"reaper for Host Controller" prio=10 tid=0x7fc3b000 nid=0x770f in Object.wait() [0x803ab000]
+"reaper for Server:server-one" prio=10 tid=0x8320b400 nid=0x7750 in Object.wait() [0x7fdfe000]
+~~~
+
+PC 启动 HC 与 Server 是在一个 JVM 中启动另一个 JVM，这样 HC 与 Server 中 System.out 和 System.err 流需要使用 PC 中的相应流，所以 PC 的另一个左右是输出 PC 和 Server 中输出流打印输出的信息，domain 模式启动完成后会启动如下线程用来完成此任务
+
+~~~
+"stdout for Host Controller" prio=10 tid=0x7fc3a400 nid=0x770e runnable [0x803fc000]
+"stderr for Host Controller" prio=10 tid=0x7fc36000 nid=0x770d runnable [0x8087d000]
+"stdout for Server:server-one" prio=10 tid=0x83209c00 nid=0x774f runnable [0x7ff5c000]
+"stderr for Server:server-one" prio=10 tid=0x83208400 nid=0x774e runnable [0x7ffad000]
+~~~
+
+HC 用来管理 Server，Domain 模式的设计的一个目的就是在一台物理服务器上通过端口偏移运行多个 Server，HC 设计用来管理这些 Server，Domain 模式的设计的另一个目的是多个物理机器上的多个 Server 可以被统一管理，HC 也可以管理多个物理机器上的多个机器，这种情况下我们称 HC 为 DC，关于如何配置 DC 不属于此处讨论的范畴。
+
+Server 是指 JBoss 服务器平台，为 JEE 应用提供容器。
+
+# 关闭 Server
+
+本部分演示通过 OS 信号关闭 Server 时 PC 和 HC 相关的 Action。我们通过如下步骤演示：
+
+* 以 domain 模式启动JBoss
+
+* 使用 `kill -9 PID` 关闭 Server
+
+观察日志，我们看到如下日志输出:
+
+~~~
+21:39:08,800 INFO  [org.jboss.as.process.Server:server-one.status] (reaper for Server:server-one) JBAS012010: Process 'Server:server-one' finished with an exit status of 137
+[Host Controller] 21:39:08,801 INFO  [org.jboss.as.host.controller] (ProcessControllerConnection-thread - 2) JBAS010926: Unregistering server server-one
+[Host Controller] 21:39:08,806 INFO  [org.jboss.as.host.controller] (Remoting "localhost.localdomain:MANAGEMENT" read-1) JBAS010926: Unregistering server server-one
+~~~ 
+
+PC 收到关闭 Server 的信息，HC Unregistering Server，如下为 `reaper for Server:server-one` 线程的代码：
+
+~~~
+        public void run() {
+            final Process process;
+            synchronized (lock) {
+                process = ManagedProcess.this.process;
+            }
+            int exitCode;
+            for (;;) try {
+                exitCode = process.waitFor();
+                log.processFinished(processName, Integer.valueOf(exitCode));
+                break;
+            } catch (InterruptedException e) {
+                // ignore
+            }
+            boolean respawn = false;
+            boolean slowRespawn = false;
+            boolean unlimitedRespawn = false;
+            int respawnCount = 0;
+            synchronized (lock) {
+
+                final long endTime = System.currentTimeMillis();
+                processController.processStopped(processName, endTime - startTime);
+~~~
+
+分析代码， `reaper for Server:server-one` 线程阻塞于 exitCode = process.waitFor() 行代码，等待关闭信号，且接收到关闭信号后首先日志输出。processController.processStopped(processName, endTime - startTime) 行通知 HC Unregistering Server。

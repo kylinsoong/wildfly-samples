@@ -46,6 +46,20 @@
 					<target>${maven.compiler.target}</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.wildfly.domain.test.PCStartHC</mainClass>
+						</manifest>
+						<manifestEntries>
+							<Jar-Version>${project.version}</Jar-Version>
+							<Jar-Name>${project.artifactId}</Jar-Name>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

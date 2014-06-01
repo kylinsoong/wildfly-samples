@@ -14,19 +14,24 @@ import java.util.List;
 
 public class PCStartHC {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		
 		 List<String> command = new ArrayList<String>();
 		 command.add("/usr/java/jdk1.7.0_21/bin/java");
+		 command.add("-Xms64m");
+		 command.add("-Xmx128m");
+		 command.add("-Xrs");
 		 command.add("-jar");
-		 command.add("/home/kylin/work/eap/jboss-eap-6.1/jboss-modules.jar");
-		 command.add("-version");
+		 command.add("/home/kylin/work/project/wildfly-samples/domain/domain-deployment-inter/target/exterProcess.jar");
 		 ProcessBuilder builder = new ProcessBuilder(command);
-		 builder.directory(new File("/home/kylin/tmp"));
+		 builder.directory(new File("/home/kylin/work/project/wildfly-samples/domain"));
 		 Process process = builder.start();
 		 final InputStream stdout = process.getInputStream();
 		 Thread stdoutThread = new Thread(new ReadTask(stdout, System.out));
 		 stdoutThread.start();
+		 
+		 int exitCode = process.waitFor();
+		 System.out.println("Process Exit with exit code: " + exitCode);
 	}
 	
 	private static class ReadTask implements Runnable {
