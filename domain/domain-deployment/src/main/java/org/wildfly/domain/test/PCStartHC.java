@@ -18,6 +18,7 @@ public class PCStartHC {
 		
 		 List<String> command = new ArrayList<String>();
 		 command.add("/usr/java/jdk1.7.0_21/bin/java");
+		 command.add("-server");
 		 command.add("-Xms64m");
 		 command.add("-Xmx128m");
 		 command.add("-Xrs");
