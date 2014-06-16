@@ -6,7 +6,7 @@ import org.jboss.msc.service.StartContext;
 import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
 
-public class MyService implements Service<MyServiceManager> {
+public class MyService implements Service<MyService> {
 	
 	final static ServiceName SERVICE = ServiceName.of("service");
 	
@@ -16,12 +16,13 @@ public class MyService implements Service<MyServiceManager> {
 		this.manager = manager;
 	}
 
-	public MyServiceManager getValue() throws IllegalStateException, IllegalArgumentException {
-		return manager;
+	public MyService getValue() throws IllegalStateException, IllegalArgumentException {
+		return this;
 	}
 
 	public void start(StartContext context) throws StartException {
-		manager.initialize("init");
+		manager.initialize("This is JBoss MSC Test");
+		System.out.println(manager.getDescription());
 	}
 
 	public void stop(StopContext context) {

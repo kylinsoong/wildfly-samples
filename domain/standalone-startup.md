@@ -77,3 +77,15 @@ org.jboss.as.standalone,
 -Djboss.home.dir=/home/kylin/work/eap/jboss-eap-6.1, 
 -Djboss.server.base.dir=/home/kylin/work/eap/jboss-eap-6.1/standalone
 ~~~
+
+# 调试 JBoss MSC
+
+### 添加系统变量控制 MSC 线程数
+
+MSC 是一个容器，它可启动工作线程，这些工作线程用来启动 JBoss 服务，我们可以通过如下系统变量控制 MSC 线程数：
+
+~~~
+-Dorg.jboss.server.bootstrap.maxThreads=1
+~~~
+
+如上，MSC 启动后共有一个工作线程。
