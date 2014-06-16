@@ -41,7 +41,7 @@ public class SubsystemExtension implements Extension {
     /**
      * The name of our subsystem within the model.
      */
-    public static final String SUBSYSTEM_NAME = "mysubsystem";
+    public static final String SUBSYSTEM_NAME = "tracker";
 
     /**
      * The parser used for parsing our subsystem

@@ -4,6 +4,9 @@
 
 * 创建初始工程
 * 创建 schema
+* 设计定义 XML 模型
+* 注册核心 subsystem 模型
+* 注册子 subsystem
 
 # 创建初始工程
 
@@ -77,3 +80,153 @@ public class SubsystemExtension implements Extension {
      */
     public static final String NAMESPACE = "urn:com.acme.corp.tracker:1.0";
 ~~~
+
+# 设计定义 XML 模型
+
+如下包括一个 XML 配置模型：
+
+~~~
+<subsystem xmlns="urn:com.acme.corp.tracker:1.0">
+   <deployment-types>
+      <deployment-type suffix="sar" tick="10000"/>
+      <deployment-type suffix="war" tick="10000"/>
+   </deployment-types>
+</subsystem>
+~~~
+
+我们设计当我们执行 `:read-resource(recursive=true)` 时会有如下输出：
+
+~~~
+{
+    "outcome" => "success",
+    "result" => {"type" => {
+        "sar" => {"tick" => "10000"},
+        "war" => {"tick" => "10000"}
+    }}
+}
+~~~
+
+编辑 `com.acme.corp.tracker.extension.SubsystemExtension`，确保 SUBSYSTEM_NAME 值为 tracker：
+
+~~~
+public class SubsystemExtension implements Extension {
+    ...
+    /** The name of our subsystem within the model. */
+    public static final String SUBSYSTEM_NAME = "tracker";
+    ...
+~~~
+
+SubsystemExtension.initialize() 方法展示了如何定义模型，如下：
+
+~~~
+    public void initialize(ExtensionContext context) {
+        final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, 1, 0);
+        final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(SubsystemDefinition.INSTANCE);
+        registration.registerOperationHandler(DESCRIBE, GenericSubsystemDescribeHandler.INSTANCE, GenericSubsystemDescribeHandler.INSTANCE, false, OperationEntry.EntryType.PRIVATE);
+
+        subsystem.registerXMLElementWriter(parser);
+    }
+~~~
+
+随后我们会继续说明此方法，并修改此方法，添加更多的内容。
+
+# 注册核心 subsystem 模型
+
+如上面 SubsystemExtension.initialize() 方法展示，首先我们获取 SubsystemRegistration 通过 extension 上下文，接着我们获取 ManagementResourceRegistration，extension 相关的编程，这一步是必须的。
+
+~~~
+final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(SubsystemDefinition.INSTANCE);
+~~~
+
+传入的参数 SubsystemDefinition 它实现了 org.jboss.as.controller.ResourceDefinition 接口，调运 /subsystem=tracker:read-resource-description 输出的数据模型是在 SubsystemDefinition.INSTANCE 中定义的。如下为 SubsystemDefinition 明细：
+
+~~~
+public class SubsystemDefinition extends SimpleResourceDefinition {
+    public static final SubsystemDefinition INSTANCE = new SubsystemDefinition();
+ 
+    private SubsystemDefinition() {
+        super(SubsystemExtension.SUBSYSTEM_PATH,
+                SubsystemExtension.getResourceDescriptionResolver(null),
+                //We always need to add an 'add' operation
+                SubsystemAdd.INSTANCE,
+                //Every resource that is added, normally needs a remove operation
+                SubsystemRemove.INSTANCE);
+    }
+ 
+    @Override
+    public void registerOperations(ManagementResourceRegistration resourceRegistration) {
+        super.registerOperations(resourceRegistration);
+        //you can register aditional operations here
+    }
+ 
+    @Override
+    public void registerAttributes(ManagementResourceRegistration resourceRegistration) {
+        //you can register attributes here
+    }
+}
+~~~
+
+如上构造方法中的 ADD 和 REMOVE handler 实现如下：
+
+~~~
+class SubsystemAdd extends AbstractBoottimeAddStepHandler {
+
+    static final SubsystemAdd INSTANCE = new SubsystemAdd();
+
+    private final Logger log = Logger.getLogger(SubsystemAdd.class);
+
+    private SubsystemAdd() {
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected void populateModel(ModelNode operation, ModelNode model) throws OperationFailedException {
+        log.info("Populating the model");
+//        model.setEmptyObject();
+        model.get("type").setEmptyObject();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void performBoottime(OperationContext context, ModelNode operation, ModelNode model,
+            ServiceVerificationHandler verificationHandler, List<ServiceController<?>> newControllers)
+            throws OperationFailedException {
+
+        //Add deployment processors here
+        //Remove this if you don't need to hook into the deployers, or you can add as many as you like
+        //see SubDeploymentProcessor for explanation of the phases
+        context.addStep(new AbstractDeploymentChainStep() {
+            public void execute(DeploymentProcessorTarget processorTarget) {
+                processorTarget.addDeploymentProcessor(SubsystemDeploymentProcessor.PHASE, SubsystemDeploymentProcessor.PRIORITY, new SubsystemDeploymentProcessor());
+
+            }
+        }, OperationContext.Stage.RUNTIME);
+
+    }
+}
+~~~
+
+
+~~~
+class SubsystemRemove extends AbstractRemoveStepHandler {
+
+    static final SubsystemRemove INSTANCE = new SubsystemRemove();
+
+    private final Logger log = Logger.getLogger(SubsystemRemove.class);
+
+    private SubsystemRemove() {
+    }
+
+    @Override
+    protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model) throws OperationFailedException {
+        //Remove any services installed by the corresponding add handler here
+        //context.removeService(ServiceName.of("some", "name"));
+    }
+
+
+}
+~~~
+
+# 注册子 subsystem
+
+

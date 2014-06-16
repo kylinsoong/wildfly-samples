@@ -32,7 +32,8 @@ class SubsystemAdd extends AbstractBoottimeAddStepHandler {
     @Override
     protected void populateModel(ModelNode operation, ModelNode model) throws OperationFailedException {
         log.info("Populating the model");
-        model.setEmptyObject();
+//        model.setEmptyObject();
+        model.get("type").setEmptyObject();
     }
 
     /** {@inheritDoc} */
