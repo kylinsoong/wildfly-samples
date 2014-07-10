@@ -1,0 +1,53 @@
+2014-07-08 15:04:15,978 ERROR [stderr] (Thread-566) 	at org.drools.rule.constraint.ASMConditionEvaluatorJitter.jitEvaluator(ASMConditionEvaluatorJitter.java:53)
+2014-07-08 15:04:15,978 ERROR [stderr] (Thread-566) 	at org.drools.rule.constraint.MvelConstraint.executeJitting(MvelConstraint.java:217)
+2014-07-08 15:04:15,979 ERROR [stderr] (Thread-566) 	... 5 more
+2014-07-08 15:11:30,072 ERROR [stderr] (main) java.io.IOException: JBAS012175: Channel closed
+2014-07-08 15:11:30,073 ERROR [stderr] (main) 	at org.jboss.as.server.mgmt.domain.HostControllerConnection.getChannel(HostControllerConnection.java:100)
+2014-07-08 15:11:30,094 ERROR [stderr] (main) 	at org.jboss.as.protocol.mgmt.ManagementChannelHandler.executeRequest(ManagementChannelHandler.java:115)
+2014-07-08 15:11:30,095 ERROR [stderr] (main) 	at org.jboss.as.protocol.mgmt.ManagementChannelHandler.executeRequest(ManagementChannelHandler.java:98)
+2014-07-08 15:11:30,290 ERROR [stderr] (main) 	at org.jboss.as.server.mgmt.domain.HostControllerConnection.reConnect(HostControllerConnection.java:168)
+2014-07-08 15:11:30,290 ERROR [stderr] (main) 	at org.jboss.as.server.mgmt.domain.HostControllerClient.reconnect(HostControllerClient.java:98)
+2014-07-08 15:11:30,290 ERROR [stderr] (main) 	at org.jboss.as.server.DomainServerMain.main(DomainServerMain.java:138)
+2014-07-08 15:11:30,290 ERROR [stderr] (main) 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+2014-07-08 15:11:30,290 ERROR [stderr] (main) 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+2014-07-08 15:11:30,290 ERROR [stderr] (main) 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+2014-07-08 15:11:30,291 ERROR [stderr] (main) 	at java.lang.reflect.Method.invoke(Method.java:597)
+2014-07-08 15:11:30,291 ERROR [stderr] (main) 	at org.jboss.modules.Module.run(Module.java:270)
+2014-07-08 15:11:30,291 ERROR [stderr] (main) 	at org.jboss.modules.Main.main(Main.java:411)
+
+...
+
+2014-07-08 15:14:12,062 ERROR [org.jboss.as.controller.management-operation] (AD Thread Pool-Global0) JBAS014612: Operation ("read-attribute") failed - address: ([
+    ("deployment" => "forder-ear.ear"),
+    ("subdeployment" => "forder-web.war"),
+    ("subsystem" => "web")
+]): java.lang.NullPointerException
+	at org.jboss.as.web.WebDeploymentDefinition$SessionManagerStatsHandler.executeRuntimeStep(WebDeploymentDefinition.java:104)
+	at org.jboss.as.controller.AbstractRuntimeOnlyHandler$1.execute(AbstractRuntimeOnlyHandler.java:90)
+	at org.jboss.as.controller.AbstractOperationContext.executeStep(AbstractOperationContext.java:440)
+	at org.jboss.as.controller.AbstractOperationContext.doCompleteStep(AbstractOperationContext.java:322)
+	at org.jboss.as.controller.AbstractOperationContext.completeStepInternal(AbstractOperationContext.java:229)
+	at org.jboss.as.controller.AbstractOperationContext.executeOperation(AbstractOperationContext.java:224)
+	at org.jboss.as.controller.ModelControllerImpl.internalExecute(ModelControllerImpl.java:194)
+	at org.jboss.as.controller.ModelControllerImpl.execute(ModelControllerImpl.java:115)
+	at org.jboss.as.jmx.model.ModelControllerMBeanHelper.execute(ModelControllerMBeanHelper.java:406)
+	at org.jboss.as.jmx.model.ModelControllerMBeanHelper.getAttribute(ModelControllerMBeanHelper.java:222)
+	at org.jboss.as.jmx.model.ModelControllerMBeanHelper.getAttribute(ModelControllerMBeanHelper.java:189)
+	at org.jboss.as.jmx.model.ModelControllerMBeanServerPlugin.getAttribute(ModelControllerMBeanServerPlugin.java:88)
+	at org.jboss.as.jmx.PluggableMBeanServerImpl.getAttribute(PluggableMBeanServerImpl.java:171)
+	at com.singularity.ee.agent.appagent.services.jmxservice.appserver.common.k.a(k.java:309) [appagent.jar:Server Agent v3.7.8.0 GA #2013-08-15_23-19-20 r06b728431c8eb3edcf0215878b6919815605a3dc 17]
+	at com.singularity.ee.agent.appagent.services.jmxservice.appserver.g.a(g.java:454) [appagent.jar:Server Agent v3.7.8.0 GA #2013-08-15_23-19-20 r06b728431c8eb3edcf0215878b6919815605a3dc 17]
+	at com.singularity.ee.agent.appagent.services.jmxservice.appserver.g.a(g.java:282) [appagent.jar:Server Agent v3.7.8.0 GA #2013-08-15_23-19-20 r06b728431c8eb3edcf0215878b6919815605a3dc 17]
+	at com.singularity.ee.agent.appagent.services.jmxservice.appserver.g.c(g.java:200) [appagent.jar:Server Agent v3.7.8.0 GA #2013-08-15_23-19-20 r06b728431c8eb3edcf0215878b6919815605a3dc 17]
+	at com.singularity.ee.agent.appagent.services.jmxservice.appserver.common.z.a(z.java:256) [appagent.jar:Server Agent v3.7.8.0 GA #2013-08-15_23-19-20 r06b728431c8eb3edcf0215878b6919815605a3dc 17]
+	at com.singularity.ee.agent.appagent.services.jmxservice.c.run(c.java:513) [appagent.jar:Server Agent v3.7.8.0 GA #2013-08-15_23-19-20 r06b728431c8eb3edcf0215878b6919815605a3dc 17]
+	at com.singularity.ee.util.wb.run(wb.java:48) [appagent.jar:Server Agent v3.7.8.0 GA #2013-08-15_23-19-20 r06b728431c8eb3edcf0215878b6919815605a3dc 17]
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:439) [rt.jar:1.6.0_43]
+	at com.singularity.ee.util.le.e(le.java:290) [appagent.jar:Server Agent v3.7.8.0 GA #2013-08-15_23-19-20 r06b728431c8eb3edcf0215878b6919815605a3dc 17]
+	at com.singularity.ee.util.kb.b(kb.java:145) [appagent.jar:Server Agent v3.7.8.0 GA #2013-08-15_23-19-20 r06b728431c8eb3edcf0215878b6919815605a3dc 17]
+	at com.singularity.ee.util.lb.a(lb.java:82) [appagent.jar:Server Agent v3.7.8.0 GA #2013-08-15_23-19-20 r06b728431c8eb3edcf0215878b6919815605a3dc 17]
+	at com.singularity.ee.util.lb.b(lb.java:160) [appagent.jar:Server Agent v3.7.8.0 GA #2013-08-15_23-19-20 r06b728431c8eb3edcf0215878b6919815605a3dc 17]
+	at com.singularity.ee.util.lb.run(lb.java:184) [appagent.jar:Server Agent v3.7.8.0 GA #2013-08-15_23-19-20 r06b728431c8eb3edcf0215878b6919815605a3dc 17]
+	at com.singularity.ee.util.sb.a(sb.java:667) [appagent.jar:Server Agent v3.7.8.0 GA #2013-08-15_23-19-20 r06b728431c8eb3edcf0215878b6919815605a3dc 17]
+	at com.singularity.ee.util.sb.run(sb.java:692) [appagent.jar:Server Agent v3.7.8.0 GA #2013-08-15_23-19-20 r06b728431c8eb3edcf0215878b6919815605a3dc 17]
+	at java.lang.Thread.run(Thread.java:662) [rt.jar:1.6.0_43]
