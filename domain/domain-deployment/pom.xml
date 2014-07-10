@@ -22,7 +22,7 @@
 
 	<dependencies>
 
-<!--  
+ 
 
 		<dependency>
 			<groupId>org.jboss.as</groupId>
@@ -35,12 +35,14 @@
 			<artifactId>jboss-as-host-controller</artifactId>
 			<version>7.2.0.Final-redhat-8</version>
 		</dependency>
--->
+<!-- 
 	<dependency>
 		<groupId>org.jboss.as</groupId>
 		<artifactId>jboss-as-server</artifactId>
 		<version>7.2.0.Final-redhat-8</version>
 	</dependency>
+	
+	-->
 
 	</dependencies>
 
