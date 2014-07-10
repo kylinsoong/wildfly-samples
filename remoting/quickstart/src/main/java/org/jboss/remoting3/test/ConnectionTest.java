@@ -1,0 +1,168 @@
+package org.jboss.remoting3.test;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.Queue;
+import java.util.Random;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReferenceArray;
+
+import org.jboss.remoting3.Channel;
+import org.jboss.remoting3.Connection;
+import org.jboss.remoting3.Endpoint;
+import org.jboss.remoting3.MessageInputStream;
+import org.jboss.remoting3.MessageOutputStream;
+import org.jboss.remoting3.OpenListener;
+import org.jboss.remoting3.Registration;
+import org.jboss.remoting3.Remoting;
+import org.jboss.remoting3.remote.RemoteConnectionProviderFactory;
+import org.jboss.remoting3.security.SimpleServerAuthenticationProvider;
+import org.jboss.remoting3.spi.NetworkServerProvider;
+import org.xnio.IoFuture;
+import org.xnio.IoUtils;
+import org.xnio.OptionMap;
+import org.xnio.Options;
+import org.xnio.Sequence;
+import org.xnio.XnioWorker;
+import org.xnio.channels.AcceptingChannel;
+import org.xnio.channels.ConnectedStreamChannel;
+
+public class ConnectionTest {
+	
+	private static final int THREAD_POOL_SIZE = 100;
+	private static final int CHANNEL_COUNT = 10;
+	private static final int CONNECTION_COUNT = 10;
+	private static final int BUFFER_SIZE = 8192;
+    private static final byte[] junkBuffer = new byte[BUFFER_SIZE];
+    private static final int MESSAGE_COUNT = 8;
+	
+	protected final Endpoint clientEndpoint;
+    protected final Endpoint serverEndpoint;
+    private final Registration clientReg;
+    private final Registration serverReg;
+    
+    private AcceptingChannel<? extends ConnectedStreamChannel> server;
+	
+	public ConnectionTest() throws IOException {
+		clientEndpoint = Remoting.createEndpoint("connection-test-client", OptionMap.create(Options.WORKER_TASK_CORE_THREADS, THREAD_POOL_SIZE, Options.WORKER_TASK_MAX_THREADS, THREAD_POOL_SIZE));
+		serverEndpoint = Remoting.createEndpoint("connection-test-server", OptionMap.create(Options.WORKER_TASK_CORE_THREADS, THREAD_POOL_SIZE, Options.WORKER_TASK_MAX_THREADS, THREAD_POOL_SIZE));
+		clientReg = clientEndpoint.addConnectionProvider("remote", new RemoteConnectionProviderFactory(), OptionMap.create(Options.SSL_ENABLED, Boolean.FALSE));
+		serverReg = serverEndpoint.addConnectionProvider("remote", new RemoteConnectionProviderFactory(), OptionMap.create(Options.SSL_ENABLED, Boolean.FALSE));
+	
+		 final NetworkServerProvider networkServerProvider = serverEndpoint.getConnectionProviderInterface("remote", NetworkServerProvider.class);
+		 SimpleServerAuthenticationProvider provider = new SimpleServerAuthenticationProvider();
+		 provider.addUser("bob", "test", "pass".toCharArray());
+		 server = networkServerProvider.createServer(new InetSocketAddress("localhost", 30123), OptionMap.create(Options.SASL_MECHANISMS, Sequence.of("CRAM-MD5")), provider, null);
+	}
+	
+	private void destroy() {
+        IoUtils.safeClose(server);
+        IoUtils.safeClose(clientReg);
+        IoUtils.safeClose(serverReg);
+        IoUtils.safeClose(clientEndpoint);
+        IoUtils.safeClose(serverEndpoint);
+    }
+	
+	private void testManyChannelsLotsOfData() throws Exception {
+		final XnioWorker clientWorker = clientEndpoint.getXnioWorker();
+		final XnioWorker serverWorker = serverEndpoint.getXnioWorker();
+		final Queue<Throwable> problems = new ConcurrentLinkedQueue<Throwable>();
+		final CountDownLatch serverChannelCount = new CountDownLatch(CHANNEL_COUNT * CONNECTION_COUNT);
+        final CountDownLatch clientChannelCount = new CountDownLatch(CHANNEL_COUNT * CONNECTION_COUNT);
+        serverEndpoint.registerService("test", new OpenListener(){
+
+			public void channelOpened(Channel channel) {
+				channel.receiveMessage(new Channel.Receiver() {
+					
+					public void handleMessage(Channel channel, MessageInputStream message) {
+						try {
+                            channel.receiveMessage(this);
+                            while (message.read(junkBuffer) > -1);
+                            System.out.println(junkBuffer);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            problems.add(e);
+                        } finally {
+                            IoUtils.safeClose(message);
+                        }
+					}
+					
+					public void handleError(Channel channel, IOException error) {
+						problems.add(error);
+                        error.printStackTrace();
+                        serverChannelCount.countDown();
+					}
+					
+					public void handleEnd(Channel channel) {
+						serverChannelCount.countDown();
+					}
+				});
+			}
+
+			public void registrationTerminated() {
+				
+			}}, OptionMap.EMPTY);
+        
+        final AtomicReferenceArray<Connection> connections = new AtomicReferenceArray<Connection>(CONNECTION_COUNT);
+        for (int h = 0; h < CONNECTION_COUNT; h ++) {
+        	final Connection connection = clientEndpoint.connect("remote", new InetSocketAddress("localhost", 0), new InetSocketAddress("localhost", 30123), OptionMap.EMPTY, "bob", "test", "pass".toCharArray()).get();
+        	connections.set(h, connection);
+        	for (int i = 0; i < CHANNEL_COUNT; i ++) {
+        		clientWorker.execute(new Runnable(){
+
+					public void run() {
+						final Random random = new Random();
+                        final IoFuture<Channel> future = connection.openChannel("test", OptionMap.EMPTY);
+                        try {
+                            final Channel channel = future.get();
+                            try {
+                                final byte[] bytes = new byte[BUFFER_SIZE];
+                                for (int j = 0; j < MESSAGE_COUNT; j++) {
+                                    final MessageOutputStream stream = channel.writeMessage();
+                                    try {
+                                        for (int k = 0; k < 100; k++) {
+                                            random.nextBytes(bytes);
+                                            stream.write(bytes, 0, random.nextInt(BUFFER_SIZE - 1) + 1);
+                                        }
+                                        stream.close();
+                                    } finally {
+                                        IoUtils.safeClose(stream);
+                                    }
+                                    stream.close();
+                                }
+                            } finally {
+                                IoUtils.safeClose(channel);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            problems.add(e);
+                        } finally {
+                            clientChannelCount.countDown();
+                        }
+					}});
+        	}
+        }
+        
+        Thread.sleep(500);
+        serverChannelCount.await();
+        clientChannelCount.await();
+        for (int h = 0; h < CONNECTION_COUNT; h ++) {
+        	Connection conn = connections.get(h);
+        	System.out.println(conn);
+        	conn.close();
+        }
+	}
+
+
+	public static void main(String[] args) throws Exception {
+		ConnectionTest test = new ConnectionTest();
+		
+		test.testManyChannelsLotsOfData();
+		
+		test.destroy();
+		
+		System.out.println("DONE");
+	}
+
+}
