@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app metadata-complete="false">
+
+	<display-name>WildFly QuickStart Servlet</display-name>
+	
+    <description>WildFly QuickStart Servlet Application</description>
+	
+
+</web-app>

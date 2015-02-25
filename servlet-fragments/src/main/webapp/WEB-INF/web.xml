@@ -1,0 +1,8 @@
+<web-app metadata-complete="false">
+
+	<display-name>WildFly QuickStart Servlet</display-name>
+	
+    <description>WildFly QuickStart Servlet Application</description>
+	
+
+</web-app>
