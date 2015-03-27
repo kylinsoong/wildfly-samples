@@ -1,0 +1,5 @@
+<subsystem xmlns="urn:com.customized.tools.monitor:1.0">
+    <folderPath>${jboss.server.base.dir}</folderPath>
+    <resultFile>monitor.out</resultFile>
+    <persist-to-file>false</persist-to-file>
+</subsystem>

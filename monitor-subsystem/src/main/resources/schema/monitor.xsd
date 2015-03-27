@@ -1,0 +1,34 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="urn:com.customized.tools.monitor:1.0"
+            xmlns="urn:com.customized.tools.monitor:1.0"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified"
+            version="1.0">
+
+    <!-- The subsystem root element -->
+    <xs:element name="subsystem" type="monitorType"/>
+
+    <xs:complexType name="monitorType">
+    	
+    	<xs:element name="folderPath" type="xs:string" minOccurs="0" maxOccurs="1" default="${jboss.server.base.dir}">
+        	<xs:annotation>
+            	<xs:documentation>The folderPath is the file system path used to monitor</xs:documentation>
+        	</xs:annotation>
+        </xs:element>
+        
+        <xs:element name="resultFile" type="xs:string" minOccurs="0" maxOccurs="1" default="monitor.out">
+        	<xs:annotation>
+            	<xs:documentation>The file used to persist monitor result</xs:documentation>
+        	</xs:annotation>
+        </xs:element>
+    	
+    
+    	<xs:sequence>
+    		<xs:element name="persist-to-file" type="xs:boolean" minOccurs="0" maxOccurs="1" default="false">
+                <xs:annotation>
+                    <xs:documentation>Whether persist result to a file</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+    	</xs:sequence>
+    </xs:complexType>
+</xs:schema>
