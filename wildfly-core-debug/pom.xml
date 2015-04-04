@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.wildfly</groupId>
+	<artifactId>wildfly-core-debug</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
+	<name>WildFly Core Debug</name>
+	<description>WildFLy Core Debug</description>
+
+	<url>https://github.com/kylinsoong</url>
+
+	<properties>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<compiler.plugin.version>2.3.1</compiler.plugin.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<version.wildfly>8.2.0.Final</version.wildfly>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-controller</artifactId>
+			<version>${version.wildfly}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-server</artifactId>
+			<version>${version.wildfly}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>${artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${compiler.plugin.version}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

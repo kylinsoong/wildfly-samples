@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.jboss</groupId>
+	<artifactId>staxmapper-quickstart</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
+	<name>JBoss staxmapper</name>
+
+	<url>https://github.com/kylinsoong</url>
+
+	<properties>
+		<version.staxmapper>1.2.0.Beta2-SNAPSHOT</version.staxmapper>
+		
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		
+		<compiler.plugin.version>2.3.1</compiler.plugin.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jboss</groupId>
+			<artifactId>staxmapper</artifactId>
+			<version>${version.staxmapper}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>${artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${compiler.plugin.version}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

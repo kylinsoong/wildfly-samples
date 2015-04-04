@@ -6,11 +6,12 @@ import java.util.Collection;
 import org.jboss.as.controller.AttributeDefinition;
 import org.jboss.as.controller.PersistentResourceDefinition;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
+import org.jboss.logging.Logger;
 
-/**
- * @author <a href="mailto:tcerar@redhat.com">Tomaz Cerar</a>
- */
+
 public class MonitorSubsystemDefinition extends PersistentResourceDefinition {
+	
+	private final Logger log = Logger.getLogger(MonitorSubsystemDefinition.class);
 
     static final AttributeDefinition[] ATTRIBUTES = { /* you can include attributes here */ };
 
@@ -27,12 +28,14 @@ public class MonitorSubsystemDefinition extends PersistentResourceDefinition {
 
     @Override
     public void registerOperations(ManagementResourceRegistration resourceRegistration) {
+    	log.info("MonitorSubsystemDefinition registerOperations");
         super.registerOperations(resourceRegistration);
-        //you can register additional operations here
+        
     }
 
     @Override
     public Collection<AttributeDefinition> getAttributes() {
+    	log.info("MonitorSubsystemDefinition getAttributes");
         return Arrays.asList(ATTRIBUTES);
     }
 }

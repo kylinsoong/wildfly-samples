@@ -1,20 +1,22 @@
 package com.customized.tools.extension;
 
-import com.mycompany.subsystem.deployment.SubsystemDeploymentProcessor;
+import java.util.List;
+
+import com.customized.tools.deployment.SubsystemDeploymentProcessor;
+
 import org.jboss.as.controller.AbstractBoottimeAddStepHandler;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
-import org.jboss.as.controller.registry.Resource;
+import org.jboss.as.controller.ServiceVerificationHandler;
 import org.jboss.as.server.AbstractDeploymentChainStep;
 import org.jboss.as.server.DeploymentProcessorTarget;
 import org.jboss.dmr.ModelNode;
+import org.jboss.logging.Logger;
+import org.jboss.msc.service.ServiceController;
 
-/**
- * Handler responsible for adding the subsystem resource to the model
- *
- * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
- */
 class SubsystemAdd extends AbstractBoottimeAddStepHandler {
+	
+	private final static Logger log = Logger.getLogger(SubsystemAdd.class);
 
     static final SubsystemAdd INSTANCE = new SubsystemAdd();
 
@@ -22,29 +24,24 @@ class SubsystemAdd extends AbstractBoottimeAddStepHandler {
         super(MonitorSubsystemDefinition.ATTRIBUTES);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void performBoottime(OperationContext context, ModelNode operation, Resource resource)
-            throws OperationFailedException {
+    static void installServices(OperationContext context, ModelNode operation, ModelNode model) {
+    	log.info("SubsystemAdd installServices");
+        // Add any services here
+        //context.getServiceTarget().addService(ServiceName.of("some", "name"), new MyService()).install();
+    }
 
-        installServices(context, operation, resource.getModel());
-
-        //Add deployment processors here
-        //Remove this if you don't need to hook into the deployers, or you can add as many as you like
-        //see SubDeploymentProcessor for explanation of the phases
-        context.addStep(new AbstractDeploymentChainStep() {
+	@Override
+	protected void performBoottime(OperationContext context, ModelNode operation, ModelNode model, ServiceVerificationHandler verificationHandler, List<ServiceController<?>> newControllers) throws OperationFailedException {
+		
+		log.info("SubsystemAdd performBoottime");
+		
+		installServices(context, operation, model);
+		
+		context.addStep(new AbstractDeploymentChainStep() {
             public void execute(DeploymentProcessorTarget processorTarget) {
                 processorTarget.addDeploymentProcessor(MonitorExtension.SUBSYSTEM_NAME, SubsystemDeploymentProcessor.PHASE, SubsystemDeploymentProcessor.PRIORITY, new SubsystemDeploymentProcessor());
 
             }
         }, OperationContext.Stage.RUNTIME);
-
-    }
-
-    static void installServices(OperationContext context, ModelNode operation, ModelNode model) {
-        // Add any services here
-        //context.getServiceTarget().addService(ServiceName.of("some", "name"), new MyService()).install();
-    }
+	}
 }
