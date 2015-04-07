@@ -1,0 +1,31 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="urn:com.customized.tools.monitor:1.0"
+            xmlns="urn:com.customized.tools.monitor:1.0"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified"
+            version="1.0">
+
+    <!-- The subsystem root element -->
+    <xs:element name="subsystem" type="subsystem"/>
+    
+    <xs:complexType name="subsystem">
+      <xs:sequence>
+         <xs:element name="folder-path" type="folderPathType" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="result-file" type="resultFileType" minOccurs="0" maxOccurs="1"/>
+         <xs:element name="persist-to-file" type="persistToFileType" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="folderPathType">
+      <xs:attribute name="name" type="xs:string" default="${jboss.server.base.dir}"/>
+    </xs:complexType>
+    
+    <xs:complexType name="resultFileType">
+      <xs:attribute name="name" type="xs:string" default="monitor.out"/>
+    </xs:complexType>
+    
+    <xs:complexType name="persistToFileType">
+      <xs:attribute name="value" type="xs:boolean" default="false"/>
+    </xs:complexType>
+    
+</xs:schema>

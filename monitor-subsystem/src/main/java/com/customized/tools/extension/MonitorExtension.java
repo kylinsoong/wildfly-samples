@@ -5,7 +5,6 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
 
-import java.io.File;
 import java.util.List;
 
 import javax.xml.stream.XMLStreamConstants;
@@ -13,6 +12,7 @@ import javax.xml.stream.XMLStreamException;
 
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
+import org.jboss.as.controller.ModelVersion;
 import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.PathElement;
 import org.jboss.as.controller.PersistentResourceXMLDescription;
@@ -38,11 +38,18 @@ public class MonitorExtension implements Extension {
      * The name space used for the {@code substystem} element
      */
     public static final String NAMESPACE = "urn:com.customized.tools.monitor:1.0";
-
+    
     /**
      * The name of our subsystem within the model.
      */
     public static final String SUBSYSTEM_NAME = "monitor";
+    
+    private static final int MANAGEMENT_API_MAJOR_VERSION = 3;
+    private static final int MANAGEMENT_API_MINOR_VERSION = 0;
+    private static final int MANAGEMENT_API_MICRO_VERSION = 0;
+
+    private static final ModelVersion CURRENT_VERSION = ModelVersion.create(MANAGEMENT_API_MAJOR_VERSION, MANAGEMENT_API_MINOR_VERSION, MANAGEMENT_API_MICRO_VERSION);
+
 
     /**
      * The parser used for parsing our subsystem
@@ -63,7 +70,7 @@ public class MonitorExtension implements Extension {
     	
     	log.info("MonitorExtension initialize");
     	
-        final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, 1, 0);
+        final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, CURRENT_VERSION);
         
         final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(MonitorSubsystemDefinition.INSTANCE);
         
@@ -77,6 +84,16 @@ public class MonitorExtension implements Extension {
     	log.info("MonitorExtension initializeParsers");
         context.setSubsystemXmlMapping(SUBSYSTEM_NAME, NAMESPACE, parser);
     }
+    
+    private static ModelNode createOperation(String name, String... addressElements) {
+        final ModelNode op = new ModelNode();
+        op.get(OP).set(name);
+        op.get(OP_ADDR).add(SUBSYSTEM, SUBSYSTEM_NAME);
+        for (int i = 0; i < addressElements.length; i++) {
+            op.get(OP_ADDR).add(addressElements[i], addressElements[++i]);
+        }
+        return op;
+    }
 
     private static class MonitorSubsystemParser implements XMLStreamConstants, XMLElementReader<List<ModelNode>>, XMLElementWriter<SubsystemMarshallingContext> {
 
@@ -89,27 +106,7 @@ public class MonitorExtension implements Extension {
 
         @Override
         public void writeContent(XMLExtendedStreamWriter writer, SubsystemMarshallingContext context) throws XMLStreamException {
-            ModelNode model = new ModelNode();
-            model.get(MonitorSubsystemDefinition.INSTANCE.getPathElement().getKeyValuePair()).set(context.getModelNode());
-            xmlDescription.persist(writer, model, MonitorExtension.NAMESPACE);
-            
-            ModelNode node = context.getModelNode();
-            
-            context.startSubsystemElement(MonitorExtension.NAMESPACE, false);
-            
-            writer.writeStartElement("folderPath");
-            String value = node.get("folderPath").asString();
-            writer.writeEndElement();
-            
-            writer.writeStartElement("resultFile");
-            value = node.get("resultFile").asString();
-            writer.writeEndElement();
-            
-            writer.writeStartElement("persist-to-file");
-            value = node.get("persist-to-file").asString();
-            writer.writeEndElement();
-            
-            writer.writeEndElement();
+        	System.out.println("TODO--");
         }
 
         @Override
@@ -117,29 +114,47 @@ public class MonitorExtension implements Extension {
         	
         	ParseUtils.requireNoAttributes(reader);
         	
-        	final ModelNode subsystem = new ModelNode();
-        	subsystem.get(OP).set(ADD);
-        	subsystem.get(OP_ADDR).set(PathAddress.pathAddress(SUBSYSTEM_PATH).toModelNode());
-        	list.add(subsystem);
+        	ModelNode add = createOperation(ADD);
+            list.add(add);
         	
-        	 while (reader.hasNext() && reader.nextTag() != END_ELEMENT) {
-        		 if(reader.getLocalName().equals("folderPath")){
-        			 String value = reader.getElementText();
-//        			 if(!new File(value).exists()){
-//        				 value = System.getProperty(value);
-//        			 }
-        			 subsystem.get("folderPath").set(value);
-        		 } else if(reader.getLocalName().equals("resultFile")){
-        			 String value = reader.getElementText();
-        			 subsystem.get("resultFile").set(value);
-        		 } else if(reader.getLocalName().equals("persist-to-file")){
-        			 String value = reader.getElementText();
-        			 subsystem.get("persist-to-file").set(value);
-        		 }
-        	 }
-        	
-        	 list.add(subsystem);
+            while (reader.hasNext() && reader.nextTag() != END_ELEMENT) {
+           	 final Element element = Element.forName(reader.getLocalName());
+                switch (element){
+                	case FOLEDER_PATH:
+                		list.add(parseMonitorElement(reader, Element.FOLEDER_PATH.getLocalName()));
+                		break;
+                	case RESULT_FILE_NAME:
+                		list.add(parseMonitorElement(reader, Element.RESULT_FILE_NAME.getLocalName()));
+                		break;
+                	case PERSIST_TO_FILE:
+                		list.add(parseMonitorElement(reader, Element.PERSIST_TO_FILE.getLocalName()));
+                		break;
+                	default: {
+                       throw ParseUtils.unexpectedElement(reader);
+                   }
+                }
+           }
         }
+
+
+		private ModelNode parseMonitorElement(XMLExtendedStreamReader reader, String name) {
+			
+			ModelNode op = createOperation(ADD, name, "name");
+			
+			for (int i = 0; i < reader.getAttributeCount(); i++) {
+				final String value = reader.getAttributeValue(i);
+				switch(value) {
+					case "name":
+						break;
+					case "value":
+						break;
+					default:
+						break;
+				}
+			}
+			
+			return null;
+		}
     }
 
 }

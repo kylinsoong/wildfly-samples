@@ -22,6 +22,8 @@
         <version.junit>4.11</version.junit>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <module.name>${module}</module.name>
+        
+        <version.wildfly.core>1.0.0.Beta4-SNAPSHOT</version.wildfly.core>
     </properties>
 
 
@@ -36,26 +38,6 @@
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.16</version>
-                <configuration>
-                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
-                    <enableAssertions>true</enableAssertions>
-                    <argLine>-Xmx512m</argLine>
-                    <systemProperties>
-                        <property>
-                            <name>jboss.home</name>
-                            <value>${jboss.home}</value>
-                        </property>
-                    </systemProperties>
-                    <includes>
-                        <include>**/*TestCase.java</include>
-                    </includes>
-                    <forkMode>once</forkMode>
                 </configuration>
             </plugin>
             <plugin>
@@ -79,44 +61,13 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <inherited>false</inherited>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <id>build-dist</id>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <target>
-                                <!-- Replace the '.' in ${module.name} with '/' to get its path  -->
-                                <tempfile property="temp.file"/>
-                                <echo message="${module.name}" file="${temp.file}"/>
-                                <replace file="${temp.file}" token="." value="/"/>
-                                <loadfile srcfile="${temp.file}" property="module.path"/>
-                                <delete file="${temp.file}"/>
-
-                                <delete dir="target/module"/>
-                                <property name="module.dir" value="target/module/${module.path}/main"/>
-
-                                <copy file="src/main/resources/module/main/module.xml" tofile="${module.dir}/module.xml"/>
-                                <copy file="target/${project.artifactId}.jar" todir="${module.dir}"/>
-
-                                <echo>Module ${module.name} has been created in the target/module directory. Copy to your WildFly installation.</echo>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            
         </plugins>
     </build>
 
     <dependencyManagement>
         <dependencies>
+        <!--  
             <dependency>
                 <groupId>org.wildfly</groupId>
                 <artifactId>wildfly-controller</artifactId>
@@ -127,7 +78,10 @@
                 <artifactId>wildfly-server</artifactId>
                 <version>${version.wildfly}</version>
             </dependency>
-
+			-->
+			
+			
+			
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -138,14 +92,11 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>org.wildfly</groupId>
-            <artifactId>wildfly-controller</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly</groupId>
-            <artifactId>wildfly-server</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.wildfly.core</groupId>
+			<artifactId>wildfly-server</artifactId>
+			<version>${version.wildfly.core}</version>
+		</dependency>
        
         <dependency>
             <groupId>junit</groupId>

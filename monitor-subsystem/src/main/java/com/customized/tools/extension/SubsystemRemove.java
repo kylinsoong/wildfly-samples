@@ -34,7 +34,7 @@ class SubsystemRemove extends AbstractRemoveStepHandler {
         
     	log.info("SubsystemRemove recoverServices");
     	// Restore any service removed in performRuntime by calling the same method the add handler uses.
-        SubsystemAdd.installServices(context, operation, model);
+        MonitorSubsystemAdd.installServices(context, operation, model);
     }
 
 
