@@ -67,21 +67,6 @@
 
     <dependencyManagement>
         <dependencies>
-        <!--  
-            <dependency>
-                <groupId>org.wildfly</groupId>
-                <artifactId>wildfly-controller</artifactId>
-                <version>${version.wildfly}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wildfly</groupId>
-                <artifactId>wildfly-server</artifactId>
-                <version>${version.wildfly}</version>
-            </dependency>
-			-->
-			
-			
-			
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -96,6 +81,25 @@
 			<groupId>org.wildfly.core</groupId>
 			<artifactId>wildfly-server</artifactId>
 			<version>${version.wildfly.core}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.wildfly.core</groupId>
+			<artifactId>wildfly-logging</artifactId>
+			<version>${version.wildfly.core}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.wildfly.core</groupId>
+			<artifactId>wildfly-jmx</artifactId>
+			<version>${version.wildfly.core}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.wildfly.core</groupId>
+			<artifactId>wildfly-subsystem-test-framework</artifactId>
+			<version>${version.wildfly.core}</version>
+			<scope>test</scope>
 		</dependency>
        
         <dependency>

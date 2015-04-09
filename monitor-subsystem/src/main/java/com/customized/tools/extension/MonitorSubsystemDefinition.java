@@ -1,41 +1,50 @@
 package com.customized.tools.extension;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import org.jboss.as.controller.AttributeDefinition;
-import org.jboss.as.controller.PersistentResourceDefinition;
+import org.jboss.as.controller.PathElement;
 import org.jboss.as.controller.SimpleAttributeDefinition;
 import org.jboss.as.controller.SimpleAttributeDefinitionBuilder;
+import org.jboss.as.controller.SimpleResourceDefinition;
+import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
+import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
 import org.jboss.logging.Logger;
 
 
-public class MonitorSubsystemDefinition extends PersistentResourceDefinition {
+public class MonitorSubsystemDefinition extends SimpleResourceDefinition {
 	
 	private final Logger log = Logger.getLogger(MonitorSubsystemDefinition.class);
 	
-	static final SimpleAttributeDefinition MONITOR_RESULT_LIST = SimpleAttributeDefinitionBuilder.create("monitor-result", ModelType.LIST, true).build();
+	public static final PathElement PATH_ELEMENT = PathElement.pathElement(ModelDescriptionConstants.SUBSYSTEM, MonitorExtension.SUBSYSTEM_NAME);
+	
+	
+	static final SimpleAttributeDefinition PATH_NAME = SimpleAttributeDefinitionBuilder.create(CommonAttributes.NAME, ModelType.STRING, true)
+													   .setAllowExpression(true)
+													   .build();
+	
+	static final SimpleAttributeDefinition IS_PERSIST = SimpleAttributeDefinitionBuilder.create(CommonAttributes.VALUE, ModelType.BOOLEAN, true)
+													   .setDefaultValue(new ModelNode(CommonAttributes.BOOLEAN_FALSE))
+													   .build();
 
-    static final AttributeDefinition[] ATTRIBUTES = { MONITOR_RESULT_LIST };
+    static final AttributeDefinition[] ATTRIBUTES = { PATH_NAME,  IS_PERSIST};
 
     static final MonitorSubsystemDefinition INSTANCE = new MonitorSubsystemDefinition();
 
     private MonitorSubsystemDefinition() {
-        super(MonitorExtension.SUBSYSTEM_PATH, MonitorExtension.getResourceDescriptionResolver(null), MonitorSubsystemAdd.INSTANCE, SubsystemRemove.INSTANCE);
+        super(PATH_ELEMENT, 
+        	  MonitorExtension.getResourceDescriptionResolver(MonitorExtension.SUBSYSTEM_NAME), 
+        	  MonitorSubsystemAdd.INSTANCE, 
+        	  MonitorSubsystemRemove.INSTANCE);
+        log.info("MonitorSubsystemDefinition constructor");
     }
 
-    @Override
-    public void registerOperations(ManagementResourceRegistration resourceRegistration) {
-    	log.info("MonitorSubsystemDefinition registerOperations");
-        super.registerOperations(resourceRegistration);
-        
-    }
+	@Override
+	public void registerChildren(ManagementResourceRegistration resourceRegistration) {
+		resourceRegistration.registerSubModel(new MonitorFileNameModelResource());
+		resourceRegistration.registerSubModel(new MonitorFolderPathModelResource());
+		resourceRegistration.registerSubModel(new MonitorPersistToFileResource());
+	}
 
-    @Override
-    public Collection<AttributeDefinition> getAttributes() {
-    	log.info("MonitorSubsystemDefinition getAttributes");
-        return Arrays.asList(ATTRIBUTES);
-    }
+
 }

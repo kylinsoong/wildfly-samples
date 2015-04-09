@@ -13,16 +13,11 @@ import javax.xml.stream.XMLStreamException;
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
 import org.jboss.as.controller.ModelVersion;
-import org.jboss.as.controller.PathAddress;
-import org.jboss.as.controller.PathElement;
-import org.jboss.as.controller.PersistentResourceXMLDescription;
 import org.jboss.as.controller.SubsystemRegistration;
 import org.jboss.as.controller.descriptions.StandardResourceDescriptionResolver;
-import org.jboss.as.controller.operations.common.GenericSubsystemDescribeHandler;
 import org.jboss.as.controller.parsing.ExtensionParsingContext;
 import org.jboss.as.controller.parsing.ParseUtils;
 import org.jboss.as.controller.persistence.SubsystemMarshallingContext;
-import org.jboss.as.controller.registry.ManagementResourceRegistration;
 import org.jboss.dmr.ModelNode;
 import org.jboss.logging.Logger;
 import org.jboss.staxmapper.XMLElementReader;
@@ -33,16 +28,12 @@ import org.jboss.staxmapper.XMLExtendedStreamWriter;
 public class MonitorExtension implements Extension {
 	
 	 private final Logger log = Logger.getLogger(MonitorExtension.class);
-
-    /**
-     * The name space used for the {@code substystem} element
-     */
-    public static final String NAMESPACE = "urn:com.customized.tools.monitor:1.0";
     
     /**
      * The name of our subsystem within the model.
      */
     public static final String SUBSYSTEM_NAME = "monitor";
+    private static final String RESOURCE_NAME = MonitorExtension.class.getPackage().getName() + ".LocalDescriptions";
     
     private static final int MANAGEMENT_API_MAJOR_VERSION = 3;
     private static final int MANAGEMENT_API_MINOR_VERSION = 0;
@@ -50,41 +41,34 @@ public class MonitorExtension implements Extension {
 
     private static final ModelVersion CURRENT_VERSION = ModelVersion.create(MANAGEMENT_API_MAJOR_VERSION, MANAGEMENT_API_MINOR_VERSION, MANAGEMENT_API_MICRO_VERSION);
 
-
     /**
      * The parser used for parsing our subsystem
      */
     private final MonitorSubsystemParser parser = new MonitorSubsystemParser();
+    private final MonitorSubsystemWriter writer = new MonitorSubsystemWriter();
 
-    protected static final PathElement SUBSYSTEM_PATH = PathElement.pathElement(SUBSYSTEM, SUBSYSTEM_NAME);
-    
-    private static final String RESOURCE_NAME = MonitorExtension.class.getPackage().getName() + ".LocalDescriptions";
 
     static StandardResourceDescriptionResolver getResourceDescriptionResolver(final String keyPrefix) {
-        String prefix = SUBSYSTEM_NAME + (keyPrefix == null ? "" : "." + keyPrefix);
-        return new StandardResourceDescriptionResolver(prefix, RESOURCE_NAME, MonitorExtension.class.getClassLoader(), true, false);
+        return new StandardResourceDescriptionResolver(keyPrefix, RESOURCE_NAME, MonitorExtension.class.getClassLoader(), true, false);
+    }
+    
+    @Override
+    public void initializeParsers(ExtensionParsingContext context) {
+        context.setSubsystemXmlMapping(SUBSYSTEM_NAME, CommonAttributes.NAMESPACE_MONITOR_1_0, parser);
+        log.info(context.getProcessType() + " set monitor subsystem XML Mapping parser");
     }
     
     @Override
     public void initialize(ExtensionContext context) {
     	
-    	log.info("MonitorExtension initialize");
+    	log.info(context.getProcessType() + " RunningMode: " + context.getRunningMode() + " register Subsystem, SubsystemModel, XMLElementWriter");
     	
-        final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, CURRENT_VERSION);
+        final SubsystemRegistration registration = context.registerSubsystem(SUBSYSTEM_NAME, CURRENT_VERSION);
         
-        final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(MonitorSubsystemDefinition.INSTANCE);
-        
-        registration.registerOperationHandler(GenericSubsystemDescribeHandler.DEFINITION, GenericSubsystemDescribeHandler.INSTANCE);
-
-        subsystem.registerXMLElementWriter(parser);
+        registration.registerSubsystemModel(MonitorSubsystemDefinition.INSTANCE);
+        registration.registerXMLElementWriter(writer);        
     }
 
-    @Override
-    public void initializeParsers(ExtensionParsingContext context) {
-    	log.info("MonitorExtension initializeParsers");
-        context.setSubsystemXmlMapping(SUBSYSTEM_NAME, NAMESPACE, parser);
-    }
-    
     private static ModelNode createOperation(String name, String... addressElements) {
         final ModelNode op = new ModelNode();
         op.get(OP).set(name);
@@ -95,19 +79,7 @@ public class MonitorExtension implements Extension {
         return op;
     }
 
-    private static class MonitorSubsystemParser implements XMLStreamConstants, XMLElementReader<List<ModelNode>>, XMLElementWriter<SubsystemMarshallingContext> {
-
-        private final PersistentResourceXMLDescription xmlDescription;
-
-        private MonitorSubsystemParser() {
-            this.xmlDescription = PersistentResourceXMLDescription.builder(MonitorSubsystemDefinition.INSTANCE).build();
-        }
-
-
-        @Override
-        public void writeContent(XMLExtendedStreamWriter writer, SubsystemMarshallingContext context) throws XMLStreamException {
-        	System.out.println("TODO--");
-        }
+    private static class MonitorSubsystemParser implements XMLStreamConstants, XMLElementReader<List<ModelNode>>{
 
         @Override
         public void readElement(XMLExtendedStreamReader reader, List<ModelNode> list) throws XMLStreamException {
@@ -118,16 +90,16 @@ public class MonitorExtension implements Extension {
             list.add(add);
         	
             while (reader.hasNext() && reader.nextTag() != END_ELEMENT) {
-           	 final Element element = Element.forName(reader.getLocalName());
-                switch (element){
-                	case FOLEDER_PATH:
-                		list.add(parseMonitorElement(reader, Element.FOLEDER_PATH.getLocalName()));
+           	 	String name = reader.getLocalName();
+                switch (name){
+                	case CommonAttributes.FOLDER_PATH :
+                		list.add(parseModelElement(reader, CommonAttributes.FOLDERPATH_MODEL, CommonAttributes.FOLDERPATH));
                 		break;
-                	case RESULT_FILE_NAME:
-                		list.add(parseMonitorElement(reader, Element.RESULT_FILE_NAME.getLocalName()));
+                	case CommonAttributes.RESULT_FILE_NAME:
+                		list.add(parseModelElement(reader, CommonAttributes.RESULTFILE_MODEL, CommonAttributes.RESULTFILENAME));
                 		break;
-                	case PERSIST_TO_FILE:
-                		list.add(parseMonitorElement(reader, Element.PERSIST_TO_FILE.getLocalName()));
+                	case CommonAttributes.PERSIST_TO_FILE:
+                		list.add(parseModelElement(reader, CommonAttributes.PERSIST_MODEL, CommonAttributes.PERSISTTOFILE));
                 		break;
                 	default: {
                        throw ParseUtils.unexpectedElement(reader);
@@ -137,24 +109,67 @@ public class MonitorExtension implements Extension {
         }
 
 
-		private ModelNode parseMonitorElement(XMLExtendedStreamReader reader, String name) {
+		private ModelNode parseModelElement(XMLExtendedStreamReader reader, String model, String address) throws XMLStreamException {
 			
-			ModelNode op = createOperation(ADD, name, "name");
+			ModelNode op = createOperation(ADD, model, address);
 			
-			for (int i = 0; i < reader.getAttributeCount(); i++) {
-				final String value = reader.getAttributeValue(i);
-				switch(value) {
-					case "name":
-						break;
-					case "value":
-						break;
-					default:
-						break;
-				}
-			}
-			
-			return null;
+            for (int i = 0; i < reader.getAttributeCount(); i++) {
+            	final String value = reader.getAttributeValue(i);
+            	final String attr = reader.getAttributeLocalName(i);
+            	switch(attr){
+            	case CommonAttributes.NAME:
+            		MonitorSubsystemDefinition.PATH_NAME.parseAndSetParameter(value, op, reader);
+            		break;
+            	case CommonAttributes.VALUE:
+            		MonitorSubsystemDefinition.IS_PERSIST.parseAndSetParameter(value, op, reader);
+            		break;
+            	default:
+                    throw ParseUtils.unexpectedAttribute(reader, i);
+            	}
+            }
+            
+            ParseUtils.requireNoContent(reader);
+            
+			return op;
 		}
+
+    }
+    
+    private static class MonitorSubsystemWriter implements XMLStreamConstants, XMLElementWriter<SubsystemMarshallingContext> {
+
+		public void writeContent(XMLExtendedStreamWriter writer, SubsystemMarshallingContext context) throws XMLStreamException {
+			
+			final ModelNode node = context.getModelNode();
+
+            context.startSubsystemElement(CommonAttributes.NAMESPACE_MONITOR_1_0, false);
+            
+            if(node.hasDefined(CommonAttributes.FOLDERPATH_MODEL)) {
+            	ModelNode nameModel = node.get(CommonAttributes.FOLDERPATH_MODEL);
+            	if(nameModel.hasDefined(CommonAttributes.NAME)){
+            		writer.writeEmptyElement(CommonAttributes.FOLDER_PATH);
+            		MonitorSubsystemDefinition.PATH_NAME.marshallAsAttribute(nameModel.get(CommonAttributes.NAME), false, writer);
+            	}
+            } 
+            
+            if(node.hasDefined(CommonAttributes.RESULTFILE_MODEL)) {
+            	ModelNode nameModel = node.get(CommonAttributes.RESULTFILE_MODEL);
+            	if(nameModel.hasDefined(CommonAttributes.NAME)){
+            		writer.writeEmptyElement(CommonAttributes.RESULT_FILE_NAME);
+            		MonitorSubsystemDefinition.PATH_NAME.marshallAsAttribute(nameModel.get(CommonAttributes.NAME), false, writer);
+            	}
+            }
+            
+            if(node.hasDefined(CommonAttributes.PERSIST_MODEL)) {
+            	ModelNode valueModel = node.get(CommonAttributes.PERSIST_MODEL);
+            	if(valueModel.hasDefined(CommonAttributes.VALUE)){
+            		writer.writeEmptyElement(CommonAttributes.PERSIST_TO_FILE);
+            		MonitorSubsystemDefinition.IS_PERSIST.marshallAsAttribute(valueModel.get(CommonAttributes.VALUE), false, writer);
+            	}
+            }
+            
+            writer.writeEndElement();
+		}
+    	
     }
 
 }

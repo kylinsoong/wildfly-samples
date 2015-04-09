@@ -105,16 +105,16 @@
             </formatter>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:jmx:1.3">
-            <expose-resolved-model/>
-            <expose-expression-model/>
-            <remoting-connector/>
+            <expose-resolved-model domain-name="jboss.as"/>
+            <expose-expression-model domain-name="jboss.as.dir"/>
+            <remoting-connector use-management-endpoint="true"/>
+        </subsystem>
+        <subsystem xmlns="urn:com.customized.tools.monitor:1.0">
+            <folder-path name="${jboss.server.base.dir}"/>
+            <result-file name="monitor.out"/>
+            <persist-to-file value="true"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:request-controller:1.0"/>
-        <subsystem xmlns="urn:com.customized.tools.monitor:1.0">
-		    <folder-path name="${jboss.server.base.dir}" />
-		    <result-file name="monitor.out" />
-		    <persist-to-file value="false" />
-		</subsystem>
     </profile>
     <interfaces>
         <interface name="management">

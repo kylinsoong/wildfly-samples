@@ -11,14 +11,14 @@ import org.jboss.logging.Logger;
  *
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  */
-class SubsystemRemove extends AbstractRemoveStepHandler {
+class MonitorSubsystemRemove extends AbstractRemoveStepHandler {
 	
-	private final static Logger log = Logger.getLogger(SubsystemRemove.class);
+	private final static Logger log = Logger.getLogger(MonitorSubsystemRemove.class);
 
-    static final SubsystemRemove INSTANCE = new SubsystemRemove();
+    static final MonitorSubsystemRemove INSTANCE = new MonitorSubsystemRemove();
 
 
-    private SubsystemRemove() {
+    private MonitorSubsystemRemove() {
     }
 
     @Override
@@ -33,8 +33,7 @@ class SubsystemRemove extends AbstractRemoveStepHandler {
     protected void recoverServices(OperationContext context, ModelNode operation, ModelNode model) throws OperationFailedException {
         
     	log.info("SubsystemRemove recoverServices");
-    	// Restore any service removed in performRuntime by calling the same method the add handler uses.
-        MonitorSubsystemAdd.installServices(context, operation, model);
+
     }
 
 
