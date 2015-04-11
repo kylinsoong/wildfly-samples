@@ -1,0 +1,11 @@
+/subsystem=monitor:read-resource()
+/subsystem=monitor:read-resource-description()
+
+/subsystem=monitor:read-attribute(name=folder-path-model)
+/subsystem=monitor:read-attribute(name=file-name-model)
+/subsystem=monitor:read-attribute(name=persist-model)
+
+/subsystem=monitor/file-name-model=fileName:read-attribute(name=fileName)
+/subsystem=monitor/folder-path-model=folderPath:read-attribute(name=folderName)
+/subsystem=monitor/persist-model=isPersist:read-attribute(name=isPersist)
+

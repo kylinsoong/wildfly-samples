@@ -17,15 +17,15 @@
     </xs:complexType>
     
     <xs:complexType name="folderPathType">
-      <xs:attribute name="name" type="xs:string" default="${jboss.server.base.dir}"/>
+      <xs:attribute name="folderName" type="xs:string" default="${jboss.server.base.dir}"/>
     </xs:complexType>
     
     <xs:complexType name="resultFileType">
-      <xs:attribute name="name" type="xs:string" default="monitor.out"/>
+      <xs:attribute name="fileName" type="xs:string" default="monitor.out"/>
     </xs:complexType>
     
     <xs:complexType name="persistToFileType">
-      <xs:attribute name="value" type="xs:boolean" default="false"/>
+      <xs:attribute name=isPersist type="xs:boolean" default="false"/>
     </xs:complexType>
     
 </xs:schema>

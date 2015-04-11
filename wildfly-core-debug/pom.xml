@@ -19,9 +19,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
 		<version.wildfly>8.2.0.Final</version.wildfly>
+		
+		<version.wildfly.core>1.0.0.Beta4-SNAPSHOT</version.wildfly.core>
 	</properties>
 
 	<dependencies>
+
+<!--  
 		<dependency>
 			<groupId>org.wildfly</groupId>
 			<artifactId>wildfly-controller</artifactId>
@@ -33,6 +37,15 @@
 			<artifactId>wildfly-server</artifactId>
 			<version>${version.wildfly}</version>
 		</dependency>
+-->
+
+		<dependency>
+			<groupId>org.wildfly.core</groupId>
+			<artifactId>wildfly-server</artifactId>
+			<version>${version.wildfly.core}</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>

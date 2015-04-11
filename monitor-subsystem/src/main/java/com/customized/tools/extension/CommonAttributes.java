@@ -16,8 +16,10 @@ interface CommonAttributes {
 	String RESULTFILENAME = "fileName"; 
 	String PERSISTTOFILE = "isPersist"; 
 	
-	String NAME = "name";
-	String VALUE = "value";
+	String FOLDERNAME = "folderName";
+	String FILENAME = "fileName";
+	String ISPERSIST = "isPersist";
+	
 	Boolean BOOLEAN_FALSE = false;
 
 }

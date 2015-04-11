@@ -110,10 +110,10 @@
             <remoting-connector use-management-endpoint="true"/>
         </subsystem>
         <subsystem xmlns="urn:com.customized.tools.monitor:1.0">
-            <folder-path name="${jboss.server.base.dir}"/>
-            <result-file name="monitor.out"/>
-            <persist-to-file value="true"/>
-        </subsystem>
+			<folder-path folderName="${jboss.server.base.dir}"/>
+			<result-file fileName="monitor.out"/>
+			<persist-to-file isPersist="true"/>
+		</subsystem>
         <subsystem xmlns="urn:jboss:domain:request-controller:1.0"/>
     </profile>
     <interfaces>

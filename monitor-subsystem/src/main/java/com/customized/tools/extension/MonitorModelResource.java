@@ -16,8 +16,10 @@ import org.jboss.msc.service.ServiceName;
 public class MonitorModelResource extends SimpleResourceDefinition{
 
 	public MonitorModelResource(PathElement pathElement, ResourceDescriptionResolver descriptionResolver, SimpleAttributeDefinition name, SimpleAttributeDefinition...otherAttributes) {
-		super(pathElement, descriptionResolver, new ShowModelAdd(name, otherAttributes), new ShowModelRemove());
-		// TODO Auto-generated constructor stub
+		super(pathElement, 
+			  descriptionResolver, 
+			  new ShowModelAdd(name, otherAttributes), 
+			  new ShowModelRemove());
 	}
 	
 	private static class ShowModelAdd extends RestartParentResourceAddHandler {

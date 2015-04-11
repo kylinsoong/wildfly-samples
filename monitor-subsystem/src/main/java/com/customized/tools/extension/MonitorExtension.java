@@ -13,6 +13,7 @@ import javax.xml.stream.XMLStreamException;
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
 import org.jboss.as.controller.ModelVersion;
+import org.jboss.as.controller.SimpleAttributeDefinition;
 import org.jboss.as.controller.SubsystemRegistration;
 import org.jboss.as.controller.descriptions.StandardResourceDescriptionResolver;
 import org.jboss.as.controller.parsing.ExtensionParsingContext;
@@ -65,7 +66,7 @@ public class MonitorExtension implements Extension {
     	
         final SubsystemRegistration registration = context.registerSubsystem(SUBSYSTEM_NAME, CURRENT_VERSION);
         
-        registration.registerSubsystemModel(MonitorSubsystemDefinition.INSTANCE);
+        registration.registerSubsystemModel(MonitorSubsystemRootResource.INSTANCE);
         registration.registerXMLElementWriter(writer);        
     }
 
@@ -117,11 +118,14 @@ public class MonitorExtension implements Extension {
             	final String value = reader.getAttributeValue(i);
             	final String attr = reader.getAttributeLocalName(i);
             	switch(attr){
-            	case CommonAttributes.NAME:
-            		MonitorSubsystemDefinition.PATH_NAME.parseAndSetParameter(value, op, reader);
+            	case CommonAttributes.FOLDERNAME:
+            		MonitorFolderPathModelResource.FOLDER_NAME.parseAndSetParameter(value, op, reader);
             		break;
-            	case CommonAttributes.VALUE:
-            		MonitorSubsystemDefinition.IS_PERSIST.parseAndSetParameter(value, op, reader);
+            	case CommonAttributes.FILENAME:
+            		MonitorFileNameModelResource.FILE_NAME.parseAndSetParameter(value, op, reader);
+            		break;
+            	case CommonAttributes.ISPERSIST:
+            		MonitorPersistToFileResource.IS_PERSIST.parseAndSetParameter(value, op, reader);
             		break;
             	default:
                     throw ParseUtils.unexpectedAttribute(reader, i);
@@ -145,25 +149,25 @@ public class MonitorExtension implements Extension {
             
             if(node.hasDefined(CommonAttributes.FOLDERPATH_MODEL)) {
             	ModelNode nameModel = node.get(CommonAttributes.FOLDERPATH_MODEL);
-            	if(nameModel.hasDefined(CommonAttributes.NAME)){
+            	if(nameModel.hasDefined(CommonAttributes.FOLDERNAME)){
             		writer.writeEmptyElement(CommonAttributes.FOLDER_PATH);
-            		MonitorSubsystemDefinition.PATH_NAME.marshallAsAttribute(nameModel.get(CommonAttributes.NAME), false, writer);
+            		MonitorFolderPathModelResource.FOLDER_NAME.marshallAsAttribute(nameModel.get(CommonAttributes.FOLDERNAME), false, writer);
             	}
             } 
             
             if(node.hasDefined(CommonAttributes.RESULTFILE_MODEL)) {
             	ModelNode nameModel = node.get(CommonAttributes.RESULTFILE_MODEL);
-            	if(nameModel.hasDefined(CommonAttributes.NAME)){
+            	if(nameModel.hasDefined(CommonAttributes.FILENAME)){
             		writer.writeEmptyElement(CommonAttributes.RESULT_FILE_NAME);
-            		MonitorSubsystemDefinition.PATH_NAME.marshallAsAttribute(nameModel.get(CommonAttributes.NAME), false, writer);
+            		MonitorFileNameModelResource.FILE_NAME.marshallAsAttribute(nameModel.get(CommonAttributes.FILENAME), false, writer);
             	}
             }
             
             if(node.hasDefined(CommonAttributes.PERSIST_MODEL)) {
             	ModelNode valueModel = node.get(CommonAttributes.PERSIST_MODEL);
-            	if(valueModel.hasDefined(CommonAttributes.VALUE)){
+            	if(valueModel.hasDefined(CommonAttributes.ISPERSIST)){
             		writer.writeEmptyElement(CommonAttributes.PERSIST_TO_FILE);
-            		MonitorSubsystemDefinition.IS_PERSIST.marshallAsAttribute(valueModel.get(CommonAttributes.VALUE), false, writer);
+            		MonitorPersistToFileResource.IS_PERSIST.marshallAsAttribute(valueModel.get(CommonAttributes.ISPERSIST), false, writer);
             	}
             }
             
