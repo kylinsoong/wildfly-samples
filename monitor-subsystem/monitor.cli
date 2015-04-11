@@ -7,5 +7,9 @@
 
 /subsystem=monitor/file-name-model=fileName:read-attribute(name=fileName)
 /subsystem=monitor/folder-path-model=folderPath:read-attribute(name=folderName)
-/subsystem=monitor/persist-model=isPersist:read-attribute(name=isPersist)
+
+/subsystem=monitor/persist-model=persist:read-resource-description()
+/subsystem=monitor/persist-model=persist:read-attribute(name=isPersist)
+/subsystem=monitor/persist-model=persist:read-attribute(name=isPersist, include-defaults=true,resolve-expressions=true)
+/subsystem=monitor/persist-model=persist:write-attribute(name=isPersist,value=false)
 

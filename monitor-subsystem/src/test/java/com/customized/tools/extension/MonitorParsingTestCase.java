@@ -16,9 +16,9 @@ import org.jboss.as.subsystem.test.AbstractSubsystemTest;
 import org.jboss.dmr.ModelNode;
 import org.junit.Test;
 
-public class SubsystemParsingTestCase extends AbstractSubsystemTest {
+public class MonitorParsingTestCase extends AbstractSubsystemTest {
 
-	public SubsystemParsingTestCase() {
+	public MonitorParsingTestCase() {
 		super(MonitorExtension.SUBSYSTEM_NAME, new MonitorExtension());
 	}
 	

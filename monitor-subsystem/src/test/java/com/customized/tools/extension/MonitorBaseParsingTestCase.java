@@ -6,9 +6,9 @@ import org.jboss.as.subsystem.test.AbstractSubsystemBaseTest;
 import org.junit.Ignore;
 
 @Ignore
-public class SubsystemBaseParsingTestCase extends AbstractSubsystemBaseTest {
+public class MonitorBaseParsingTestCase extends AbstractSubsystemBaseTest {
 
-	public SubsystemBaseParsingTestCase() {
+	public MonitorBaseParsingTestCase() {
 		super(MonitorExtension.SUBSYSTEM_NAME, new MonitorExtension());
 	}
 

@@ -24,7 +24,7 @@ class MonitorSubsystemRemove extends AbstractRemoveStepHandler {
     @Override
     protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model) throws OperationFailedException {
        
-    	log.info("SubsystemRemove performBoottime");
+    	log.info("MonitorSubsystemRemove performBoottime");
     	//Remove any services installed by the corresponding add handler here
         //context.removeService(ServiceName.of("some", "name"));
     }
@@ -32,7 +32,7 @@ class MonitorSubsystemRemove extends AbstractRemoveStepHandler {
     @Override
     protected void recoverServices(OperationContext context, ModelNode operation, ModelNode model) throws OperationFailedException {
         
-    	log.info("SubsystemRemove recoverServices");
+    	log.info("MonitorSubsystemRemove recoverServices");
 
     }
 

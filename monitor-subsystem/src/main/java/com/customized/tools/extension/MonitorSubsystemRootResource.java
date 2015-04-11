@@ -74,7 +74,7 @@ public class MonitorSubsystemRootResource extends SimpleResourceDefinition {
 	public void registerChildren(ManagementResourceRegistration resourceRegistration) {
 		resourceRegistration.registerSubModel(new MonitorFileNameModelResource());
 		resourceRegistration.registerSubModel(new MonitorFolderPathModelResource());
-		resourceRegistration.registerSubModel(new MonitorPersistToFileResource());
+		resourceRegistration.registerSubModel(MonitorPersistToFileResource.INSTANCE);
 		
 		log.info("register Children ");
 	}

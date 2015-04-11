@@ -1,26 +1,43 @@
 package com.customized.tools.extension;
 
+import org.jboss.as.controller.OperationStepHandler;
 import org.jboss.as.controller.PathElement;
+import org.jboss.as.controller.ReloadRequiredWriteAttributeHandler;
 import org.jboss.as.controller.SimpleAttributeDefinition;
 import org.jboss.as.controller.SimpleAttributeDefinitionBuilder;
+import org.jboss.as.controller.SimpleResourceDefinition;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
 
-public class MonitorPersistToFileResource extends MonitorModelResource{
+import static com.customized.tools.extension.CommonAttributes.PERSIST_MODEL;
+import static com.customized.tools.extension.CommonAttributes.PERSISTTOFILE;
+import static com.customized.tools.extension.CommonAttributes.ISPERSIST;
+import static com.customized.tools.extension.CommonAttributes.BOOLEAN_FALSE;
+
+public class MonitorPersistToFileResource extends SimpleResourceDefinition {
 	
-	static final PathElement PATH_ELEMENT = PathElement.pathElement(CommonAttributes.PERSIST_MODEL, CommonAttributes.PERSISTTOFILE);
+	static final PathElement PATH_ELEMENT = PathElement.pathElement(PERSIST_MODEL, PERSISTTOFILE);
 	
-	static final SimpleAttributeDefinition IS_PERSIST = SimpleAttributeDefinitionBuilder.create(CommonAttributes.ISPERSIST, ModelType.BOOLEAN, true)
-			   .setDefaultValue(new ModelNode(CommonAttributes.BOOLEAN_FALSE))
-			   .build();
+	static final SimpleAttributeDefinition IS_PERSIST = SimpleAttributeDefinitionBuilder.create(ISPERSIST, ModelType.BOOLEAN, true)
+			   								.setDefaultValue(new ModelNode(BOOLEAN_FALSE))
+			   								.setAllowExpression(true)
+			   								.build();
+	
+	static MonitorPersistToFileResource INSTANCE = new MonitorPersistToFileResource();
 
 	MonitorPersistToFileResource() {
-		super(PATH_ELEMENT, MonitorExtension.getResourceDescriptionResolver(CommonAttributes.PERSIST_MODEL + "." + PATH_ELEMENT.getValue()), IS_PERSIST);
+		super(PATH_ELEMENT, 
+			  MonitorExtension.getResourceDescriptionResolver(PERSIST_MODEL), 
+			  MonitorPersistToFileResourceAdd.INSTANCE, 
+			  MonitorPersistToFileResourceRemove.INSTANCE);
 	}
-	
+
 	@Override
 	public void registerAttributes(ManagementResourceRegistration resourceRegistration) {
-		super.registerAttributes(resourceRegistration);
+		final OperationStepHandler writeHandler = new ReloadRequiredWriteAttributeHandler(IS_PERSIST);
+		resourceRegistration.registerReadWriteAttribute(IS_PERSIST, null, writeHandler);
 	}
+	
+	
 }
