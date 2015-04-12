@@ -13,7 +13,6 @@ import javax.xml.stream.XMLStreamException;
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
 import org.jboss.as.controller.ModelVersion;
-import org.jboss.as.controller.SimpleAttributeDefinition;
 import org.jboss.as.controller.SubsystemRegistration;
 import org.jboss.as.controller.descriptions.StandardResourceDescriptionResolver;
 import org.jboss.as.controller.parsing.ExtensionParsingContext;
@@ -93,13 +92,13 @@ public class MonitorExtension implements Extension {
             while (reader.hasNext() && reader.nextTag() != END_ELEMENT) {
            	 	String name = reader.getLocalName();
                 switch (name){
-                	case CommonAttributes.FOLDER_PATH :
-                		list.add(parseModelElement(reader, CommonAttributes.FOLDERPATH_MODEL, CommonAttributes.FOLDERPATH));
+                	case CommonAttributes.ELEMENT_FOLDER_PATH :
+                		list.add(parseModelElement(reader, CommonAttributes.PATH_MODEL, CommonAttributes.FOLDERPATH));
                 		break;
-                	case CommonAttributes.RESULT_FILE_NAME:
-                		list.add(parseModelElement(reader, CommonAttributes.RESULTFILE_MODEL, CommonAttributes.RESULTFILENAME));
+                	case CommonAttributes.ELEMENT_RESULT_FILE_NAME:
+                		list.add(parseModelElement(reader, CommonAttributes.PATH_MODEL, CommonAttributes.RESULTFILENAME));
                 		break;
-                	case CommonAttributes.PERSIST_TO_FILE:
+                	case CommonAttributes.ELEMENT_PERSIST_TO_FILE:
                 		list.add(parseModelElement(reader, CommonAttributes.PERSIST_MODEL, CommonAttributes.PERSISTTOFILE));
                 		break;
                 	default: {
@@ -118,13 +117,13 @@ public class MonitorExtension implements Extension {
             	final String value = reader.getAttributeValue(i);
             	final String attr = reader.getAttributeLocalName(i);
             	switch(attr){
-            	case CommonAttributes.FOLDERNAME:
+            	case CommonAttributes.ATTR_FOLDERNAME:
             		MonitorFolderPathModelResource.FOLDER_NAME.parseAndSetParameter(value, op, reader);
             		break;
-            	case CommonAttributes.FILENAME:
+            	case CommonAttributes.ATTR_FILENAME:
             		MonitorFileNameModelResource.FILE_NAME.parseAndSetParameter(value, op, reader);
             		break;
-            	case CommonAttributes.ISPERSIST:
+            	case CommonAttributes.ATTR_ISPERSIST:
             		MonitorPersistToFileResource.IS_PERSIST.parseAndSetParameter(value, op, reader);
             		break;
             	default:
@@ -139,6 +138,7 @@ public class MonitorExtension implements Extension {
 
     }
     
+    
     private static class MonitorSubsystemWriter implements XMLStreamConstants, XMLElementWriter<SubsystemMarshallingContext> {
 
 		public void writeContent(XMLExtendedStreamWriter writer, SubsystemMarshallingContext context) throws XMLStreamException {
@@ -147,27 +147,23 @@ public class MonitorExtension implements Extension {
 
             context.startSubsystemElement(CommonAttributes.NAMESPACE_MONITOR_1_0, false);
             
-            if(node.hasDefined(CommonAttributes.FOLDERPATH_MODEL)) {
-            	ModelNode nameModel = node.get(CommonAttributes.FOLDERPATH_MODEL);
-            	if(nameModel.hasDefined(CommonAttributes.FOLDERNAME)){
-            		writer.writeEmptyElement(CommonAttributes.FOLDER_PATH);
-            		MonitorFolderPathModelResource.FOLDER_NAME.marshallAsAttribute(nameModel.get(CommonAttributes.FOLDERNAME), false, writer);
+            if(node.hasDefined(CommonAttributes.PATH_MODEL)){
+            	ModelNode pathModel = node.get(CommonAttributes.PATH_MODEL);
+            	if(pathModel.hasDefined(CommonAttributes.FOLDERPATH)){
+            		writer.writeEmptyElement(CommonAttributes.ELEMENT_FOLDER_PATH);
+            		MonitorFolderPathModelResource.FOLDER_NAME.marshallAsAttribute(pathModel.get(CommonAttributes.ATTR_FOLDERNAME), false, writer);
             	}
-            } 
-            
-            if(node.hasDefined(CommonAttributes.RESULTFILE_MODEL)) {
-            	ModelNode nameModel = node.get(CommonAttributes.RESULTFILE_MODEL);
-            	if(nameModel.hasDefined(CommonAttributes.FILENAME)){
-            		writer.writeEmptyElement(CommonAttributes.RESULT_FILE_NAME);
-            		MonitorFileNameModelResource.FILE_NAME.marshallAsAttribute(nameModel.get(CommonAttributes.FILENAME), false, writer);
+            	if(pathModel.hasDefined(CommonAttributes.RESULTFILENAME)){
+            		writer.writeEmptyElement(CommonAttributes.ELEMENT_RESULT_FILE_NAME);
+            		MonitorFileNameModelResource.FILE_NAME.marshallAsAttribute(pathModel.get(CommonAttributes.ATTR_FILENAME), false, writer);
             	}
             }
             
             if(node.hasDefined(CommonAttributes.PERSIST_MODEL)) {
             	ModelNode valueModel = node.get(CommonAttributes.PERSIST_MODEL);
-            	if(valueModel.hasDefined(CommonAttributes.ISPERSIST)){
-            		writer.writeEmptyElement(CommonAttributes.PERSIST_TO_FILE);
-            		MonitorPersistToFileResource.IS_PERSIST.marshallAsAttribute(valueModel.get(CommonAttributes.ISPERSIST), false, writer);
+            	if(valueModel.hasDefined(CommonAttributes.PERSISTTOFILE)){
+            		writer.writeEmptyElement(CommonAttributes.ELEMENT_PERSIST_TO_FILE);
+            		MonitorPersistToFileResource.IS_PERSIST.marshallAsAttribute(valueModel.get(CommonAttributes.ATTR_ISPERSIST), false, writer);
             	}
             }
             

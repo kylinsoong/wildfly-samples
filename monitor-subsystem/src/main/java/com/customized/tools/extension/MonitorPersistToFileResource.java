@@ -12,14 +12,14 @@ import org.jboss.dmr.ModelType;
 
 import static com.customized.tools.extension.CommonAttributes.PERSIST_MODEL;
 import static com.customized.tools.extension.CommonAttributes.PERSISTTOFILE;
-import static com.customized.tools.extension.CommonAttributes.ISPERSIST;
+import static com.customized.tools.extension.CommonAttributes.ATTR_ISPERSIST;
 import static com.customized.tools.extension.CommonAttributes.BOOLEAN_FALSE;
 
 public class MonitorPersistToFileResource extends SimpleResourceDefinition {
 	
 	static final PathElement PATH_ELEMENT = PathElement.pathElement(PERSIST_MODEL, PERSISTTOFILE);
 	
-	static final SimpleAttributeDefinition IS_PERSIST = SimpleAttributeDefinitionBuilder.create(ISPERSIST, ModelType.BOOLEAN, true)
+	static final SimpleAttributeDefinition IS_PERSIST = SimpleAttributeDefinitionBuilder.create(ATTR_ISPERSIST, ModelType.BOOLEAN, true)
 			   								.setDefaultValue(new ModelNode(BOOLEAN_FALSE))
 			   								.setAllowExpression(true)
 			   								.build();

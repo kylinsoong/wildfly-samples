@@ -7,8 +7,11 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUB
 import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+
+import javax.xml.stream.XMLStreamException;
 
 import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.PathElement;
@@ -43,9 +46,24 @@ public class MonitorParsingTestCase extends AbstractSubsystemTest {
 		PathElement element = addr.getElement(0);
 		assertEquals(SUBSYSTEM, element.getKey());
 		assertEquals(MonitorExtension.SUBSYSTEM_NAME, element.getValue());
+
+	}
+	
+	@Test
+	public void testMonitorSubsystemWriter() throws IOException, XMLStreamException {
 		
+		List<ModelNode> operations = super.parse(loadSubsystem());
 		
-		
+		for(ModelNode node : operations){
+//			System.out.println(node);
+			
+			if(node.hasDefined(CommonAttributes.PATH_MODEL)){
+				ModelNode pathModel = node.get(CommonAttributes.PATH_MODEL);
+				System.out.println(pathModel);
+			}
+			
+			System.out.println();
+		}
 	}
 	
 	private String loadSubsystem() throws java.io.IOException {

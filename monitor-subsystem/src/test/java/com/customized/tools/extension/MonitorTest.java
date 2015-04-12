@@ -12,6 +12,10 @@ public class MonitorTest {
 		System.out.println(CommonAttributes.PERSIST_MODEL + "." + MonitorPersistToFileResource.PATH_ELEMENT.getValue());
 		
 		System.out.println(PathElement.pathElement(CommonAttributes.PATH_MODEL, CommonAttributes.RESULTFILENAME).getValue());
-//		System.out.println(CommonAttributes.PATH_MODEL + "." + MonitorFileNameModelResource.PATH_ELEMENT.getValue());
+		System.out.println(CommonAttributes.PATH_MODEL + "." + MonitorFileNameModelResource.PATH_ELEMENT.getValue());
+		
+		System.out.println(MonitorFolderPathModelResource.PATH_ELEMENT.getValue());
+		System.out.println(CommonAttributes.PATH_MODEL + "." + MonitorFolderPathModelResource.PATH_ELEMENT.getValue());
+
 	}
 }

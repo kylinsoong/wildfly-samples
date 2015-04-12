@@ -28,11 +28,8 @@ public class MonitorSubsystemRootResource extends SimpleResourceDefinition {
 	
 	private final Logger log = Logger.getLogger(MonitorSubsystemRootResource.class);
 	
-	private static final SimpleAttributeDefinition FOLDERPATH_MODEL_ALIAS = SimpleAttributeDefinitionBuilder.create(CommonAttributes.FOLDERPATH_MODEL, ModelType.BOOLEAN, true)
-																			.addFlag(AttributeAccess.Flag.ALIAS)
-																            .build();
 	
-	private static final SimpleAttributeDefinition RESULTFILE_MODEL_ALIAS = SimpleAttributeDefinitionBuilder.create(CommonAttributes.RESULTFILE_MODEL, ModelType.BOOLEAN, true)
+	private static final SimpleAttributeDefinition PATH_MODEL_ALIAS = SimpleAttributeDefinitionBuilder.create(CommonAttributes.PATH_MODEL, ModelType.BOOLEAN, true)
 																			.addFlag(AttributeAccess.Flag.ALIAS)
 																            .build();
 	
@@ -55,8 +52,7 @@ public class MonitorSubsystemRootResource extends SimpleResourceDefinition {
     
     @Override
 	public void registerAttributes(ManagementResourceRegistration resourceRegistration) {   	
-    	resourceRegistration.registerReadWriteAttribute(FOLDERPATH_MODEL_ALIAS, FolderPathModelAliasReadHandler.INSTANCE, FolderPathModelAliasWriteHandler.INSTANCE);
-    	resourceRegistration.registerReadWriteAttribute(RESULTFILE_MODEL_ALIAS, FilePathModelAliasReadHandler.INSTANCE, FilePathModelAliasWriteHandler.INSTANCE);
+    	resourceRegistration.registerReadWriteAttribute(PATH_MODEL_ALIAS, FolderPathModelAliasReadHandler.INSTANCE, FolderPathModelAliasWriteHandler.INSTANCE);
     	resourceRegistration.registerReadWriteAttribute(PERSIST_MODEL_ALIAS, PersistModelAliasReadHandler.INSTANCE, PersistModelAliasWriteHandler.INSTANCE);
     	
     	log.info("registerReadWriteAttribute FOLDERPATH_MODEL_ALIAS, RESULTFILE_MODEL_ALIAS, PERSIST_MODEL_ALIAS");
@@ -72,8 +68,8 @@ public class MonitorSubsystemRootResource extends SimpleResourceDefinition {
 
 	@Override
 	public void registerChildren(ManagementResourceRegistration resourceRegistration) {
-		resourceRegistration.registerSubModel(new MonitorFileNameModelResource());
 		resourceRegistration.registerSubModel(new MonitorFolderPathModelResource());
+		resourceRegistration.registerSubModel(new MonitorFileNameModelResource());
 		resourceRegistration.registerSubModel(MonitorPersistToFileResource.INSTANCE);
 		
 		log.info("register Children ");
@@ -117,43 +113,6 @@ public class MonitorSubsystemRootResource extends SimpleResourceDefinition {
 		}
 	}
 	
-	private static class FilePathModelAliasReadHandler implements OperationStepHandler{
-
-		static final FilePathModelAliasReadHandler INSTANCE = new FilePathModelAliasReadHandler();
-		@Override
-		public void execute(OperationContext context, ModelNode operation)throws OperationFailedException {
-			final Resource resource = context.readResource(PathAddress.EMPTY_ADDRESS);
-			context.getResult().set(resource.hasChild(MonitorFileNameModelResource.PATH_ELEMENT));
-		}
-		
-	}
-	
-	private static class FilePathModelAliasWriteHandler implements OperationStepHandler{
-
-		static final FilePathModelAliasWriteHandler INSTANCE = new FilePathModelAliasWriteHandler();
-		@Override
-		public void execute(OperationContext context, ModelNode operation)throws OperationFailedException {
-			final boolean value = operation.get(ModelDescriptionConstants.VALUE).asBoolean(false);
-            boolean hasResource = context.readResource(PathAddress.EMPTY_ADDRESS).hasChild(MonitorFileNameModelResource.PATH_ELEMENT);
-            if (value) {
-                if (!hasResource) {
-                    OperationStepHandler handler = context.getResourceRegistration().getOperationEntry(PathAddress.pathAddress(MonitorFileNameModelResource.PATH_ELEMENT), ADD).getOperationHandler();
-                    ModelNode addOp = new ModelNode();
-                    addOp.get(OP).set(ADD);
-                    addOp.get(OP_ADDR).set(PathAddress.pathAddress(operation.get(OP_ADDR)).append(MonitorFileNameModelResource.PATH_ELEMENT).toModelNode());
-                    context.addStep(addOp, handler, Stage.MODEL, true);
-                }
-            } else {
-                if (hasResource) {
-                    OperationStepHandler handler = context.getResourceRegistration().getOperationEntry(PathAddress.pathAddress(MonitorFileNameModelResource.PATH_ELEMENT), REMOVE).getOperationHandler();
-                    ModelNode addOp = new ModelNode();
-                    addOp.get(OP).set(REMOVE);
-                    addOp.get(OP_ADDR).set(PathAddress.pathAddress(operation.get(OP_ADDR)).append(MonitorFileNameModelResource.PATH_ELEMENT).toModelNode());
-                    context.addStep(addOp, handler, Stage.MODEL, true);
-                }
-            }
-		}
-	}
 	
 	private static class PersistModelAliasReadHandler implements OperationStepHandler{
 
