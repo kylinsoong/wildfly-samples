@@ -6,6 +6,12 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
 import static org.junit.Assert.assertEquals;
 
+import static com.customized.tools.extension.CommonAttributes.PATH_MODEL;
+import static com.customized.tools.extension.CommonAttributes.PERSIST_MODEL;
+import static com.customized.tools.extension.CommonAttributes.FOLDERPATH;
+import static com.customized.tools.extension.CommonAttributes.RESULTFILENAME;
+import static com.customized.tools.extension.CommonAttributes.PERSISTTOFILE;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -50,20 +56,33 @@ public class MonitorParsingTestCase extends AbstractSubsystemTest {
 	}
 	
 	@Test
-	public void testMonitorSubsystemWriter() throws IOException, XMLStreamException {
+	public void testWriteSubsystem() throws IOException, XMLStreamException {
 		
-		List<ModelNode> operations = super.parse(loadSubsystem());
+		ModelNode node = new ModelNode();
 		
-		for(ModelNode node : operations){
-//			System.out.println(node);
-			
-			if(node.hasDefined(CommonAttributes.PATH_MODEL)){
-				ModelNode pathModel = node.get(CommonAttributes.PATH_MODEL);
-				System.out.println(pathModel);
-			}
-			
-			System.out.println();
-		}
+		node.get("path-model").get("folder").get("folderName").set("${jboss.server.base.dir}");
+		node.get("path-model").get("file").get("fileName").set("monitor.out");
+		node.get("persist-model").get("persist").get("isPersist").set(true);
+		
+		System.out.println(node);
+		
+		if(node.hasDefined(PATH_MODEL)){
+        	ModelNode pathModel = node.get(PATH_MODEL);
+        	if(pathModel.hasDefined(FOLDERPATH)){
+        		System.out.println(pathModel.get(FOLDERPATH));
+        	}
+        	if(pathModel.hasDefined(RESULTFILENAME)){
+        		System.out.println(pathModel.get(RESULTFILENAME));
+        	}
+        }
+        
+        if(node.hasDefined(PERSIST_MODEL)) {
+        	ModelNode valueModel = node.get(PERSIST_MODEL);
+        	if(valueModel.hasDefined(PERSISTTOFILE)){
+        		System.out.println(valueModel.get(PERSISTTOFILE));
+        	}
+        }
+		
 	}
 	
 	private String loadSubsystem() throws java.io.IOException {
