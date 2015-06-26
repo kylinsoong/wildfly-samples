@@ -17,6 +17,7 @@
 
     <modules>
     	<module>quickstart</module>
+	<module>example</module>
   </modules>
 
 </project>

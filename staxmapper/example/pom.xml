@@ -4,48 +4,30 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.wildfly</groupId>
-	<artifactId>wildfly-core-debug</artifactId>
+	<artifactId>widfly-subsystem-parser</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
-	<name>WildFly Core Debug</name>
-	<description>WildFLy Core Debug</description>
+	<name>WildFly Subsystem Parser</name>
 
 	<url>https://github.com/kylinsoong</url>
 
 	<properties>
-		<maven.compiler.target>1.7</maven.compiler.target>
-		<maven.compiler.source>1.7</maven.compiler.source>
+		<version.staxmapper>1.2.0.Final</version.staxmapper>
+		
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		
 		<compiler.plugin.version>2.3.1</compiler.plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
-		<version.wildfly>8.2.0.Final</version.wildfly>
-		
-		<version.wildfly.core>2.0.0.Alpha5-SNAPSHOT</version.wildfly.core>
 	</properties>
 
 	<dependencies>
-
-<!--  
-		<dependency>
-			<groupId>org.wildfly</groupId>
-			<artifactId>wildfly-controller</artifactId>
-			<version>${version.wildfly}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.wildfly</groupId>
-			<artifactId>wildfly-server</artifactId>
-			<version>${version.wildfly}</version>
-		</dependency>
--->
-
 		<dependency>
 			<groupId>org.wildfly.core</groupId>
-			<artifactId>wildfly-server</artifactId>
-			<version>${version.wildfly.core}</version>
+			<artifactId>wildfly-logging</artifactId>
+			<version>2.0.0.Alpha5-SNAPSHOT</version>
 		</dependency>
-
-
 	</dependencies>
 
 	<build>
