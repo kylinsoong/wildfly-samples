@@ -37,6 +37,7 @@ public class LoggingConfigurationParser {
         for(ModelNode model : updates) {
         	System.out.println(model.toJSONString(true));
         }
+        
 
 	}
 	
