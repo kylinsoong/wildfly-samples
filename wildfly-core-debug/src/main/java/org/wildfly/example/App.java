@@ -1,17 +1,19 @@
 package org.wildfly.example;
 
-import org.jboss.as.server.Services;
-import org.jboss.as.server.mgmt.domain.HostControllerConnectionService;
-import org.jboss.msc.service.ServiceName;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class App {
 	
-	public static void main(String[] args) {
+	@SuppressWarnings("static-access")
+	public static void main(String[] args) throws InterruptedException {
 		
-		System.out.println(ServiceName.JBOSS.append("path", "manager"));
-		System.out.println(Services.JBOSS_SERVER_EXECUTOR.append("scheduled"));
-		System.out.println(HostControllerConnectionService.SERVICE_NAME);
-		System.out.println();
+		System.out.println(System.currentTimeMillis());
+		Timer timer = new Timer("Test Timer", true);
+        TimerTask task = new TestTimerTask();
+        timer.schedule(task, 5000, 2000);
+        Thread.currentThread().sleep(Long.MAX_VALUE);
+
 	}
 
 }
