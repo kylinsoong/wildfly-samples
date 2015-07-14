@@ -1,0 +1,18 @@
+2015-07-08 12:19:55,226 INFO  [org.jboss.logging.sample.HelloWorld] (main) INFO Message
+2015-07-08 12:19:55,244 WARN  [org.jboss.logging.sample.HelloWorld] (main) WARN Message
+2015-07-08 12:19:55,245 ERROR [org.jboss.logging.sample.HelloWorld] (main) Error Message
+2015-07-08 12:19:55,245 FATAL [org.jboss.logging.sample.HelloWorld] (main) FATAL Message
+2015-07-08 12:21:24,833 DEBUG [org.jboss.logging] (main) Logging Provider: org.jboss.logging.JBossLogManagerProvider
+2015-07-08 12:21:24,850 TRACE [org.jboss.logging.sample.HelloWorld] (main) TRACE Message
+2015-07-08 12:21:24,851 DEBUG [org.jboss.logging.sample.HelloWorld] (main) DEBUG Message
+2015-07-08 12:21:24,851 INFO  [org.jboss.logging.sample.HelloWorld] (main) INFO Message
+2015-07-08 12:21:24,851 WARN  [org.jboss.logging.sample.HelloWorld] (main) WARN Message
+2015-07-08 12:21:24,852 ERROR [org.jboss.logging.sample.HelloWorld] (main) Error Message
+2015-07-08 12:21:24,852 FATAL [org.jboss.logging.sample.HelloWorld] (main) FATAL Message
+2015-07-08 12:23:07,952 DEBUG [org.jboss.logging] (main) Logging Provider: org.jboss.logging.JBossLogManagerProvider
+2015-07-08 12:23:07,970 TRACE [org.jboss.logging.sample.HelloWorld] (main) TRACE Message
+2015-07-08 12:23:07,971 DEBUG [org.jboss.logging.sample.HelloWorld] (main) DEBUG Message
+2015-07-08 12:23:07,971 INFO  [org.jboss.logging.sample.HelloWorld] (main) INFO Message
+2015-07-08 12:23:07,971 WARN  [org.jboss.logging.sample.HelloWorld] (main) WARN Message
+2015-07-08 12:23:07,972 ERROR [org.jboss.logging.sample.HelloWorld] (main) Error Message
+2015-07-08 12:23:07,972 FATAL [org.jboss.logging.sample.HelloWorld] (main) FATAL Message

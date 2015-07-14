@@ -1,0 +1,4 @@
+2015-07-08 12:34:17,757 INFO  [org.jboss.logging.sample.HelloWorld] (main) INFO Message
+2015-07-08 12:34:17,760 WARN  [org.jboss.logging.sample.HelloWorld] (main) WARN Message
+2015-07-08 12:34:17,760 ERROR [org.jboss.logging.sample.HelloWorld] (main) Error Message
+2015-07-08 12:34:17,761 FATAL [org.jboss.logging.sample.HelloWorld] (main) FATAL Message

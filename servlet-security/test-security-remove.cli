@@ -1,0 +1,2 @@
+/subsystem=security/security-domain=test-security:remove()
+:reload()

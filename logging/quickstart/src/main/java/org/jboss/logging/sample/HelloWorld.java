@@ -11,10 +11,9 @@ public class HelloWorld {
 		LOGGER.trace("TRACE Message");
 		LOGGER.debug("DEBUG Message");
 		LOGGER.info("INFO Message");
+		LOGGER.warn("WARN Message");
 		LOGGER.error("Error Message");
 		LOGGER.fatal("FATAL Message");
-		
-		LOGGER.error("Configuration file not found.");
 	}
 
 }

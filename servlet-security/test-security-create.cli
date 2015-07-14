@@ -1,0 +1,4 @@
+/subsystem=security/security-domain=test-security:add(cache-type=default)
+/subsystem=security/security-domain=test-security/authentication=classic:add()
+/subsystem=security/security-domain=test-security/authentication=classic/login-module=RealmDirect:add(code=RealmDirect,flag=sufficient,module-options={password-stacking=useFirstPass})
+:reload()
