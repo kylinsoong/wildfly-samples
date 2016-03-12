@@ -1,0 +1,24 @@
+
+
+== Test locally
+
+You may need test locally, to make sure the changes are correct, to do this install https://github.com/GitbookIO/gitbook[gitbook], then execute the following commands from the checkout location:
+
+----
+$ gitbook install
+$ gitbook serve -w
+----
+
+Once above commands executes successfully, the http format document can be test locally via `http://localhost:4000/`.
+
+== Generate html/pdf/epub/mobi
+
+You may locally create rendered forms of the documentation. To do this install https://github.com/GitbookIO/gitbook[gitbook] and https://help.gitbook.com/build/ebookconvert.html[ebook-convert], then execute the following commands from the checkout location:
+
+----
+$ gitbook build ./ teiid-documents
+$ gitbook pdf ./ teiid-documents.pdf
+$ gitbook epub ./ teiid-documents.epub
+$ gitbook mobi ./ teiid-documents.mobi
+----
+

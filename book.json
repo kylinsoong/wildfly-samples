@@ -1,0 +1,17 @@
+{
+    "variables" : {
+        "versionNumber" : "9.0",
+        "fullVersionNumber": "9.0.0.Final",
+        "asVersionNumber" :  "Wildfly 10.0.0.Final",
+        "copyrightYear" :  "2016",
+        "copyrightHolder" :  "ksoong.org",
+        "javaVersionUrl" : "https://docs.oracle.com/javase/7"
+    },
+    "plugins": ["collapsible-menu"],
+    "links": {
+        "sidebar": {
+            "WildFly Architecture": "/wildfly-samples"
+        }
+    },
+    "pluginsConfig": {}
+}
