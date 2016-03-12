@@ -9,6 +9,7 @@ import org.jboss.dmr.ModelNode;
 
 /**
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
+ * @author <a href="ksoong.org">Kylin Soong</a>
  */
 class TrackerTickHandler extends AbstractWriteAttributeHandler<Void> {
 
