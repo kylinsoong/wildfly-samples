@@ -1,0 +1,68 @@
+
+== 创建初始工程
+
+通过如下 mvn 命令创建初始化工程：
+
+[source,xml]
+----
+$ mvn archetype:generate -DarchetypeArtifactId=wildfly-subsystem -DarchetypeGroupId=org.wildfly.archetypes -DarchetypeVersion=8.0.0.Final -DarchetypeRepository=http://repository.jboss.org/nexus/content/groups/public
+----
+
+mvn 会提示输入相关的信息，如下所示：
+
+|===
+|名称 |输入值
+
+|'groupId'
+|com.acme.corp
+
+|'artifactId'
+|acme-subsystem
+
+|'version'
+|
+
+|'package'
+|com.acme.corp.tracker
+
+|'module'
+|com.acme.corp.tracker
+|===
+
+创建初始化工程完成以后，进入该项目根目录，运行 `mvn install` 编译:
+
+[source,xml]
+----
+$ mvn install
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building WildFly: Subsystem Artifact 1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+....
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running com.acme.corp.tracker.extension.SubsystemBaseParsingTestCase
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.154 sec - in com.acme.corp.tracker.extension.SubsystemBaseParsingTestCase
+Running com.acme.corp.tracker.extension.SubsystemParsingTestCase
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.11 sec - in com.acme.corp.tracker.extension.SubsystemParsingTestCase
+
+Results :
+
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ acme-subsystem ---
+[INFO] Building jar: /home/kylin/tmp/acme-subsystem/target/acme-subsystem.jar
+[INFO] 
+[INFO] --- maven-antrun-plugin:1.7:run (build-dist) @ acme-subsystem ---
+[INFO] Executing tasks
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 01:05 min
+[INFO] Finished at: 2016-03-12T17:13:12+08:00
+[INFO] Final Memory: 29M/194M
+----

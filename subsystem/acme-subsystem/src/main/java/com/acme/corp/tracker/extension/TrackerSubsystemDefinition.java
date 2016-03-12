@@ -18,7 +18,7 @@ public class TrackerSubsystemDefinition extends SimpleResourceDefinition {
         super(TrackerExtension.SUBSYSTEM_PATH,
                 TrackerExtension.getResourceDescriptionResolver(null),
                 //We always need to add an 'add' operation
-                SubsystemAdd.INSTANCE,
+                SubsystemAddHandler.INSTANCE,
                 //Every resource that is added, normally needs a remove operation
                 SubsystemRemove.INSTANCE);
     }

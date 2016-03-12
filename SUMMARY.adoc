@@ -1,2 +1,3 @@
 
-. link:subsystem/extending-wildfly.adoc[扩展 WildFly]
+. link:subsystem/acme-subsystem/README.adoc[扩展 WildFly]
+.. link:subsystem/extending-wildfly-template.adoc[创建初始工程]
