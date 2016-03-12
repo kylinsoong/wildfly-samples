@@ -38,13 +38,14 @@ public class MSCThreadPoolExecutor {
 				return doPrivileged(new ThreadAction(r, id, threadSeq));
 			}}, POLICY);
 		
-		for(int i = 0 ; i < 10 ; i ++) {
-			executor.execute(new WaitTask());
-		}
+//		for(int i = 0 ; i < 10 ; i ++) {
+//			executor.execute(new WaitTask());
+//		}
+		
+		executor.execute(new PrintTask());
 				
 		System.out.println(executor);
 		
-//		Thread.sleep(Long.MAX_VALUE);
 	}
 	
 	static class WaitTask implements Runnable {
