@@ -1,0 +1,56 @@
+
+== Extension 实现
+
+WildFly 中的任意一个 subsystem 都必需有一个 Extension 实现,
+
+image:img/wildfly-controller-extension.png[WildFly Controller API: Extension]
+
+Extension 实现必需遵循如下规则:
+
+1. Extension 实现类的构造方法不能有参数
+2. Extension 实现类应的类加载 Module 必需包含一个 _META-INF/services/org.jboss.as.controller.Extension_ 文件，并且该文件内容为Extension 实现类，参照代码-1
+3. WildFly 配置文件中必需有 extension 的相应配置，且 extension 的 module 属性指向 Extension 实现类对应的类加载 Module，参照代码-2
+
+[source,java]
+.*代码-1*
+----
+com.acme.corp.tracker.extension.TrackerExtension
+---- 
+
+[source,xml]
+.*代码-2*
+----
+<extensions>
+    ...
+    <extension module="com.acme.corp.tracker"/>
+</extensions>
+----
+
+`TrackerExtension` initializeParsers(), initialize() 实现如下
+
+[source,java]
+----
+@Override
+public void initializeParsers(ExtensionParsingContext context) {
+    context.setSubsystemXmlMapping(SUBSYSTEM_NAME, NAMESPACE_1_0, parser);
+}
+
+@Override
+public void initialize(ExtensionContext context) {
+        
+    Parameters parameters = new Parameters(SUBSYSTEM_PATH, getResourceDescriptionResolver(null));
+    parameters.setAddHandler(SubsystemAddHandler.INSTANCE)
+              .setRemoveHandler(SubsystemRemoveHandler.INSTANCE)
+              .setAddRestartLevel(OperationEntry.Flag.RESTART_NONE)
+              .setRemoveRestartLevel(OperationEntry.Flag.RESTART_RESOURCE_SERVICES)
+              .setDeprecationData(null)
+              .setCapabilities();    
+    TrackerSubsystemDefinition resourceDefinition = new TrackerSubsystemDefinition(parameters);
+        
+    final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, CURRENT_VERSION);
+    subsystem.registerSubsystemModel(resourceDefinition);
+    subsystem.registerXMLElementWriter(parser);
+}
+----
+
+完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerExtension.java[TrackerExtension.java]

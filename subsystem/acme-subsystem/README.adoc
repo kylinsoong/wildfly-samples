@@ -33,17 +33,7 @@ $ unzip acme-subsystem-dist.zip -d wildfly-10.0.0.Final
 $ ./bin/standalone.sh -c standalone-wildfly10.xml
 ----
 
-* The following CLI commands can be used manage `acme-subsystem`
-
-[source,java]
-----
-/subsystem=tracker:read-resource(recursive=true)
-/subsystem=tracker/type=war:read-resource(recursive=true)
-/subsystem=tracker/type=war:read-attribute(name=tick)
-/subsystem=tracker/type=war:write-attribute(name=tick,value=1000)
-----
-
-* Deploy [example.war](deployments/example.war), [cool.war](deployments/cool.war), [test.war](deployments/test.war) to a http://wildfly.org[WildFly] which `acme-subsystem` be installed, the following log output in console:
+* Deploy link:deployments/example.war[example.war], link:deployments/cool.war[cool.war], link:deployments/test.war[test.war] to a http://wildfly.org[WildFly], the following log output in console:
 
 [source,java]
 ----

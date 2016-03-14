@@ -15,6 +15,7 @@ import static com.acme.corp.tracker.extension.TrackerExtension.TYPE_PATH;
  * @author <a href="tcerar@redhat.com">Tomaz Cerar</a>
  */
 public class TypeDefinition extends SimpleResourceDefinition {
+    
     public static final TypeDefinition INSTANCE = new TypeDefinition();
 
     protected static final SimpleAttributeDefinition TICK =
