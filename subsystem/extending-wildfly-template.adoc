@@ -66,3 +66,53 @@ Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
 [INFO] Finished at: 2016-03-12T17:13:12+08:00
 [INFO] Final Memory: 29M/194M
 ----
+
+== 版本控制
+
+<<创建初始工程, 创建初始工程>> 中创建一个模板工程，我们首先要对依赖的版本进行控制
+
+|===
+|WildFly Dist |WildFly 版本 |WildFly Core 版本
+
+|wildfly-10.0.0.Final
+|
+|2.0.10.Final
+
+|wildfly-9.0.2.Final
+|
+|1.0.2.Final
+
+|wildfly-9.0.0.Final
+|
+|1.0.0.Final
+
+|wildfly-8.2.0.Final
+|8.2.0.Final
+|
+|===
+
+从 WildFly 9.0 之后 `wildfly-controller`, `wildfly-server` 等核心 API 被抽取成为 WildFly Core, 所有我们需要引入 WildFly Core 相关的依赖包如下
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.wildfly.core</groupId>
+    <artifactId>wildfly-controller</artifactId>
+    <version>${version.org.wildfly.core}</version>
+</dependency>
+<dependency>
+    <groupId>org.wildfly.core</groupId>
+    <artifactId>wildfly-server</artifactId>
+    <version>${version.org.wildfly.core}</version>
+</dependency>
+<dependency>
+    <groupId>org.wildfly.core</groupId>
+    <artifactId>wildfly-subsystem-test</artifactId>
+    <type>pom</type>
+    <scope>test</scope>
+    <version>${version.org.wildfly.core}</version>
+</dependency>
+----
+
+详细关于包依赖配置参照 link:acme-subsystem/pom.xml[pom.xml]
+

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.acme.corp</groupId>
@@ -11,14 +12,34 @@
     <packaging>jar</packaging>
     
     <properties>
-        <version.wildfly>8.2.1.Final</version.wildfly>
+        <version.org.wildfly>10.0.0.Final</version.org.wildfly>
+        <version.org.wildfly.core>2.0.10.Final</version.org.wildfly.core>
         <version.junit>4.8.2</version.junit>
         <version.jta>1.1</version.jta>
         <module.name>com.acme.corp.tracker</module.name>
     </properties>
     
     <dependencyManagement>
-      <dependencies>
+        <dependencies>
+            <dependency>
+                <groupId>org.wildfly.core</groupId>
+                <artifactId>wildfly-controller</artifactId>
+                <version>${version.org.wildfly.core}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.core</groupId>
+                <artifactId>wildfly-server</artifactId>
+                <version>${version.org.wildfly.core}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.core</groupId>
+                <artifactId>wildfly-subsystem-test</artifactId>
+                <type>pom</type>
+                <scope>test</scope>
+                <version>${version.org.wildfly.core}</version>
+            </dependency>
+            
+          <!--  
             <dependency>
                 <groupId>org.wildfly</groupId>
                 <artifactId>wildfly-controller</artifactId>
@@ -36,26 +57,28 @@
                 <scope>test</scope>
                 <version>${version.wildfly}</version>
             </dependency>
+            -->
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <scope>test</scope>
                 <version>${version.junit}</version>
             </dependency>
+            
         </dependencies>    
     </dependencyManagement>
 
     <dependencies>
         <dependency>
-            <groupId>org.wildfly</groupId>
+            <groupId>org.wildfly.core</groupId>
             <artifactId>wildfly-controller</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wildfly</groupId>
+            <groupId>org.wildfly.core</groupId>
             <artifactId>wildfly-server</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wildfly</groupId>
+            <groupId>org.wildfly.core</groupId>
             <artifactId>wildfly-subsystem-test</artifactId>
             <type>pom</type>
             <scope>test</scope>
@@ -77,8 +100,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>

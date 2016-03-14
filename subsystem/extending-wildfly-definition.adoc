@@ -1,0 +1,20 @@
+
+== ResourceDefinition 的实现
+
+WildFly 最主要的特点是 Modular，Pluggable，可以理解为 WildFly 是由一系列 Management 命令组成的，Management 命令是通过 Management resource 定义的，扩展 WildFly 新添加 Management Resource 必须实现 `ResourceDefinition` 接口.
+
+image:img/wildfly-controller-resourcedefinition.png[WildFly Controller API: ResourceDefinition]
+
+`TrackerSubsystemDefinition` 继承了 `SimpleResourceDefinition`, 它初始化 `TrackerExtension` 的 initialize() 方法中进行的，相关代码段:
+
+[source,java]
+----
+Parameters parameters = new Parameters(SUBSYSTEM_PATH, getResourceDescriptionResolver(null));
+parameters.setAddHandler(SubsystemAddHandler.INSTANCE)
+          .setRemoveHandler(SubsystemRemoveHandler.INSTANCE)
+          .setAddRestartLevel(OperationEntry.Flag.RESTART_NONE)
+          .setRemoveRestartLevel(OperationEntry.Flag.RESTART_RESOURCE_SERVICES)
+          .setDeprecationData(null)
+          .setCapabilities();    
+TrackerSubsystemDefinition resourceDefinition = new TrackerSubsystemDefinition(parameters);
+----

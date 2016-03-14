@@ -1,0 +1,51 @@
+
+== 使用 CLI 测试
+
+**查看所有 resource 定义:**
+
+[source,java]
+----
+[standalone@localhost:9990 /] /subsystem=tracker:read-resource(include-defaults=true,recursive=true)
+{
+    "outcome" => "success",
+    "result" => {"type" => {
+        "war" => {"tick" => 10000L},
+        "sar" => {"tick" => 10000L}
+    }}
+}
+----
+
+**添加新type:**
+
+[source,java]
+----
+[standalone@localhost:9990 /] /subsystem=tracker/type=jar:add(tick=10000)
+{"outcome" => "success"}
+----
+
+**移除type:**
+
+[source,java]
+----
+[standalone@localhost:9990 /] /subsystem=tracker/type=jar:remove()
+{"outcome" => "success"}
+----
+
+**修改tick默认值:**
+
+[source,java]
+----
+[standalone@localhost:9990 /] /subsystem=tracker/type=sar:write-attribute(name=tick,value=20000)
+{"outcome" => "success"}
+----
+
+**读取tick值:**
+
+[source,java]
+----
+[standalone@localhost:9990 /] /subsystem=tracker/type=sar:read-attribute(name=tick)
+{
+    "outcome" => "success",
+    "result" => 20000L
+}
+----

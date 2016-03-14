@@ -1,0 +1,70 @@
+
+== 创建 schema
+
+基于 link:extending-wildfly-template.adoc[创建初始工程], 重命名 `src/main/resources/schema/mysubsystem.xsd` 为 `src/main/resources/schema/wildfly_acme_1_0.xsd`，编辑 `wildfly_acme_1_0.xsd` 内容如下：
+
+[source,xml]
+----
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="urn:com.acme.corp.tracker:1.0"
+            xmlns="urn:com.acme.corp.tracker:1.0"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified"
+            version="1.0">
+ 
+   <!-- The subsystem root element -->
+   <xs:element name="subsystem" type="subsystemType"/>
+   <xs:complexType name="subsystemType">
+      <xs:all>
+         <xs:element name="deployment-types" type="deployment-typesType"/>
+      </xs:all>
+   </xs:complexType>
+   <xs:complexType name="deployment-typesType">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+         <xs:element name="deployment-type" type="deployment-typeType"/>
+      </xs:choice>
+   </xs:complexType>
+   <xs:complexType name="deployment-typeType">
+      <xs:attribute name="suffix" use="required"/>
+      <xs:attribute name="tick" type="xs:long" use="optional" default="10000"/>
+   </xs:complexType>
+</xs:schema>
+----
+
+如上述 schema:
+
+1. **xmlns** 和 **targetNamespace** 的值设定为 **urn:com.acme.corp.tracker:1.0**
+2. 新添加的 subsystem 只有一个 **deployment-types** 元素，一个 **deployment-types** 可包括多个 **deployment-type**，而每个 **deployment-type** 有两个属性：**suffix** 和 **tick**
+
+== 模型结构
+
+根据上面创建 schema  中设计的 schema, 对应的模型结构如下
+
+[source,xml]
+----
+<subsystem xmlns="urn:com.acme.corp.tracker:1.0">
+   <deployment-types>
+      <deployment-type suffix="sar" tick="10000"/>
+      <deployment-type suffix="war" tick="10000"/>
+   </deployment-types>
+</subsystem>
+----
+
+WildFly 中不同的 Subsystem 对应不同的 SubsystemParser，XML 文件的解析（读/写）是通过 http://ksoong.org/jboss/2015/04/05/staxmapper[JBoss staxmapper] 来完成的，通常 SubsystemParser 的实现如下所示:
+
+[source,java]
+----
+class SubsystemParser implements XMLStreamConstants, XMLElementReader<List<ModelNode>>, XMLElementWriter<SubsystemMarshallingContext> {
+    @Override
+    public void readElement(XMLExtendedStreamReader reader, List<ModelNode> list) throws XMLStreamException {
+    }
+
+    @Override
+    public void writeContent(final XMLExtendedStreamWriter writer, final SubsystemMarshallingContext context) throws XMLStreamException {
+    }
+}
+----
+
+readElement() 负责读 subsystem xml， writeContent（）负责写 subsystem xml。
+
+详细关于 XML 解析的代码参照内部类 link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerExtension.java[SubsystemParser].

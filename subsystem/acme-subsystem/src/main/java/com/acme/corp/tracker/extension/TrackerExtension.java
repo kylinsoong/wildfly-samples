@@ -2,15 +2,18 @@ package com.acme.corp.tracker.extension;
 
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
+import org.jboss.as.controller.ModelVersion;
 import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.PathElement;
 import org.jboss.as.controller.SubsystemRegistration;
+import org.jboss.as.controller.SimpleResourceDefinition.Parameters;
 import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
 import org.jboss.as.controller.descriptions.StandardResourceDescriptionResolver;
 import org.jboss.as.controller.parsing.ExtensionParsingContext;
 import org.jboss.as.controller.parsing.ParseUtils;
 import org.jboss.as.controller.persistence.SubsystemMarshallingContext;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
+import org.jboss.as.controller.registry.OperationEntry;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.Property;
 import org.jboss.staxmapper.XMLElementReader;
@@ -20,6 +23,7 @@ import org.jboss.staxmapper.XMLExtendedStreamWriter;
 
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -28,16 +32,12 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
 
-
-/**
- * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
- */
 public class TrackerExtension implements Extension {
 
     /**
      * The name space used for the {@code subsystem} element
      */
-    public static final String NAMESPACE = "urn:com.acme.corp.tracker:1.0";
+    public static final String NAMESPACE_1_0 = "urn:com.acme.corp.tracker:1.0";
 
     /**
      * The name of our subsystem within the model.
@@ -55,6 +55,12 @@ public class TrackerExtension implements Extension {
     protected static final String TICK = "tick";
     protected static final PathElement SUBSYSTEM_PATH = PathElement.pathElement(SUBSYSTEM, SUBSYSTEM_NAME);
     protected static final PathElement TYPE_PATH = PathElement.pathElement(TYPE);
+    
+    private static final int MANAGEMENT_API_MAJOR_VERSION = 1;
+    private static final int MANAGEMENT_API_MINOR_VERSION = 0;
+    private static final int MANAGEMENT_API_MICRO_VERSION = 0;
+
+    private static final ModelVersion CURRENT_VERSION = ModelVersion.create(MANAGEMENT_API_MAJOR_VERSION, MANAGEMENT_API_MINOR_VERSION, MANAGEMENT_API_MICRO_VERSION);
 
     static StandardResourceDescriptionResolver getResourceDescriptionResolver(final String keyPrefix) {
         String prefix = SUBSYSTEM_NAME + (keyPrefix == null ? "" : "." + keyPrefix);
@@ -63,17 +69,23 @@ public class TrackerExtension implements Extension {
 
     @Override
     public void initializeParsers(ExtensionParsingContext context) {
-        context.setSubsystemXmlMapping(SUBSYSTEM_NAME, NAMESPACE, parser);
+        context.setSubsystemXmlMapping(SUBSYSTEM_NAME, NAMESPACE_1_0, parser);
     }
 
     @Override
     public void initialize(ExtensionContext context) {
-        final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, 1, 0);
-        final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(TrackerSubsystemDefinition.INSTANCE);
-
-
-        //Add the type child
-        ManagementResourceRegistration typeChild = registration.registerSubModel(TypeDefinition.INSTANCE);
+        
+        Parameters parameters = new Parameters(SUBSYSTEM_PATH, getResourceDescriptionResolver(null));
+        parameters.setAddHandler(SubsystemAddHandler.INSTANCE)
+                  .setRemoveHandler(SubsystemRemoveHandler.INSTANCE)
+                  .setAddRestartLevel(OperationEntry.Flag.RESTART_NONE)
+                  .setRemoveRestartLevel(OperationEntry.Flag.RESTART_RESOURCE_SERVICES)
+                  .setDeprecationData(null)
+                  .setCapabilities();    
+        TrackerSubsystemDefinition resourceDefinition = new TrackerSubsystemDefinition(parameters);
+        
+        final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, CURRENT_VERSION);
+        subsystem.registerSubsystemModel(resourceDefinition);
         subsystem.registerXMLElementWriter(parser);
     }
 
@@ -146,7 +158,7 @@ public class TrackerExtension implements Extension {
         @Override
         public void writeContent(final XMLExtendedStreamWriter writer, final SubsystemMarshallingContext context) throws XMLStreamException {
             //Write out the main subsystem element
-            context.startSubsystemElement(TrackerExtension.NAMESPACE, false);
+            context.startSubsystemElement(TrackerExtension.NAMESPACE_1_0, false);
             writer.writeStartElement("deployment-types");
             ModelNode node = context.getModelNode();
             ModelNode type = node.get(TYPE);

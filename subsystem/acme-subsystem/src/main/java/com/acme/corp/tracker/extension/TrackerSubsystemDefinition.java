@@ -1,26 +1,16 @@
 package com.acme.corp.tracker.extension;
 
 import org.jboss.as.controller.SimpleResourceDefinition;
-import org.jboss.as.controller.operations.common.GenericSubsystemDescribeHandler;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
-import org.jboss.as.controller.registry.OperationEntry;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.DESCRIBE;
-
-/**
- * @author <a href="tcerar@redhat.com">Tomaz Cerar</a>
- */
 public class TrackerSubsystemDefinition extends SimpleResourceDefinition {
 
-    public static final TrackerSubsystemDefinition INSTANCE = new TrackerSubsystemDefinition();
-
-    private TrackerSubsystemDefinition() {
-        super(TrackerExtension.SUBSYSTEM_PATH,
-                TrackerExtension.getResourceDescriptionResolver(null),
-                //We always need to add an 'add' operation
-                SubsystemAddHandler.INSTANCE,
-                //Every resource that is added, normally needs a remove operation
-                SubsystemRemove.INSTANCE);
+    protected TrackerSubsystemDefinition() {
+        super(TrackerExtension.SUBSYSTEM_PATH, TrackerExtension.getResourceDescriptionResolver(null), SubsystemAddHandler.INSTANCE, SubsystemRemoveHandler.INSTANCE);
+    }
+    
+    protected TrackerSubsystemDefinition(Parameters parameters){
+        super(parameters);
     }
 
     /**
@@ -31,6 +21,7 @@ public class TrackerSubsystemDefinition extends SimpleResourceDefinition {
     public void registerOperations(ManagementResourceRegistration resourceRegistration) {
         super.registerOperations(resourceRegistration);
         //We always need to add a 'describe' operation
-        resourceRegistration.registerOperationHandler(DESCRIBE, GenericSubsystemDescribeHandler.INSTANCE, GenericSubsystemDescribeHandler.INSTANCE, false, OperationEntry.EntryType.PRIVATE);
+//        resourceRegistration.registerOperationHandler(DESCRIBE, GenericSubsystemDescribeHandler.INSTANCE, GenericSubsystemDescribeHandler.INSTANCE, false, OperationEntry.EntryType.PRIVATE);
+        resourceRegistration.registerSubModel(TypeDefinition.INSTANCE);
     }
 }

@@ -8,12 +8,12 @@ import org.jboss.logging.Logger;
  *
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  */
-class SubsystemRemove extends AbstractRemoveStepHandler {
+class SubsystemRemoveHandler extends AbstractRemoveStepHandler {
 
-    static final SubsystemRemove INSTANCE = new SubsystemRemove();
+    static final SubsystemRemoveHandler INSTANCE = new SubsystemRemoveHandler();
 
-    private final Logger log = Logger.getLogger(SubsystemRemove.class);
+    private final Logger log = Logger.getLogger(SubsystemRemoveHandler.class);
 
-    private SubsystemRemove() {
+    private SubsystemRemoveHandler() {
     }
 }

@@ -20,7 +20,6 @@ import com.acme.corp.tracker.extension.TrackerService;
  * processors copy this class, and add to the {@link AbstractDeploymentChainStep}
  * {@link SubsystemAddHandler#performBoottime(org.jboss.as.controller.OperationContext, org.jboss.dmr.ModelNode, org.jboss.dmr.ModelNode, org.jboss.as.controller.ServiceVerificationHandler, java.util.List)}
  *
- * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  */
 public class SubsystemDeploymentProcessor implements DeploymentUnitProcessor {
 
