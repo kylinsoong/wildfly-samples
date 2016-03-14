@@ -19,7 +19,6 @@ import com.acme.corp.tracker.deployment.SubsystemDeploymentProcessor;
 /**
  * Handler responsible for adding the subsystem resource to the model
  *
- * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  */
 class SubsystemAddHandler extends AbstractBoottimeAddStepHandler {
 

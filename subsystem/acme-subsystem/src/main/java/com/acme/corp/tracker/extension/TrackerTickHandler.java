@@ -2,6 +2,7 @@ package com.acme.corp.tracker.extension;
 
 import org.jboss.as.controller.AbstractWriteAttributeHandler;
 import org.jboss.as.controller.OperationContext;
+import org.jboss.as.controller.OperationContext.RollbackHandler;
 import org.jboss.as.controller.OperationFailedException;
 import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
@@ -41,7 +42,7 @@ class TrackerTickHandler extends AbstractWriteAttributeHandler<Void> {
             final String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
             TrackerService service = (TrackerService) context.getServiceRegistry(true).getRequiredService(TrackerService.createServiceName(suffix)).getValue();
             service.setTick(resolvedValue.asLong());
-            context.completeStep();
+            context.completeStep(RollbackHandler.NOOP_ROLLBACK_HANDLER);
         }
 
         return false;

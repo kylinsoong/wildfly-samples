@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>扩展 WildFly | </title>
+        <title>ResourceDefinition 实现 | </title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.6.7">
@@ -15,21 +15,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
-        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
-        <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
         
-    <link rel="stylesheet" href="../../gitbook/style.css">
+    <link rel="stylesheet" href="../gitbook/style.css">
     
         
-        <link rel="stylesheet" href="../../gitbook/plugins/gitbook-plugin-highlight/website.css">
-        
-    
-        
-        <link rel="stylesheet" href="../../gitbook/plugins/gitbook-plugin-search/search.css">
+        <link rel="stylesheet" href="../gitbook/plugins/gitbook-plugin-highlight/website.css">
         
     
         
-        <link rel="stylesheet" href="../../gitbook/plugins/gitbook-plugin-fontsettings/website.css">
+        <link rel="stylesheet" href="../gitbook/plugins/gitbook-plugin-search/search.css">
+        
+    
+        
+        <link rel="stylesheet" href="../gitbook/plugins/gitbook-plugin-fontsettings/website.css">
         
     
     
@@ -37,10 +37,10 @@
         
     
     
-    <link rel="next" href="../../subsystem/extending-wildfly-template.html" />
+    <link rel="next" href="../subsystem/extending-wildfly-test.html" />
     
     
-    <link rel="prev" href="../../index.html" />
+    <link rel="prev" href="../subsystem/extending-wildfly-deployers.html" />
     
 
         
@@ -49,10 +49,10 @@
         
         
     <div class="book"
-        data-level="1"
-        data-chapter-title="扩展 WildFly"
-        data-filepath="subsystem/acme-subsystem/README.adoc"
-        data-basepath="../.."
+        data-level="1.4"
+        data-chapter-title="ResourceDefinition 实现"
+        data-filepath="subsystem/extending-wildfly-definition.adoc"
+        data-basepath=".."
         data-revision="Mon Mar 14 2016 17:22:00 GMT+0800 (CST)"
         data-innerlanguage="">
     
@@ -79,7 +79,7 @@
         <li class="chapter " data-level="0" data-path="index.html">
             
                 
-                    <a href="../../index.html">
+                    <a href="../index.html">
                 
                         <i class="fa fa-check"></i>
                         
@@ -89,10 +89,10 @@
             
         </li>
     
-        <li class="chapter active" data-level="1" data-path="subsystem/acme-subsystem/index.html">
+        <li class="chapter " data-level="1" data-path="subsystem/acme-subsystem/index.html">
             
                 
-                    <a href="../../subsystem/acme-subsystem/index.html">
+                    <a href="../subsystem/acme-subsystem/index.html">
                 
                         <i class="fa fa-check"></i>
                         
@@ -108,7 +108,7 @@
         <li class="chapter " data-level="1.1" data-path="subsystem/extending-wildfly-template.html">
             
                 
-                    <a href="../../subsystem/extending-wildfly-template.html">
+                    <a href="../subsystem/extending-wildfly-template.html">
                 
                         <i class="fa fa-check"></i>
                         
@@ -123,7 +123,7 @@
         <li class="chapter " data-level="1.2" data-path="subsystem/extending-wildfly-schema.html">
             
                 
-                    <a href="../../subsystem/extending-wildfly-schema.html">
+                    <a href="../subsystem/extending-wildfly-schema.html">
                 
                         <i class="fa fa-check"></i>
                         
@@ -138,7 +138,7 @@
         <li class="chapter " data-level="1.3" data-path="subsystem/extending-wildfly-deployers.html">
             
                 
-                    <a href="../../subsystem/extending-wildfly-deployers.html">
+                    <a href="../subsystem/extending-wildfly-deployers.html">
                 
                         <i class="fa fa-check"></i>
                         
@@ -150,10 +150,10 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="subsystem/extending-wildfly-definition.html">
+        <li class="chapter active" data-level="1.4" data-path="subsystem/extending-wildfly-definition.html">
             
                 
-                    <a href="../../subsystem/extending-wildfly-definition.html">
+                    <a href="../subsystem/extending-wildfly-definition.html">
                 
                         <i class="fa fa-check"></i>
                         
@@ -168,7 +168,7 @@
         <li class="chapter " data-level="1.5" data-path="subsystem/extending-wildfly-test.html">
             
                 
-                    <a href="../../subsystem/extending-wildfly-test.html">
+                    <a href="../subsystem/extending-wildfly-test.html">
                 
                         <i class="fa fa-check"></i>
                         
@@ -208,7 +208,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="../../" ></a>
+        <a href="../" ></a>
     </h1>
 </div>
 
@@ -219,81 +219,27 @@
                     <section class="normal" id="section-">
                     
                         <div class="sect1">
-<h2 id="_steps_to_run_acme_example">Steps to run acme example</h2>
+<h2 id="_resourcedefinition">ResourceDefinition &#x7684;&#x5B9E;&#x73B0;</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><strong>Build</strong></p>
+<p>WildFly &#x6700;&#x4E3B;&#x8981;&#x7684;&#x7279;&#x70B9;&#x662F; Modular&#xFF0C;Pluggable&#xFF0C;&#x53EF;&#x4EE5;&#x7406;&#x89E3;&#x4E3A; WildFly &#x662F;&#x7531;&#x4E00;&#x7CFB;&#x5217; Management &#x547D;&#x4EE4;&#x7EC4;&#x6210;&#x7684;&#xFF0C;Management &#x547D;&#x4EE4;&#x662F;&#x901A;&#x8FC7; Management resource &#x5B9A;&#x4E49;&#x7684;&#xFF0C;&#x6269;&#x5C55; WildFly &#x65B0;&#x6DFB;&#x52A0; Management Resource &#x5FC5;&#x987B;&#x5B9E;&#x73B0; <code>ResourceDefinition</code> &#x63A5;&#x53E3;.</p>
 </div>
 <div class="paragraph">
-<p>Install Maven 3.x and Java 1.7 or higher, enter the following commands:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">$ git clone git<span class="hljs-annotation">@github</span>.com:kylinsoong/wildfly-samples.git
-$ cd wildfly-samples/subsystem/acme-subsystem/
-$ mvn clean install</code></pre>
-</div>
+<p><span class="image"><img src="img/wildfly-controller-resourcedefinition.png" alt="WildFly Controller API: ResourceDefinition"></span></p>
 </div>
 <div class="paragraph">
-<p>you will find distribution <code>acme-subsystem-dist.zip</code> under &quot;target&quot; directory once the build is completed.</p>
-</div>
-<div class="paragraph">
-<p><strong>Install</strong></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Assuming a <a href="http://wildfly.org" target="_blank">WildFly</a> was installed. Unzip the distribution as below to install <code>acme-subsystem</code></p>
-</li>
-</ul>
+<p><code>TrackerSubsystemDefinition</code> &#x7EE7;&#x627F;&#x4E86; <code>SimpleResourceDefinition</code>, &#x5B83;&#x521D;&#x59CB;&#x5316; <code>TrackerExtension</code> &#x7684; initialize() &#x65B9;&#x6CD5;&#x4E2D;&#x8FDB;&#x884C;&#x7684;&#xFF0C;&#x76F8;&#x5173;&#x4EE3;&#x7801;&#x6BB5;:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">$ unzip acme-subsystem-dist.zip -d wildfly-<span class="hljs-number">10.0</span>.0.Final</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>Run</strong></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Run the <code>acme-subsystem</code> in <a href="http://wildfly.org" target="_blank">WildFly</a>:</p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">$ ./bin/standalone.sh -c standalone-wildfly10.xml</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>The following CLI commands can be used manage <code>acme-subsystem</code></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">/subsystem=tracker:read-resource(recursive=<span class="hljs-keyword">true</span>)
-/subsystem=tracker/type=war:read-resource(recursive=<span class="hljs-keyword">true</span>)
-/subsystem=tracker/type=war:read-attribute(name=tick)
-/subsystem=tracker/type=war:write-attribute(name=tick,value=<span class="hljs-number">1000</span>)</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Deploy [example.war](deployments/example.war), [cool.war](deployments/cool.war), [test.war](deployments/test.war) to a <a href="http://wildfly.org" target="_blank">WildFly</a> which <code>acme-subsystem</code> be installed, the following log output in console:</p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Current deployments deployed <span class="hljs-keyword">while</span> war tracking active:
-[example.war, cool.war, test.war]
-Cool: <span class="hljs-number">1</span></code></pre>
+<pre class="highlight"><code class="language-java" data-lang="java">Parameters parameters = <span class="hljs-keyword">new</span> Parameters(SUBSYSTEM_PATH, getResourceDescriptionResolver(<span class="hljs-keyword">null</span>));
+parameters.setAddHandler(SubsystemAddHandler.INSTANCE)
+          .setRemoveHandler(SubsystemRemoveHandler.INSTANCE)
+          .setAddRestartLevel(OperationEntry.Flag.RESTART_NONE)
+          .setRemoveRestartLevel(OperationEntry.Flag.RESTART_RESOURCE_SERVICES)
+          .setDeprecationData(<span class="hljs-keyword">null</span>)
+          .setCapabilities();
+TrackerSubsystemDefinition resourceDefinition = <span class="hljs-keyword">new</span> TrackerSubsystemDefinition(parameters);</code></pre>
 </div>
 </div>
 </div>
@@ -307,35 +253,35 @@ Cool: <span class="hljs-number">1</span></code></pre>
         </div>
 
         
-        <a href="../../index.html" class="navigation navigation-prev " aria-label="Previous page: Introduction"><i class="fa fa-angle-left"></i></a>
+        <a href="../subsystem/extending-wildfly-deployers.html" class="navigation navigation-prev " aria-label="Previous page: 添加 deployers hook"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="../../subsystem/extending-wildfly-template.html" class="navigation navigation-next " aria-label="Next page: 创建初始工程"><i class="fa fa-angle-right"></i></a>
+        <a href="../subsystem/extending-wildfly-test.html" class="navigation navigation-next " aria-label="Next page: 测试"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>
 
         
-<script src="../../gitbook/app.js"></script>
+<script src="../gitbook/app.js"></script>
 
     
-    <script src="../../gitbook/plugins/gitbook-plugin-collapsible-menu/plugin.js"></script>
-    
-
-    
-    <script src="../../gitbook/plugins/gitbook-plugin-search/lunr.min.js"></script>
+    <script src="../gitbook/plugins/gitbook-plugin-collapsible-menu/plugin.js"></script>
     
 
     
-    <script src="../../gitbook/plugins/gitbook-plugin-search/search.js"></script>
+    <script src="../gitbook/plugins/gitbook-plugin-search/lunr.min.js"></script>
     
 
     
-    <script src="../../gitbook/plugins/gitbook-plugin-sharing/buttons.js"></script>
+    <script src="../gitbook/plugins/gitbook-plugin-search/search.js"></script>
     
 
     
-    <script src="../../gitbook/plugins/gitbook-plugin-fontsettings/buttons.js"></script>
+    <script src="../gitbook/plugins/gitbook-plugin-sharing/buttons.js"></script>
+    
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-fontsettings/buttons.js"></script>
     
 
 <script>

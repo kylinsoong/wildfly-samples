@@ -48,11 +48,5 @@ class TypeAdd extends AbstractAddStepHandler {
                 .install();
         newControllers.add(controller);
         
-//        DQPCoreService dqp = new DQPCoreService();
-//        ServiceController<Void> controller2 = context.getServiceTarget()
-//                .addService(DQPCoreService.serviceName, dqp)
-//                .setInitialMode(Mode.ACTIVE)
-//                .install();
-//        newControllers.add(controller2);
     }
 }

@@ -1,0 +1,348 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>添加 deployers hook | </title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.6.7">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="../gitbook/style.css">
+    
+        
+        <link rel="stylesheet" href="../gitbook/plugins/gitbook-plugin-highlight/website.css">
+        
+    
+        
+        <link rel="stylesheet" href="../gitbook/plugins/gitbook-plugin-search/search.css">
+        
+    
+        
+        <link rel="stylesheet" href="../gitbook/plugins/gitbook-plugin-fontsettings/website.css">
+        
+    
+    
+
+        
+    
+    
+    <link rel="next" href="../subsystem/extending-wildfly-definition.html" />
+    
+    
+    <link rel="prev" href="../subsystem/extending-wildfly-schema.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book"
+        data-level="1.3"
+        data-chapter-title="添加 deployers hook"
+        data-filepath="subsystem/extending-wildfly-deployers.adoc"
+        data-basepath=".."
+        data-revision="Mon Mar 14 2016 17:22:00 GMT+0800 (CST)"
+        data-innerlanguage="">
+    
+
+<div class="book-summary">
+    <nav role="navigation">
+        <ul class="summary">
+            
+            
+            
+                
+                <li>
+                    <a href="/wildfly-samples" target="blank" class="custom-link">WildFly Architecture</a>
+                </li>
+            
+            
+
+            
+            <li class="divider"></li>
+            
+
+            
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Introduction
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="subsystem/acme-subsystem/index.html">
+            
+                
+                    <a href="../subsystem/acme-subsystem/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        扩展 WildFly
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.1" data-path="subsystem/extending-wildfly-template.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-template.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.1.</b>
+                        
+                        创建初始工程
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="subsystem/extending-wildfly-schema.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-schema.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.2.</b>
+                        
+                        创建 schema 模型
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3" data-path="subsystem/extending-wildfly-deployers.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-deployers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.3.</b>
+                        
+                        添加 deployers hook
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="subsystem/extending-wildfly-definition.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-definition.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.</b>
+                        
+                        ResourceDefinition 实现
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="subsystem/extending-wildfly-test.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-test.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        测试
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+
+            
+            <li class="divider"></li>
+            <li>
+                <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                    Published with GitBook
+                </a>
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header" role="navigation">
+    <!-- Actions Left -->
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../" ></a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1" role="main">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <div class="sect1">
+<h2 id="__deployer_hook">&#x6DFB;&#x52A0; deployer hook</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>SubsystemAddHandler</code> &#x8D1F;&#x8D23;&#x6DFB;&#x52A0; subsystem resource &#x5230; model&#xFF0C; &#x7EE7;&#x627F;&#x4E86; <code>AbstractBoottimeAddStepHandler</code></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="img/wildfly-controller-boottimeaddstephandler.png" alt="Wildfly Controller API: AbstractBoottimeAddStepHandler"></span></p>
+</div>
+<div class="paragraph">
+<p>&#x91CD;&#x5199; performBoottime() &#x65B9;&#x6CD5;&#x6DFB;&#x52A0; deployers&#x2019;s hook</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-annotation">@Override</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">performBoottime</span><span class="hljs-params">(OperationContext context,
+                            ModelNode operation,
+                            ModelNode model,
+                            ServiceVerificationHandler verificationHandler,
+                            List&lt;ServiceController&lt;?&gt;&gt; newControllers)</span> <span class="hljs-keyword">throws</span> OperationFailedException </span>{
+
+    log.info(<span class="hljs-string">&quot;Populating the model&quot;</span>);
+
+    context.addStep(<span class="hljs-keyword">new</span> AbstractDeploymentChainStep() {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">execute</span><span class="hljs-params">(DeploymentProcessorTarget processorTarget)</span> </span>{
+            processorTarget.addDeploymentProcessor(SUBSYSTEM_NAME, SubsystemDeploymentProcessor.PHASE, SubsystemDeploymentProcessor.PRIORITY, <span class="hljs-keyword">new</span> SubsystemDeploymentProcessor());
+         }
+    }, OperationContext.Stage.RUNTIME);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x8BE6;&#x7EC6;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/extension/SubsystemAddHandler.java">SubsystemAddHandler.java</a></p>
+</div>
+<div class="paragraph">
+<p><code>SubsystemDeploymentProcessor</code> &#x5B9E;&#x73B0;&#x4E86; WildFly deployment &#x63A5;&#x53E3; <code>DeploymentUnitProcessor</code></p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="img/wildfly-deployment-DeploymentUnitProcessor.png" alt="WildFly deployment API: DeploymentUnitProcessor"></span></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SubsystemDeploymentProcessor</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">DeploymentUnitProcessor</span> </span>{
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">deploy</span><span class="hljs-params">(DeploymentPhaseContext phaseContext)</span> <span class="hljs-keyword">throws</span> DeploymentUnitProcessingException </span>{
+        String name = phaseContext.getDeploymentUnit().getName();
+        ResourceRoot root = phaseContext.getDeploymentUnit().getAttachment(Attachments.DEPLOYMENT_ROOT);
+        TrackerService service = getTrackerService(phaseContext.getServiceRegistry(), name);
+        <span class="hljs-keyword">if</span> (service != <span class="hljs-keyword">null</span>) {
+            VirtualFile cool = root.getRoot().getChild(<span class="hljs-string">&quot;META-INF/cool.txt&quot;</span>);
+            service.addDeployment(name);
+            <span class="hljs-keyword">if</span> (cool.exists()) {
+                service.addCoolDeployment(name);
+            }
+        }
+    }
+
+    <span class="hljs-annotation">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">undeploy</span><span class="hljs-params">(DeploymentUnit context)</span> </span>{
+        context.getServiceRegistry();
+        String name = context.getName();
+        TrackerService service = getTrackerService(context.getServiceRegistry(), name);
+        <span class="hljs-keyword">if</span> (service != <span class="hljs-keyword">null</span>) {
+            service.removeDeployment(name);
+        }
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x5982;&#x4E0A;&#x4EE3;&#x7801;&#x6240;&#x793A;&#xFF0C;&#x5F53; WildFly &#x6267;&#x884C;&#x90E8;&#x7F72;&#x4EFB;&#x52A1;&#x65F6;&#x4F1A;&#x68C0;&#x67E5;&#x90E8;&#x7F72;&#x7684; war/jar/ear &#x7684;&#x6839;&#x76EE;&#x5F55;&#xFF0C;&#x5982;&#x679C; <code>META-INF/cool.txt</code> &#x5B58;&#x5728;&#x5C31;&#x8BA4;&#x4E3A;&#x8BE5;&#x90E8;&#x7F72;&#x662F;&#x4E00;&#x4E2A; cool &#x90E8;&#x7F72;&#xFF0C;&#x5C06;&#x5176;&#x6DFB;&#x52A0;&#x5230; TrackerService &#x7684; cool &#x90E8;&#x7F72;&#x5217;&#x8868;&#x3002;</p>
+</div>
+<div class="paragraph">
+<p>&#x8BE6;&#x7EC6;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/deployment/SubsystemDeploymentProcessor.java">SubsystemDeploymentProcessor.java</a></p>
+</div>
+</div>
+</div>
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../subsystem/extending-wildfly-schema.html" class="navigation navigation-prev " aria-label="Previous page: 创建 schema 模型"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../subsystem/extending-wildfly-definition.html" class="navigation navigation-next " aria-label="Next page: ResourceDefinition 实现"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="../gitbook/app.js"></script>
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-collapsible-menu/plugin.js"></script>
+    
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-search/lunr.min.js"></script>
+    
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-search/search.js"></script>
+    
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-sharing/buttons.js"></script>
+    
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-fontsettings/buttons.js"></script>
+    
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"collapsible-menu":{},"highlight":{},"search":{"maxIndexSize":1000000},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>

@@ -11,9 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
- */
 public class TrackerService implements Service<TrackerService> {
 
     private AtomicLong tick = new AtomicLong(10000);
