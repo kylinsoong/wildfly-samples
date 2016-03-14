@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>测试 | </title>
+        <title>Extension 实现 | </title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.6.7">
@@ -37,8 +37,10 @@
         
     
     
+    <link rel="next" href="../subsystem/extending-wildfly-deployers.html" />
     
-    <link rel="prev" href="../subsystem/extending-wildfly-definition.html" />
+    
+    <link rel="prev" href="../subsystem/extending-wildfly-schema.html" />
     
 
         
@@ -47,9 +49,9 @@
         
         
     <div class="book"
-        data-level="1.6"
-        data-chapter-title="测试"
-        data-filepath="subsystem/extending-wildfly-test.adoc"
+        data-level="1.3"
+        data-chapter-title="Extension 实现"
+        data-filepath="subsystem/extending-wildfly-extension.adoc"
         data-basepath=".."
         data-revision="Mon Mar 14 2016 22:08:28 GMT+0800 (CST)"
         data-innerlanguage="">
@@ -133,7 +135,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3" data-path="subsystem/extending-wildfly-extension.html">
+        <li class="chapter active" data-level="1.3" data-path="subsystem/extending-wildfly-extension.html">
             
                 
                     <a href="../subsystem/extending-wildfly-extension.html">
@@ -178,7 +180,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.6" data-path="subsystem/extending-wildfly-test.html">
+        <li class="chapter " data-level="1.6" data-path="subsystem/extending-wildfly-test.html">
             
                 
                     <a href="../subsystem/extending-wildfly-test.html">
@@ -232,61 +234,75 @@
                     <section class="normal" id="section-">
                     
                         <div class="sect1">
-<h2 id="__cli">&#x4F7F;&#x7528; CLI &#x6D4B;&#x8BD5;</h2>
+<h2 id="_extension">Extension &#x5B9E;&#x73B0;</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><strong>&#x67E5;&#x770B;&#x6240;&#x6709; resource &#x5B9A;&#x4E49;:</strong></p>
+<p>WildFly &#x4E2D;&#x7684;&#x4EFB;&#x610F;&#x4E00;&#x4E2A; subsystem &#x90FD;&#x5FC5;&#x9700;&#x6709;&#x4E00;&#x4E2A; Extension &#x5B9E;&#x73B0;,</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="img/wildfly-controller-extension.png" alt="WildFly Controller API: Extension"></span></p>
+</div>
+<div class="paragraph">
+<p>Extension &#x5B9E;&#x73B0;&#x5FC5;&#x9700;&#x9075;&#x5FAA;&#x5982;&#x4E0B;&#x89C4;&#x5219;:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Extension &#x5B9E;&#x73B0;&#x7C7B;&#x7684;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#x4E0D;&#x80FD;&#x6709;&#x53C2;&#x6570;</p>
+</li>
+<li>
+<p>Extension &#x5B9E;&#x73B0;&#x7C7B;&#x5E94;&#x7684;&#x7C7B;&#x52A0;&#x8F7D; Module &#x5FC5;&#x9700;&#x5305;&#x542B;&#x4E00;&#x4E2A; <em>META-INF/services/org.jboss.as.controller.Extension</em> &#x6587;&#x4EF6;&#xFF0C;&#x5E76;&#x4E14;&#x8BE5;&#x6587;&#x4EF6;&#x5185;&#x5BB9;&#x4E3A;Extension &#x5B9E;&#x73B0;&#x7C7B;&#xFF0C;&#x53C2;&#x7167;&#x4EE3;&#x7801;-1</p>
+</li>
+<li>
+<p>WildFly &#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x4E2D;&#x5FC5;&#x9700;&#x6709; extension &#x7684;&#x76F8;&#x5E94;&#x914D;&#x7F6E;&#xFF0C;&#x4E14; extension &#x7684; module &#x5C5E;&#x6027;&#x6307;&#x5411; Extension &#x5B9E;&#x73B0;&#x7C7B;&#x5BF9;&#x5E94;&#x7684;&#x7C7B;&#x52A0;&#x8F7D; Module&#xFF0C;&#x53C2;&#x7167;&#x4EE3;&#x7801;-2</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="title"><strong>&#x4EE3;&#x7801;-1</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">com.acme.corp.tracker.extension.TrackerExtension</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>&#x4EE3;&#x7801;-2</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="hljs-tag">&lt;<span class="hljs-title">extensions</span>&gt;</span>
+    ...
+    <span class="hljs-tag">&lt;<span class="hljs-title">extension</span> <span class="hljs-attribute">module</span>=<span class="hljs-value">&quot;com.acme.corp.tracker&quot;</span>/&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">extensions</span>&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>TrackerExtension</code> initializeParsers(), initialize() &#x5B9E;&#x73B0;&#x5982;&#x4E0B;</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">[standalone<span class="hljs-annotation">@localhost</span>:<span class="hljs-number">9990</span> /] /subsystem=tracker:read-resource(include-defaults=<span class="hljs-keyword">true</span>,recursive=<span class="hljs-keyword">true</span>)
-{
-    <span class="hljs-string">&quot;outcome&quot;</span> =&gt; <span class="hljs-string">&quot;success&quot;</span>,
-    <span class="hljs-string">&quot;result&quot;</span> =&gt; {<span class="hljs-string">&quot;type&quot;</span> =&gt; {
-        <span class="hljs-string">&quot;war&quot;</span> =&gt; {<span class="hljs-string">&quot;tick&quot;</span> =&gt; <span class="hljs-number">10000L</span>},
-        <span class="hljs-string">&quot;sar&quot;</span> =&gt; {<span class="hljs-string">&quot;tick&quot;</span> =&gt; <span class="hljs-number">10000L</span>}
-    }}
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-annotation">@Override</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initializeParsers</span><span class="hljs-params">(ExtensionParsingContext context)</span> </span>{
+    context.setSubsystemXmlMapping(SUBSYSTEM_NAME, NAMESPACE_1_0, parser);
+}
+
+<span class="hljs-annotation">@Override</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initialize</span><span class="hljs-params">(ExtensionContext context)</span> </span>{
+
+    Parameters parameters = <span class="hljs-keyword">new</span> Parameters(SUBSYSTEM_PATH, getResourceDescriptionResolver(<span class="hljs-keyword">null</span>));
+    parameters.setAddHandler(SubsystemAddHandler.INSTANCE)
+              .setRemoveHandler(SubsystemRemoveHandler.INSTANCE)
+              .setAddRestartLevel(OperationEntry.Flag.RESTART_NONE)
+              .setRemoveRestartLevel(OperationEntry.Flag.RESTART_RESOURCE_SERVICES)
+              .setDeprecationData(<span class="hljs-keyword">null</span>)
+              .setCapabilities();
+    TrackerSubsystemDefinition resourceDefinition = <span class="hljs-keyword">new</span> TrackerSubsystemDefinition(parameters);
+
+    <span class="hljs-keyword">final</span> SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, CURRENT_VERSION);
+    subsystem.registerSubsystemModel(resourceDefinition);
+    subsystem.registerXMLElementWriter(parser);
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><strong>&#x6DFB;&#x52A0;&#x65B0;type:</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">[standalone<span class="hljs-annotation">@localhost</span>:<span class="hljs-number">9990</span> /] /subsystem=tracker/type=jar:add(tick=<span class="hljs-number">10000</span>)
-{<span class="hljs-string">&quot;outcome&quot;</span> =&gt; <span class="hljs-string">&quot;success&quot;</span>}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>&#x79FB;&#x9664;type:</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">[standalone<span class="hljs-annotation">@localhost</span>:<span class="hljs-number">9990</span> /] /subsystem=tracker/type=jar:remove()
-{<span class="hljs-string">&quot;outcome&quot;</span> =&gt; <span class="hljs-string">&quot;success&quot;</span>}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>&#x4FEE;&#x6539;tick&#x9ED8;&#x8BA4;&#x503C;:</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">[standalone<span class="hljs-annotation">@localhost</span>:<span class="hljs-number">9990</span> /] /subsystem=tracker/type=sar:write-attribute(name=tick,value=<span class="hljs-number">20000</span>)
-{<span class="hljs-string">&quot;outcome&quot;</span> =&gt; <span class="hljs-string">&quot;success&quot;</span>}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>&#x8BFB;&#x53D6;tick&#x503C;:</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">[standalone<span class="hljs-annotation">@localhost</span>:<span class="hljs-number">9990</span> /] /subsystem=tracker/type=sar:read-attribute(name=tick)
-{
-    <span class="hljs-string">&quot;outcome&quot;</span> =&gt; <span class="hljs-string">&quot;success&quot;</span>,
-    <span class="hljs-string">&quot;result&quot;</span> =&gt; <span class="hljs-number">20000L</span>
-}</code></pre>
-</div>
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerExtension.java">TrackerExtension.java</a></p>
 </div>
 </div>
 </div>
@@ -299,8 +315,10 @@
         </div>
 
         
-        <a href="../subsystem/extending-wildfly-definition.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: ResourceDefinition 实现"><i class="fa fa-angle-left"></i></a>
+        <a href="../subsystem/extending-wildfly-schema.html" class="navigation navigation-prev " aria-label="Previous page: 创建 schema 模型"><i class="fa fa-angle-left"></i></a>
         
+        
+        <a href="../subsystem/extending-wildfly-deployers.html" class="navigation navigation-next " aria-label="Next page: 添加 deployers hook"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>
