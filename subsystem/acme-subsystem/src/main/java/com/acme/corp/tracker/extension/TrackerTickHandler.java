@@ -17,7 +17,7 @@ class TrackerTickHandler extends AbstractWriteAttributeHandler<Void> {
     public static final TrackerTickHandler INSTANCE = new TrackerTickHandler();
 
     private TrackerTickHandler() {
-        super(TypeDefinition.TICK);
+        super(TrackerTypeDefinition.TICK);
     }
 
 

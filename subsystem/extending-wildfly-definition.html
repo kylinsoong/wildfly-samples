@@ -53,7 +53,7 @@
         data-chapter-title="ResourceDefinition 实现"
         data-filepath="subsystem/extending-wildfly-definition.adoc"
         data-basepath=".."
-        data-revision="Tue Mar 15 2016 18:05:21 GMT+0800 (CST)"
+        data-revision="Tue Mar 15 2016 22:19:58 GMT+0800 (CST)"
         data-innerlanguage="">
     
 
@@ -266,15 +266,59 @@
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>ResourceDefinition &#x5B9E;&#x73B0;&#x7C7B;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#x4E2D;&#x5FC5;&#x9700;&#x521D;&#x59CB;&#x5316;&#x8282;&#x70B9;&#x7684;&#x8DEF;&#x5F84;&#xFF0C;&#x4F8B;&#x5982; root &#x8282;&#x70B9;&#x5BF9;&#x5E94;&#x7684;&#x7684;&#x8DEF;&#x5F84;&#x4E3A; <em>&quot;subsystem&quot; &#x21D2; &quot;tracker&quot;</em>, &#x4E8C;&#x7EA7;&#x8282;&#x70B9;&#x5BF9;&#x5E94;&#x7684;&#x7684;&#x8DEF;&#x5F84;&#x4E3A; <em>&quot;type&quot; &#x21D2; &quot;*&quot;</em>
-2.
-3.
-4.</p>
+<p>ResourceDefinition &#x5B9E;&#x73B0;&#x7C7B;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#x4E2D;&#x5FC5;&#x9700;&#x521D;&#x59CB;&#x5316;&#x8282;&#x70B9;&#x7684;&#x8DEF;&#x5F84;&#xFF0C;&#x4F8B;&#x5982; root &#x8282;&#x70B9;&#x5BF9;&#x5E94;&#x7684;&#x7684;&#x8DEF;&#x5F84;&#x4E3A; <em>&quot;subsystem&quot; &#x21D2; &quot;tracker&quot;</em>, &#x4E8C;&#x7EA7;&#x8282;&#x70B9;&#x5BF9;&#x5E94;&#x7684;&#x7684;&#x8DEF;&#x5F84;&#x4E3A; <em>&quot;type&quot; &#x21D2; &quot;*&quot;</em></p>
+</li>
+<li>
+<p>ResourceDefinition &#x5B9E;&#x73B0;&#x7C7B;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#x4E2D;&#x5FC5;&#x9700;&#x521D;&#x59CB;&#x5316;&#x4E00;&#x4E2A; ResourceDescriptionResolver&#xFF0C;&#x5BF9;&#x5E94;&#x4E00;&#x4E2A; LocalDescriptions.properties &#x6587;&#x4EF6;&#xFF0C;&#x8BE5;&#x6587;&#x4EF6;&#x4E2D;&#x5305;&#x542B; Subsystem &#x4E2D;&#x6240;&#x6709; <strong>&#x64CD;&#x4F5C;</strong>&#xFF0C;<strong>&#x5C5E;&#x6027;</strong>&#xFF0C;<strong>&#x8282;&#x70B9;</strong> &#x7B49;&#x7684;&#x540D;&#x79F0;&#xFF0C;&#x53C2;&#x7167;&#x9644;&#x4EF6;-1</p>
+</li>
+<li>
+<p>ResourceDefinition &#x5B9E;&#x73B0;&#x7C7B;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#x4E2D;&#x9700;&#x8981;&#x6307;&#x5B9A;&#x76F8;&#x5E94;&#x7684;&#x8282;&#x70B9; ResourceDefinition &#x6DFB;&#x52A0;&#x5904;&#x7406;&#x5668;&#x548C;&#x79FB;&#x9664;&#x5904;&#x7406;&#x5668;&#xFF0C;&#x53C2;&#x7167; ResourceDefinition &#x5B9E;&#x73B0;&#x521D;&#x59CB;&#x5316;</p>
+</li>
+<li>
+<p>&#x91CD;&#x5199; registerOperations(), registerAttributes(), registerChildren() &#x6DFB;&#x52A0;&#x76F8;&#x5E94;&#x7684; <strong>&#x64CD;&#x4F5C;</strong>&#xFF0C;<strong>&#x5C5E;&#x6027;</strong>&#xFF0C;<strong>&#x5B50;&#x8282;&#x70B9;</strong>&#xFF0C;&#x53C2;&#x7167;&#x9644;&#x4EF6;-2</p>
 </li>
 </ol>
 </div>
+<div class="listingblock">
+<div class="title"><strong>&#x9644;&#x4EF6;-1</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">tracker=Acme Tracker subsystem
+tracker.add=Operation Adds tracker subsystem
+tracker.remove=Operation Removes tracker subsystem
+tracker.type=Deployment type
+tracker.type.add=Operation Adds tracker subsystem
+tracker.type.remove=Operation Removes tracker subsystem
+tracker.type.tick=Tick attribute
+tracker.show-cool-deployments=Show cool deployments</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title"><strong>&#x9644;&#x4EF6;-2</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-annotation">@Override</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">registerOperations</span><span class="hljs-params">(ManagementResourceRegistration resourceRegistration)</span> </span>{
+    <span class="hljs-keyword">super</span>.registerOperations(resourceRegistration);
+    resourceRegistration.registerOperationHandler(GenericSubsystemDescribeHandler.DEFINITION, GenericSubsystemDescribeHandler.INSTANCE);
+}
+
+<span class="hljs-annotation">@Override</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">registerChildren</span><span class="hljs-params">(ManagementResourceRegistration resourceRegistration)</span> </span>{
+    resourceRegistration.registerSubModel(TrackerTypeDefinition.INSTANCE);
+}
+
+<span class="hljs-annotation">@Override</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">registerAttributes</span><span class="hljs-params">(ManagementResourceRegistration resourceRegistration)</span> </span>{
+    resourceRegistration.registerReadWriteAttribute(SHOW_COOL_DEPLOYMENTS, TrackerShowCoolReadHandler.INSTANCE, TrackerShowCoolWriteHandler.INSTANCE);
+}</code></pre>
+</div>
+</div>
 <div class="paragraph">
-<p><code>TrackerSubsystemDefinition</code> &#x7EE7;&#x627F;&#x4E86; <code>SimpleResourceDefinition</code>, &#x5B83;&#x521D;&#x59CB;&#x5316; <code>TrackerExtension</code> &#x7684; initialize() &#x65B9;&#x6CD5;&#x4E2D;&#x8FDB;&#x884C;&#x7684;&#xFF0C;&#x76F8;&#x5173;&#x4EE3;&#x7801;&#x6BB5;:</p>
+<p>&#x8BE6;&#x7EC6;&#x5173;&#x4E8E;&#x91CD;&#x5199; registerOperations(), registerAttributes(), registerChildren() &#x7684;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerSubsystemDefinition.java">TrackerSubsystemDefinition.java</a>, <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerTypeDefinition.java">TrackerTypeDefinition.java</a></p>
+</div>
+<div class="sect2">
+<h3 id="_resourcedefinition_2">ResourceDefinition &#x5B9E;&#x73B0;&#x521D;&#x59CB;&#x5316;</h3>
+<div class="paragraph">
+<p><code>TrackerSubsystemDefinition</code> &#x7EE7;&#x627F;&#x4E86; <code>SimpleResourceDefinition</code>, &#x5B83;&#x521D;&#x59CB;&#x5316;&#x662F;&#x5728; <code>TrackerExtension</code> &#x7684; initialize() &#x65B9;&#x6CD5;&#x4E2D;&#x8FDB;&#x884C;&#x7684;&#xFF0C;&#x76F8;&#x5173;&#x4EE3;&#x7801;&#x6BB5;:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -286,6 +330,17 @@ parameters.setAddHandler(SubsystemAddHandler.INSTANCE)
           .setDeprecationData(<span class="hljs-keyword">null</span>)
           .setCapabilities();
 TrackerSubsystemDefinition resourceDefinition = <span class="hljs-keyword">new</span> TrackerSubsystemDefinition(parameters);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>TrackerTypeDefinition</code> &#x7EE7;&#x627F;&#x4E86; <code>SimpleResourceDefinition</code>, &#x5B83;&#x521D;&#x59CB;&#x5316;&#x4EE3;&#x7801;&#x5982;&#x4E0B;:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">TrackerTypeDefinition</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">super</span>(TYPE_PATH, TrackerExtension.getResourceDescriptionResolver(TYPE), TypeAdd.INSTANCE, TypeRemove.INSTANCE);
+}</code></pre>
+</div>
 </div>
 </div>
 </div>

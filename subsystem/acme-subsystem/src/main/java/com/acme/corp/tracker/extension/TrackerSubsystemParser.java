@@ -40,7 +40,7 @@ class TrackerSubsystemParser implements XMLStreamConstants, XMLElementReader<Lis
             writer.writeStartElement("deployment-type");
             writer.writeAttribute("suffix", property.getName());
             ModelNode entry = property.getValue();
-            TypeDefinition.TICK.marshallAsAttribute(entry, true, writer);
+            TrackerTypeDefinition.TICK.marshallAsAttribute(entry, true, writer);
             writer.writeEndElement();
         }
         //End deployment-types
@@ -86,7 +86,7 @@ class TrackerSubsystemParser implements XMLStreamConstants, XMLElementReader<Lis
             String attr = reader.getAttributeLocalName(i);
             String value = reader.getAttributeValue(i);
             if (attr.equals("tick")) {
-                TypeDefinition.TICK.parseAndSetParameter(value, addTypeOperation, reader);
+                TrackerTypeDefinition.TICK.parseAndSetParameter(value, addTypeOperation, reader);
             } else if (attr.equals("suffix")) {
                 suffix = value;
             } else {
