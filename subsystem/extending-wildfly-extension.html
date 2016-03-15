@@ -37,7 +37,7 @@
         
     
     
-    <link rel="next" href="../subsystem/extending-wildfly-deployers.html" />
+    <link rel="next" href="../subsystem/extending-wildfly-definition.html" />
     
     
     <link rel="prev" href="../subsystem/extending-wildfly-schema.html" />
@@ -53,7 +53,7 @@
         data-chapter-title="Extension 实现"
         data-filepath="subsystem/extending-wildfly-extension.adoc"
         data-basepath=".."
-        data-revision="Mon Mar 14 2016 22:08:28 GMT+0800 (CST)"
+        data-revision="Tue Mar 15 2016 18:05:21 GMT+0800 (CST)"
         data-innerlanguage="">
     
 
@@ -150,31 +150,31 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="subsystem/extending-wildfly-deployers.html">
-            
-                
-                    <a href="../subsystem/extending-wildfly-deployers.html">
-                
-                        <i class="fa fa-check"></i>
-                        
-                            <b>1.4.</b>
-                        
-                        添加 deployers hook
-                    </a>
-            
-            
-        </li>
-    
-        <li class="chapter " data-level="1.5" data-path="subsystem/extending-wildfly-definition.html">
+        <li class="chapter " data-level="1.4" data-path="subsystem/extending-wildfly-definition.html">
             
                 
                     <a href="../subsystem/extending-wildfly-definition.html">
                 
                         <i class="fa fa-check"></i>
                         
-                            <b>1.5.</b>
+                            <b>1.4.</b>
                         
                         ResourceDefinition 实现
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="subsystem/extending-wildfly-deployers.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-deployers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        添加 deployers hook
                     </a>
             
             
@@ -189,7 +189,7 @@
                         
                             <b>1.6.</b>
                         
-                        测试
+                        安装测试
                     </a>
             
             
@@ -237,7 +237,7 @@
 <h2 id="_extension">Extension &#x5B9E;&#x73B0;</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>WildFly &#x4E2D;&#x7684;&#x4EFB;&#x610F;&#x4E00;&#x4E2A; subsystem &#x90FD;&#x5FC5;&#x9700;&#x6709;&#x4E00;&#x4E2A; Extension &#x5B9E;&#x73B0;,</p>
+<p>WildFly &#x4E2D;&#x7684;&#x4EFB;&#x610F;&#x4E00;&#x4E2A; subsystem &#x90FD;&#x5FC5;&#x9700;&#x5BF9;&#x5E94;&#x4E00;&#x4E2A; Extension &#x5B9E;&#x73B0;,</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="img/wildfly-controller-extension.png" alt="WildFly Controller API: Extension"></span></p>
@@ -255,6 +255,9 @@
 </li>
 <li>
 <p>WildFly &#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x4E2D;&#x5FC5;&#x9700;&#x6709; extension &#x7684;&#x76F8;&#x5E94;&#x914D;&#x7F6E;&#xFF0C;&#x4E14; extension &#x7684; module &#x5C5E;&#x6027;&#x6307;&#x5411; Extension &#x5B9E;&#x73B0;&#x7C7B;&#x5BF9;&#x5E94;&#x7684;&#x7C7B;&#x52A0;&#x8F7D; Module&#xFF0C;&#x53C2;&#x7167;&#x4EE3;&#x7801;-2</p>
+</li>
+<li>
+<p>initialize() &#x5B9E;&#x73B0;&#x9700;&#x8981;&#x6CE8;&#x518C; Subsystem Root ResourceDefinition &#x53CA; XML &#x5199;&#x64CD;&#x4F5C;&#x89E3;&#x6790;&#x5668;&#xFF0C;initializeParsers() &#x5B9E;&#x73B0;&#x9700;&#x8981;&#x8BBE;&#x5B9A; XML &#x8BFB;&#x64CD;&#x4F5C;&#x89E3;&#x6790;&#x5668;&#xFF0C;&#x53C2;&#x7167;&#x4EE3;&#x7801;-3</p>
 </li>
 </ol>
 </div>
@@ -277,6 +280,7 @@
 <p><code>TrackerExtension</code> initializeParsers(), initialize() &#x5B9E;&#x73B0;&#x5982;&#x4E0B;</p>
 </div>
 <div class="listingblock">
+<div class="title"><strong>&#x4EE3;&#x7801;-3</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-annotation">@Override</span>
 <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initializeParsers</span><span class="hljs-params">(ExtensionParsingContext context)</span> </span>{
@@ -286,15 +290,7 @@
 <span class="hljs-annotation">@Override</span>
 <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initialize</span><span class="hljs-params">(ExtensionContext context)</span> </span>{
 
-    Parameters parameters = <span class="hljs-keyword">new</span> Parameters(SUBSYSTEM_PATH, getResourceDescriptionResolver(<span class="hljs-keyword">null</span>));
-    parameters.setAddHandler(SubsystemAddHandler.INSTANCE)
-              .setRemoveHandler(SubsystemRemoveHandler.INSTANCE)
-              .setAddRestartLevel(OperationEntry.Flag.RESTART_NONE)
-              .setRemoveRestartLevel(OperationEntry.Flag.RESTART_RESOURCE_SERVICES)
-              .setDeprecationData(<span class="hljs-keyword">null</span>)
-              .setCapabilities();
     TrackerSubsystemDefinition resourceDefinition = <span class="hljs-keyword">new</span> TrackerSubsystemDefinition(parameters);
-
     <span class="hljs-keyword">final</span> SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, CURRENT_VERSION);
     subsystem.registerSubsystemModel(resourceDefinition);
     subsystem.registerXMLElementWriter(parser);
@@ -302,7 +298,7 @@
 </div>
 </div>
 <div class="paragraph">
-<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerExtension.java">TrackerExtension.java</a></p>
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerExtension.java">TrackerExtension.java</a>, &#x8BE6;&#x7EC6;&#x5173;&#x4E8E;XML &#x89E3;&#x6790;&#x5668;&#x7684;&#x5B9E;&#x73B0;&#x53C2;&#x7167; <a href="extending-wildfly-schema.html#_model_structure">&#x6A21;&#x578B;&#x7ED3;&#x6784;</a>.</p>
 </div>
 </div>
 </div>
@@ -318,7 +314,7 @@
         <a href="../subsystem/extending-wildfly-schema.html" class="navigation navigation-prev " aria-label="Previous page: 创建 schema 模型"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="../subsystem/extending-wildfly-deployers.html" class="navigation navigation-next " aria-label="Next page: 添加 deployers hook"><i class="fa fa-angle-right"></i></a>
+        <a href="../subsystem/extending-wildfly-definition.html" class="navigation navigation-next " aria-label="Next page: ResourceDefinition 实现"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>

@@ -53,7 +53,7 @@
         data-chapter-title="创建 schema 模型"
         data-filepath="subsystem/extending-wildfly-schema.adoc"
         data-basepath=".."
-        data-revision="Mon Mar 14 2016 22:08:28 GMT+0800 (CST)"
+        data-revision="Tue Mar 15 2016 18:05:21 GMT+0800 (CST)"
         data-innerlanguage="">
     
 
@@ -150,31 +150,31 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="subsystem/extending-wildfly-deployers.html">
-            
-                
-                    <a href="../subsystem/extending-wildfly-deployers.html">
-                
-                        <i class="fa fa-check"></i>
-                        
-                            <b>1.4.</b>
-                        
-                        添加 deployers hook
-                    </a>
-            
-            
-        </li>
-    
-        <li class="chapter " data-level="1.5" data-path="subsystem/extending-wildfly-definition.html">
+        <li class="chapter " data-level="1.4" data-path="subsystem/extending-wildfly-definition.html">
             
                 
                     <a href="../subsystem/extending-wildfly-definition.html">
                 
                         <i class="fa fa-check"></i>
                         
-                            <b>1.5.</b>
+                            <b>1.4.</b>
                         
                         ResourceDefinition 实现
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="subsystem/extending-wildfly-deployers.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-deployers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        添加 deployers hook
                     </a>
             
             
@@ -189,7 +189,7 @@
                         
                             <b>1.6.</b>
                         
-                        测试
+                        安装测试
                     </a>
             
             
@@ -283,7 +283,7 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="__">&#x6A21;&#x578B;&#x7ED3;&#x6784;</h2>
+<h2 id="_model_structure">Model Structure</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>&#x6839;&#x636E;&#x4E0A;&#x9762;&#x521B;&#x5EFA; schema  &#x4E2D;&#x8BBE;&#x8BA1;&#x7684; schema, &#x5BF9;&#x5E94;&#x7684;&#x6A21;&#x578B;&#x7ED3;&#x6784;&#x5982;&#x4E0B;</p>
@@ -303,7 +303,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SubsystemParser</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">XMLStreamConstants</span>, <span class="hljs-title">XMLElementReader</span>&lt;<span class="hljs-title">List</span>&lt;<span class="hljs-title">ModelNode</span>&gt;&gt;, <span class="hljs-title">XMLElementWriter</span>&lt;<span class="hljs-title">SubsystemMarshallingContext</span>&gt; </span>{
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TrackerSubsystemParser</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">XMLStreamConstants</span>, <span class="hljs-title">XMLElementReader</span>&lt;<span class="hljs-title">List</span>&lt;<span class="hljs-title">ModelNode</span>&gt;&gt;, <span class="hljs-title">XMLElementWriter</span>&lt;<span class="hljs-title">SubsystemMarshallingContext</span>&gt; </span>{
     <span class="hljs-annotation">@Override</span>
     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">readElement</span><span class="hljs-params">(XMLExtendedStreamReader reader, List&lt;ModelNode&gt; list)</span> <span class="hljs-keyword">throws</span> XMLStreamException </span>{
     }
@@ -318,7 +318,7 @@
 <p>readElement() &#x8D1F;&#x8D23;&#x8BFB; subsystem xml&#xFF0C; writeContent&#xFF08;&#xFF09;&#x8D1F;&#x8D23;&#x5199; subsystem xml&#x3002;</p>
 </div>
 <div class="paragraph">
-<p>&#x8BE6;&#x7EC6;&#x5173;&#x4E8E; XML &#x89E3;&#x6790;&#x7684;&#x4EE3;&#x7801;&#x53C2;&#x7167;&#x5185;&#x90E8;&#x7C7B; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerExtension.java">SubsystemParser</a>.</p>
+<p>&#x8BE6;&#x7EC6;&#x5173;&#x4E8E; XML &#x89E3;&#x6790;&#x7684;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerSubsystemParser.java">TrackerSubsystemParser</a>.</p>
 </div>
 </div>
 </div>

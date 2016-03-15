@@ -53,7 +53,7 @@
         data-chapter-title="扩展 WildFly"
         data-filepath="subsystem/acme-subsystem/README.adoc"
         data-basepath="../.."
-        data-revision="Mon Mar 14 2016 22:08:28 GMT+0800 (CST)"
+        data-revision="Tue Mar 15 2016 18:05:21 GMT+0800 (CST)"
         data-innerlanguage="">
     
 
@@ -150,31 +150,31 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="subsystem/extending-wildfly-deployers.html">
-            
-                
-                    <a href="../../subsystem/extending-wildfly-deployers.html">
-                
-                        <i class="fa fa-check"></i>
-                        
-                            <b>1.4.</b>
-                        
-                        添加 deployers hook
-                    </a>
-            
-            
-        </li>
-    
-        <li class="chapter " data-level="1.5" data-path="subsystem/extending-wildfly-definition.html">
+        <li class="chapter " data-level="1.4" data-path="subsystem/extending-wildfly-definition.html">
             
                 
                     <a href="../../subsystem/extending-wildfly-definition.html">
                 
                         <i class="fa fa-check"></i>
                         
-                            <b>1.5.</b>
+                            <b>1.4.</b>
                         
                         ResourceDefinition 实现
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="subsystem/extending-wildfly-deployers.html">
+            
+                
+                    <a href="../../subsystem/extending-wildfly-deployers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        添加 deployers hook
                     </a>
             
             
@@ -189,7 +189,7 @@
                         
                             <b>1.6.</b>
                         
-                        测试
+                        安装测试
                     </a>
             
             
@@ -234,68 +234,9 @@
                     <section class="normal" id="section-">
                     
                         <div class="sect1">
-<h2 id="_steps_to_run_acme_example">Steps to run acme example</h2>
+<h2 id="_acme_subsystem">acme-subsystem</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p><strong>Build</strong></p>
-</div>
-<div class="paragraph">
-<p>Install Maven 3.x and Java 1.7 or higher, enter the following commands:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">$ git clone git<span class="hljs-annotation">@github</span>.com:kylinsoong/wildfly-samples.git
-$ cd wildfly-samples/subsystem/acme-subsystem/
-$ mvn clean install</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>you will find distribution <code>acme-subsystem-dist.zip</code> under &quot;target&quot; directory once the build is completed.</p>
-</div>
-<div class="paragraph">
-<p><strong>Install</strong></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Assuming a <a href="http://wildfly.org" target="_blank">WildFly</a> was installed. Unzip the distribution as below to install <code>acme-subsystem</code></p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">$ unzip acme-subsystem-dist.zip -d wildfly-<span class="hljs-number">10.0</span>.0.Final</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>Run</strong></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Run the <code>acme-subsystem</code> in <a href="http://wildfly.org" target="_blank">WildFly</a>:</p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">$ ./bin/standalone.sh -c standalone-wildfly10.xml</code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Deploy <a href="deployments/example.war">example.war</a>, <a href="deployments/cool.war">cool.war</a>, <a href="deployments/test.war">test.war</a> to a <a href="http://wildfly.org" target="_blank">WildFly</a>, the following log output in console:</p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Current deployments deployed <span class="hljs-keyword">while</span> war tracking active:
-[example.war, cool.war, test.war]
-Cool: <span class="hljs-number">1</span></code></pre>
-</div>
-</div>
+
 </div>
 </div>
                     

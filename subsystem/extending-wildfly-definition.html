@@ -37,10 +37,10 @@
         
     
     
-    <link rel="next" href="../subsystem/extending-wildfly-test.html" />
+    <link rel="next" href="../subsystem/extending-wildfly-deployers.html" />
     
     
-    <link rel="prev" href="../subsystem/extending-wildfly-deployers.html" />
+    <link rel="prev" href="../subsystem/extending-wildfly-extension.html" />
     
 
         
@@ -49,11 +49,11 @@
         
         
     <div class="book"
-        data-level="1.5"
+        data-level="1.4"
         data-chapter-title="ResourceDefinition 实现"
         data-filepath="subsystem/extending-wildfly-definition.adoc"
         data-basepath=".."
-        data-revision="Mon Mar 14 2016 22:08:28 GMT+0800 (CST)"
+        data-revision="Tue Mar 15 2016 18:05:21 GMT+0800 (CST)"
         data-innerlanguage="">
     
 
@@ -150,31 +150,31 @@
             
         </li>
     
-        <li class="chapter " data-level="1.4" data-path="subsystem/extending-wildfly-deployers.html">
-            
-                
-                    <a href="../subsystem/extending-wildfly-deployers.html">
-                
-                        <i class="fa fa-check"></i>
-                        
-                            <b>1.4.</b>
-                        
-                        添加 deployers hook
-                    </a>
-            
-            
-        </li>
-    
-        <li class="chapter active" data-level="1.5" data-path="subsystem/extending-wildfly-definition.html">
+        <li class="chapter active" data-level="1.4" data-path="subsystem/extending-wildfly-definition.html">
             
                 
                     <a href="../subsystem/extending-wildfly-definition.html">
                 
                         <i class="fa fa-check"></i>
                         
-                            <b>1.5.</b>
+                            <b>1.4.</b>
                         
                         ResourceDefinition 实现
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="subsystem/extending-wildfly-deployers.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-deployers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        添加 deployers hook
                     </a>
             
             
@@ -189,7 +189,7 @@
                         
                             <b>1.6.</b>
                         
-                        测试
+                        安装测试
                     </a>
             
             
@@ -237,10 +237,41 @@
 <h2 id="_resourcedefinition">ResourceDefinition &#x7684;&#x5B9E;&#x73B0;</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>WildFly &#x6700;&#x4E3B;&#x8981;&#x7684;&#x7279;&#x70B9;&#x662F; Modular&#xFF0C;Pluggable&#xFF0C;&#x53EF;&#x4EE5;&#x7406;&#x89E3;&#x4E3A; WildFly &#x662F;&#x7531;&#x4E00;&#x7CFB;&#x5217; Management &#x547D;&#x4EE4;&#x7EC4;&#x6210;&#x7684;&#xFF0C;Management &#x547D;&#x4EE4;&#x662F;&#x901A;&#x8FC7; Management resource &#x5B9A;&#x4E49;&#x7684;&#xFF0C;&#x6269;&#x5C55; WildFly &#x65B0;&#x6DFB;&#x52A0; Management Resource &#x5FC5;&#x987B;&#x5B9E;&#x73B0; <code>ResourceDefinition</code> &#x63A5;&#x53E3;.</p>
+<p>WildFly &#x7684;&#x67B6;&#x6784;&#x8BBE;&#x8BA1;&#x5177;&#x6709; Modular&#xFF0C;Pluggable &#x7684;&#x7279;&#x70B9;&#xFF0C;&#x591A;&#x4E2A; Subsystem &#x7684;&#x96C6;&#x5408;&#x5F62;&#x6210;&#x4E00;&#x4E2A; WildFly &#x670D;&#x52A1;&#x5668;&#xFF08;&#x4E0D;&#x540C; Subsystem &#x4E4B;&#x95F4;&#x662F;&#x76F8;&#x4E92;&#x72EC;&#x7ACB;&#x7684;&#xFF09;&#xFF0C;&#x800C;&#x6BCF;&#x4E00;&#x4E2A; Subsystem &#x53C8;&#x662F;&#x7531;&#x591A;&#x4E2A;&#x7BA1;&#x7406;&#x547D;&#x4EE4;&#xFF08;Management CLI&#xFF09;&#x6784;&#x6210;&#xFF0C;Subsystem &#x4E2D;&#x7684;&#x6240;&#x6709;&#x7BA1;&#x7406;&#x547D;&#x4EE4;&#x6210;&#x6811;&#x72B6;&#x7ED3;&#x6784;&#xFF0C;&#x6811;&#x7684; root &#x8282;&#x70B9;&#x4E3A; Subsystem &#x7684;&#x540D;&#x79F0;&#xFF0C;&#x6811;&#x4E2D;&#x7684;&#x4E00;&#x6761;&#x6709;&#x6548;&#x8DEF;&#x5F84;&#x4EE3;&#x8868;&#x4E00;&#x6761; Management CLI&#xFF0C;&#x5982;&#x4E0B;&#x56FE;</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="img/WildFly_Subsystem_Architecture.png" alt="WildFly Subsystem Architecture"></span></p>
+</div>
+<div class="paragraph">
+<p>&#x5982;&#x4E0A;&#x56FE;&#xFF0C;&#x6811;&#x4E2D;&#x6709;&#x4E94;&#x4E2A;&#x8282;&#x70B9;&#xFF0C;&#x5B83;&#x5BF9;&#x5E94; Management CLI &#x53EF;&#x4EE5;&#x662F;</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">/subsystem=tracker
+/subsystem=tracker/type=sar
+/subsystem=tracker/type=war
+/subsystem=tracker/X
+/subsystem=tracker/X/Y</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x6BCF;&#x4E00;&#x6761; Management CLI &#x5BF9;&#x5E94;&#x7684;&#x6811;&#x4E2D;&#x7684;&#x8282;&#x70B9;&#x4E0A;&#x5FC5;&#x9700;&#x6CE8;&#x518C;&#x4E00;&#x4E2A; ResourceDefinition &#x7684;&#x5B9E;&#x73B0;&#xFF0C;&#x8BE5;&#x5B9E;&#x73B0;&#x8D1F;&#x8D23;&#x5BF9;&#x5E94;&#x8282;&#x70B9; Management CLI &#x7684; <strong>&#x64CD;&#x4F5C;</strong>&#xFF0C;<strong>&#x5C5E;&#x6027;</strong>&#xFF0C;<strong>&#x5B50;&#x8282;&#x70B9;</strong> &#x7B49;&#x3002;</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="img/wildfly-controller-resourcedefinition.png" alt="WildFly Controller API: ResourceDefinition"></span></p>
+</div>
+<div class="paragraph">
+<p>ResourceDefinition &#x5B9E;&#x73B0;&#x5FC5;&#x9700;&#x9075;&#x5FAA;&#x5982;&#x4E0B;&#x89C4;&#x5219;:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ResourceDefinition &#x5B9E;&#x73B0;&#x7C7B;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#x4E2D;&#x5FC5;&#x9700;&#x521D;&#x59CB;&#x5316;&#x8282;&#x70B9;&#x7684;&#x8DEF;&#x5F84;&#xFF0C;&#x4F8B;&#x5982; root &#x8282;&#x70B9;&#x5BF9;&#x5E94;&#x7684;&#x7684;&#x8DEF;&#x5F84;&#x4E3A; <em>&quot;subsystem&quot; &#x21D2; &quot;tracker&quot;</em>, &#x4E8C;&#x7EA7;&#x8282;&#x70B9;&#x5BF9;&#x5E94;&#x7684;&#x7684;&#x8DEF;&#x5F84;&#x4E3A; <em>&quot;type&quot; &#x21D2; &quot;*&quot;</em>
+2.
+3.
+4.</p>
+</li>
+</ol>
 </div>
 <div class="paragraph">
 <p><code>TrackerSubsystemDefinition</code> &#x7EE7;&#x627F;&#x4E86; <code>SimpleResourceDefinition</code>, &#x5B83;&#x521D;&#x59CB;&#x5316; <code>TrackerExtension</code> &#x7684; initialize() &#x65B9;&#x6CD5;&#x4E2D;&#x8FDB;&#x884C;&#x7684;&#xFF0C;&#x76F8;&#x5173;&#x4EE3;&#x7801;&#x6BB5;:</p>
@@ -268,10 +299,10 @@ TrackerSubsystemDefinition resourceDefinition = <span class="hljs-keyword">new</
         </div>
 
         
-        <a href="../subsystem/extending-wildfly-deployers.html" class="navigation navigation-prev " aria-label="Previous page: 添加 deployers hook"><i class="fa fa-angle-left"></i></a>
+        <a href="../subsystem/extending-wildfly-extension.html" class="navigation navigation-prev " aria-label="Previous page: Extension 实现"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="../subsystem/extending-wildfly-test.html" class="navigation navigation-next " aria-label="Next page: 测试"><i class="fa fa-angle-right"></i></a>
+        <a href="../subsystem/extending-wildfly-deployers.html" class="navigation navigation-next " aria-label="Next page: 添加 deployers hook"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>

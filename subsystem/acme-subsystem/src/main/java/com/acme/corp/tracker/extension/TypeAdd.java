@@ -37,10 +37,15 @@ class TypeAdd extends AbstractAddStepHandler {
     protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model,
             ServiceVerificationHandler verificationHandler, List<ServiceController<?>> newControllers)
             throws OperationFailedException {
+        
+        //TODO-- service dependency
+        TrackerRuntimeService runtimeService = TrackerRuntimeService.install(context.getServiceRegistry(true), context.getServiceTarget());
+                
         String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
         long tick = TICK.resolveModelAttribute(context,model).asLong();
         TrackerService service = new TrackerService(suffix, tick);
         ServiceName name = TrackerService.createServiceName(suffix);
+//        ServiceName name = TrackerService.NAME;
         ServiceController<TrackerService> controller = context.getServiceTarget()
                 .addService(name, service)
                 .addListener(verificationHandler)
