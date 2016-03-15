@@ -40,7 +40,7 @@ public class TrackerSubsystemDefinition extends SimpleResourceDefinition {
 
     @Override
     public void registerChildren(ManagementResourceRegistration resourceRegistration) {
-        resourceRegistration.registerSubModel(TypeDefinition.INSTANCE);
+        resourceRegistration.registerSubModel(TrackerTypeDefinition.INSTANCE);
     }
 
     @Override

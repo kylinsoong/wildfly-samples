@@ -1,6 +1,6 @@
 package com.acme.corp.tracker.extension;
 
-import static com.acme.corp.tracker.extension.TypeDefinition.TICK;
+import static com.acme.corp.tracker.extension.TrackerTypeDefinition.TICK;
 
 
 import java.util.List;

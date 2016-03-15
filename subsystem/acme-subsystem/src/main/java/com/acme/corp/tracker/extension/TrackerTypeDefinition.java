@@ -11,12 +11,9 @@ import org.jboss.dmr.ModelType;
 import static com.acme.corp.tracker.extension.TrackerExtension.TYPE;
 import static com.acme.corp.tracker.extension.TrackerExtension.TYPE_PATH;
 
-/**
- * @author <a href="tcerar@redhat.com">Tomaz Cerar</a>
- */
-public class TypeDefinition extends SimpleResourceDefinition {
+public class TrackerTypeDefinition extends SimpleResourceDefinition {
     
-    public static final TypeDefinition INSTANCE = new TypeDefinition();
+    public static final TrackerTypeDefinition INSTANCE = new TrackerTypeDefinition();
 
     protected static final SimpleAttributeDefinition TICK =
             new SimpleAttributeDefinitionBuilder(TrackerExtension.TICK, ModelType.LONG)
@@ -28,13 +25,8 @@ public class TypeDefinition extends SimpleResourceDefinition {
                     .build();
 
 
-    private TypeDefinition() {
-        super(TYPE_PATH,
-                TrackerExtension.getResourceDescriptionResolver(TYPE),
-                //We always need to add an 'add' operation
-                TypeAdd.INSTANCE,
-                //Every resource that is added, normally needs a remove operation
-                TypeRemove.INSTANCE);
+    private TrackerTypeDefinition() {
+        super(TYPE_PATH, TrackerExtension.getResourceDescriptionResolver(TYPE), TypeAdd.INSTANCE, TypeRemove.INSTANCE);
     }
 
     @Override
