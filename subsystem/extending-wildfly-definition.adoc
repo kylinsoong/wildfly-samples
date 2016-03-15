@@ -1,9 +1,31 @@
 
 == ResourceDefinition 的实现
 
-WildFly 最主要的特点是 Modular，Pluggable，可以理解为 WildFly 是由一系列 Management 命令组成的，Management 命令是通过 Management resource 定义的，扩展 WildFly 新添加 Management Resource 必须实现 `ResourceDefinition` 接口.
+WildFly 的架构设计具有 Modular，Pluggable 的特点，多个 Subsystem 的集合形成一个 WildFly 服务器（不同 Subsystem 之间是相互独立的），而每一个 Subsystem 又是由多个管理命令（Management CLI）构成，Subsystem 中的所有管理命令成树状结构，树的 root 节点为 Subsystem 的名称，树中的一条有效路径代表一条 Management CLI，如下图
+
+image:img/WildFly_Subsystem_Architecture.png[WildFly Subsystem Architecture]
+
+如上图，树中有五个节点，它对应 Management CLI 可以是
+
+[source,java]
+----
+/subsystem=tracker
+/subsystem=tracker/type=sar
+/subsystem=tracker/type=war
+/subsystem=tracker/X
+/subsystem=tracker/X/Y
+----
+
+每一条 Management CLI 对应的树中的节点上必需注册一个 ResourceDefinition 的实现，该实现负责对应节点 Management CLI 的 **操作**，**属性**，**子节点** 等。
 
 image:img/wildfly-controller-resourcedefinition.png[WildFly Controller API: ResourceDefinition]
+
+ResourceDefinition 实现必需遵循如下规则:
+
+1. ResourceDefinition 实现类构造方法中必需初始化节点的路径，例如 root 节点对应的的路径为 _"subsystem" => "tracker"_, 二级节点对应的的路径为 _"type" => "*"_
+2. 
+3.
+4.
 
 `TrackerSubsystemDefinition` 继承了 `SimpleResourceDefinition`, 它初始化 `TrackerExtension` 的 initialize() 方法中进行的，相关代码段:
 

@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class TrackerService implements Service<TrackerService> {
-
+    
     private AtomicLong tick = new AtomicLong(10000);
 
     private Set<String> deployments = Collections.synchronizedSet(new HashSet<String>());
@@ -25,9 +25,10 @@ public class TrackerService implements Service<TrackerService> {
         @Override
         public void run() {
             while (true) {
+                Thread.currentThread().setName("tracker-" + suffix + "-thread");
                 try {
                     Thread.sleep(tick.get());
-                    System.out.println("Current deployments deployed while " + suffix + " tracking active:\n" + deployments + "\nCool: " + coolDeployments.size());
+                    System.out.println("Current deployments deployed while " + suffix + " tracking active:" + deployments + ", Cool: " + coolDeployments.size());
                 } catch (InterruptedException e) {
                     interrupted();
                     break;

@@ -1,4 +1,61 @@
 
+== 安装运行
+
+安装之前首先需要:
+
+1. 克隆编译打包生成安装文件
+2. 安装 WildFly
+
+**克隆编译打包生成安装文件:**
+
+_Maven 3.x_，_Java 1.7 或以后版本_，_git 客户端_ 安装配置完成后执行如下命令
+
+[source,java]
+----
+$ git clone git@github.com:kylinsoong/wildfly-samples.git
+$ cd wildfly-samples/subsystem/acme-subsystem/
+$ mvn clean install
+----
+
+如上命令执行完成会生成 `acme-subsystem-dist.zip` 文件，位于 `target` 目录下.
+
+**安装 WildFly:**
+
+下载 http://wildfly.org[WildFly]，解压完成安装
+
+[source,java]
+----
+$ unzip wildfly-10.0.0.Final.zip
+----
+
+**安装 acme-subsystem:**
+
+解压 `acme-subsystem-dist.zip` 到 WildFly 主目录
+
+[source,java]
+----
+$ unzip acme-subsystem-dist.zip -d wildfly-10.0.0.Final
+----
+
+**启动 acme-subsystem:**
+
+[source,java]
+----
+$ ./bin/standalone.sh -c standalone-wildfly10.xml
+----
+
+**测试 acme-subsystem:**
+
+部署 link:acme-subsystem/deployments/example.war[example.war], link:acme-subsystem/deployments/cool.war[cool.war], link:acme-subsystem/deployments/test.war[test.war] 到 http://wildfly.org[WildFly]，查看 console 端日志输出:
+
+[source,java]
+----
+16:20:23,007 INFO  [stdout] (tracker-sar-thread) Current deployments deployed while sar tracking active:[], Cool: 0
+16:20:23,011 INFO  [stdout] (tracker-war-thread) Current deployments deployed while war tracking active:[example.war, test.war, cool.war], Cool: 1
+----
+
+更多管理层面的测试参照如下`使用 CLI 测试`部分。
+
 == 使用 CLI 测试
 
 **查看所有 resource 定义:**

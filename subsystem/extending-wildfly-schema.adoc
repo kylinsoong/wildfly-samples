@@ -36,7 +36,7 @@
 1. **xmlns** 和 **targetNamespace** 的值设定为 **urn:com.acme.corp.tracker:1.0**
 2. 新添加的 subsystem 只有一个 **deployment-types** 元素，一个 **deployment-types** 可包括多个 **deployment-type**，而每个 **deployment-type** 有两个属性：**suffix** 和 **tick**
 
-== 模型结构
+== Model Structure
 
 根据上面创建 schema  中设计的 schema, 对应的模型结构如下
 
@@ -54,7 +54,7 @@ WildFly 中不同的 Subsystem 对应不同的 SubsystemParser，XML 文件的�
 
 [source,java]
 ----
-class SubsystemParser implements XMLStreamConstants, XMLElementReader<List<ModelNode>>, XMLElementWriter<SubsystemMarshallingContext> {
+class TrackerSubsystemParser implements XMLStreamConstants, XMLElementReader<List<ModelNode>>, XMLElementWriter<SubsystemMarshallingContext> {
     @Override
     public void readElement(XMLExtendedStreamReader reader, List<ModelNode> list) throws XMLStreamException {
     }
@@ -67,4 +67,4 @@ class SubsystemParser implements XMLStreamConstants, XMLElementReader<List<Model
 
 readElement() 负责读 subsystem xml， writeContent（）负责写 subsystem xml。
 
-详细关于 XML 解析的代码参照内部类 link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerExtension.java[SubsystemParser].
+详细关于 XML 解析的代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerSubsystemParser.java[TrackerSubsystemParser].

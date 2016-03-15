@@ -60,8 +60,7 @@ class TrackerTickHandler extends AbstractWriteAttributeHandler<Void> {
      * @param handback       an object, if any, passed in to the {@code handbackHolder} by the {@code applyUpdateToRuntime}
      *                       implementation
      */
-    protected void revertUpdateToRuntime(OperationContext context, ModelNode operation, String attributeName,
-                                         ModelNode valueToRestore, ModelNode valueToRevert, Void handback) {
+    protected void revertUpdateToRuntime(OperationContext context, ModelNode operation, String attributeName, ModelNode valueToRestore, ModelNode valueToRevert, Void handback) {
         // no-op
     }
 }

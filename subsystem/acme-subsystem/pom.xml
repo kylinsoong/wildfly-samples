@@ -14,7 +14,7 @@
     <properties>
         <version.org.wildfly>10.0.0.Final</version.org.wildfly>
         <version.org.wildfly.core>2.0.10.Final</version.org.wildfly.core>
-        <version.junit>4.8.2</version.junit>
+        <version.junit>4.11</version.junit>
         <version.jta>1.1</version.jta>
         <module.name>com.acme.corp.tracker</module.name>
     </properties>
@@ -87,7 +87,8 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-        </dependency>       
+        </dependency>    
+        
     </dependencies>
     
 
@@ -149,10 +150,10 @@
                                <delete dir="target/module" />
                                <property name="module.dir" value="target/module/${module.path}/main" />
                                
-                               <copy file="src/main/resources/module/main/module.xml" tofile="${module.dir}/module.xml" />
+                               <copy file="src/assemble/kits/modules/com/acme/corp/tracker/main/module.xml" tofile="${module.dir}/module.xml" />
                                <copy file="target/${project.artifactId}.jar" todir="${module.dir}" />
                                
-                               <echo>Module ${module.name} has been created in the target/module directory. Copy to your JBoss AS 7 installation.</echo>
+                               <echo>Module ${module.name} has been created in the target/module directory. Copy to your WildFly installation.</echo>
                             </target>
                         </configuration>
                     </execution>
