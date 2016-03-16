@@ -53,7 +53,7 @@
         data-chapter-title="OperationStepHandler 实现"
         data-filepath="subsystem/extending-wildfly-handler.adoc"
         data-basepath=".."
-        data-revision="Wed Mar 16 2016 18:06:03 GMT+0800 (CST)"
+        data-revision="Wed Mar 16 2016 21:02:10 GMT+0800 (CST)"
         data-innerlanguage="">
     
 
@@ -281,10 +281,10 @@
 <p>&#x8282;&#x70B9;<code>&#x6DFB;&#x52A0;&#x5904;&#x7406;&#x5668;</code>&#x548C;<code>&#x79FB;&#x9664;&#x5904;&#x7406;&#x5668;</code> - <code>SubsystemAddHandler</code>, <code>SubsystemRemoveHandler</code>, <code>TypeAddHandler</code>, <code>TypeRemoveHandler</code></p>
 </li>
 <li>
-<p>&#x5C5E;&#x6027;<code>&#x8BFB;&#x5904;&#x7406;&#x5668;</code>&#x548C;<code>&#x5199;&#x5904;&#x7406;&#x5668;</code> - TrackerShowCoolReadHandler`, <code>TrackerShowCoolWriteHandler</code>, <code>TypeTickReadHandler</code>, <code>TypeTickWriteHandler</code></p>
+<p>&#x5C5E;&#x6027;<code>&#x8BFB;&#x5904;&#x7406;&#x5668;</code>&#x548C;<code>&#x5199;&#x5904;&#x7406;&#x5668;</code> - <code>TrackerShowCoolReadHandler</code>, <code>TrackerShowCoolWriteHandler</code>, <code>TypeTickReadHandler</code>, <code>TypeTickWriteHandler</code></p>
 </li>
 <li>
-<p>&#x8282;&#x70B9;<code>&#x64CD;&#x4F5C;&#x5904;&#x7406;&#x5668;</code> - <code>TrackerDisableAllHandler</code>, <code>TypeDisableHandler</code>, <code>TypeEnableHandler</code></p>
+<p>&#x8282;&#x70B9;<code>&#x64CD;&#x4F5C;&#x5904;&#x7406;&#x5668;</code> - <code>TrackerDisableAllHandler</code>, <code>TrackerListAllHandler</code>, <code>TrackerListCoolHandler</code>, <code>TypeDisableHandler</code>, <code>TypeEnableHandler</code></p>
 </li>
 </ol>
 </div>
@@ -491,17 +491,25 @@ service.setTick(resolvedValue.asLong());</code></pre>
 <div class="sect2">
 <h3 id="__code_code">&#x8282;&#x70B9;<code>&#x64CD;&#x4F5C;&#x5904;&#x7406;&#x5668;</code>&#x5B9E;&#x73B0;</h3>
 <div class="paragraph">
-<p>root &#x8282;&#x70B9;(Subsystem) &#x5B9A;&#x4E49;&#x4E86;&#x4E00;&#x4E2A; <code>disable-all-tracker</code> &#x64CD;&#x4F5C;&#xFF0C;&#x4E8C;&#x7EA7; type &#x8282;&#x70B9;&#x5B9A;&#x4E49;&#x4E86;&#x4E24;&#x4E2A;&#x64CD;&#x4F5C;: <code>disable-tracker</code> &#x548C; <code>enable-tracker</code>&#xFF0C;&#xFF0C;&#x901A;&#x8FC7;&#x7BA1;&#x7406;&#x547D;&#x4EE4;&#x884C;&#x53EF;&#x4EE5;&#x6267;&#x884C;&#x64CD;&#x4F5C;</p>
+<p>root &#x8282;&#x70B9;(Subsystem) &#x5B9A;&#x4E49;&#x4E86;&#x4E00;&#x4E2A; <code>disable-all-tracker</code> &#x64CD;&#x4F5C;&#xFF0C;&#x4E8C;&#x7EA7; type &#x8282;&#x70B9;&#x5B9A;&#x4E49;&#x4E86;&#x4E24;&#x4E2A;&#x64CD;&#x4F5C;: <code>disable-tracker</code> &#x548C; <code>enable-tracker</code>&#xFF0C;&#x901A;&#x8FC7;&#x7BA1;&#x7406;&#x547D;&#x4EE4;&#x884C;&#x53EF;&#x4EE5;&#x6267;&#x884C;&#x64CD;&#x4F5C;</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java">/subsystem=tracker:disable-all-tracker()
+/subsystem=tracker:list-deployments()
+/subsystem=tracker:list-cool-deployments()
 /subsystem=tracker/type=war:disable-tracker()
 /subsystem=tracker/type=war:enable-tracker()</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>&#x8FD9;&#x4E9B;&#x64CD;&#x4F5C;&#x7684;&#x6267;&#x884C;&#x5206;&#x522B;&#x901A;&#x8FC7;<code>&#x64CD;&#x4F5C;&#x5904;&#x7406;&#x5668;</code> TrackerDisableAllHandler, TypeDisableHandler, TypeEnableHandler &#x6765;&#x5B8C;&#x6210;&#x7684;&#x3002;<code>TrackerDisableAllHandler</code> &#x5B9E;&#x73B0;&#x4E86;&#x63A5;&#x53E3; <code>OperationStepHandler</code>&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x5C06; TrackerDeploymentService &#x7684; showcool &#x53D8;&#x91CF;&#x8BBE;&#x7F6E;&#x4E3A; false:</p>
+<p>&#x8FD9;&#x4E9B;&#x64CD;&#x4F5C;&#x7684;&#x6267;&#x884C;&#x5206;&#x522B;&#x901A;&#x8FC7;<code>&#x64CD;&#x4F5C;&#x5904;&#x7406;&#x5668;</code> TrackerDisableAllHandler, TrackerListAllHandler, TrackerListCoolHandler, TypeDisableHandler, TypeEnableHandler &#x6765;&#x5B8C;&#x6210;&#x7684;&#x3002;</p>
+</div>
+<div class="paragraph">
+<p><strong>TrackerDisableAllHandler</strong></p>
+</div>
+<div class="paragraph">
+<p><code>TrackerDisableAllHandler</code> &#x5B9E;&#x73B0;&#x4E86;&#x63A5;&#x53E3; <code>OperationStepHandler</code>&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x5C06; TrackerDeploymentService &#x7684; showcool &#x53D8;&#x91CF;&#x8BBE;&#x7F6E;&#x4E3A; false:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -511,6 +519,57 @@ service.setShowCool(<span class="hljs-keyword">false</span>);</code></pre>
 </div>
 <div class="paragraph">
 <p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TrackerDisableAllHandler.java">TrackerDisableAllHandler.java</a></p>
+</div>
+<div class="paragraph">
+<p><strong>TrackerListAllHandler</strong></p>
+</div>
+<div class="paragraph">
+<p><code>TrackerListAllHandler</code> &#x5B9E;&#x73B0;&#x4E86;&#x63A5;&#x53E3; <code>OperationStepHandler</code>&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x5217;&#x51FA;&#x6240;&#x6709;&#x90E8;&#x7F72;&#x6587;&#x4EF6;:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">TrackerDeploymentService service = (TrackerDeploymentService) context.getServiceRegistry(<span class="hljs-keyword">true</span>).getRequiredService(TrackerDeploymentService.NAME).getValue();
+        Set&lt;String&gt; deployments = service.getDeployments();
+        <span class="hljs-keyword">final</span> ModelNode result = <span class="hljs-keyword">new</span> ModelNode();
+        <span class="hljs-keyword">if</span>(deployments.isEmpty()){
+            result.setEmptyList();
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">for</span>(String deployment : deployments) {
+                result.add(deployment);
+            }
+        }
+        context.getResult().set(result);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TrackerListAllHandler.java">TrackerListAllHandler.java</a></p>
+</div>
+<div class="paragraph">
+<p><strong>TrackerListCoolHandler</strong></p>
+</div>
+<div class="paragraph">
+<p><code>TrackerListCoolHandler</code> &#x5B9E;&#x73B0;&#x4E86;&#x63A5;&#x53E3; <code>OperationStepHandler</code>&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x5217;&#x51FA;&#x6240;&#x6709;&#x90E8;&#x7F72;&#x6587;&#x4EF6;:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">TrackerDeploymentService service = (TrackerDeploymentService) context.getServiceRegistry(<span class="hljs-keyword">true</span>).getRequiredService(TrackerDeploymentService.NAME).getValue();
+        Set&lt;String&gt; deployments = service.getCoolDeployments();
+        <span class="hljs-keyword">final</span> ModelNode result = <span class="hljs-keyword">new</span> ModelNode();
+        <span class="hljs-keyword">if</span>(deployments.isEmpty()){
+            result.setEmptyList();
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">for</span>(String deployment : deployments) {
+                result.add(deployment);
+            }
+        }
+        context.getResult().set(result);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TrackerListCoolHandler.java">TrackerListCoolHandler.java</a></p>
+</div>
+<div class="paragraph">
+<p><strong>TypeDisableHandler</strong></p>
 </div>
 <div class="paragraph">
 <p><code>TypeDisableHandler</code> &#x5B9E;&#x73B0;&#x4E86;&#x63A5;&#x53E3; <code>OperationStepHandler</code>&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x5C06; TrackerService &#x7684; showcool &#x53D8;&#x91CF;&#x8BBE;&#x7F6E;&#x4E3A; false:</p>
@@ -524,6 +583,9 @@ service.setShowCool(<span class="hljs-keyword">false</span>);</code></pre>
 </div>
 <div class="paragraph">
 <p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeDisableHandler.java">TypeDisableHandler.java</a></p>
+</div>
+<div class="paragraph">
+<p><strong>TypeEnableHandler</strong></p>
 </div>
 <div class="paragraph">
 <p><code>TypeEnableHandler</code> &#x5B9E;&#x73B0;&#x4E86;&#x63A5;&#x53E3; <code>OperationStepHandler</code>&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x5C06; TrackerService &#x7684; showcool &#x53D8;&#x91CF;&#x8BBE;&#x7F6E;&#x4E3A; true:</p>

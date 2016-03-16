@@ -45,13 +45,17 @@ public class TrackerSubsystemDefinition extends SimpleResourceDefinition {
             .build();
     
     public static final SimpleOperationDefinition LIST_DEPLOYMENTS_OPER = new SimpleOperationDefinitionBuilder(LIST_DEPLOYMENTS, TrackerExtension.getResourceDescriptionResolver(null))
-            .setReplyType(ModelType.LIST)
+            .setReadOnly()
             .setRuntimeOnly()
+            .setReplyType(ModelType.LIST)
+            .setReplyValueType(ModelType.STRING)
             .build();
     
     public static final SimpleOperationDefinition LIST_COOL_DEPLOYMENTS_OPER = new SimpleOperationDefinitionBuilder(LIST_COOL_DEPLOYMENTS, TrackerExtension.getResourceDescriptionResolver(null))
-            .setReplyType(ModelType.LIST)
+            .setReadOnly()
             .setRuntimeOnly()
+            .setReplyType(ModelType.LIST)
+            .setReplyValueType(ModelType.STRING)
             .build();
     
 

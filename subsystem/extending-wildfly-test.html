@@ -51,7 +51,7 @@
         data-chapter-title="安装测试"
         data-filepath="subsystem/extending-wildfly-test.adoc"
         data-basepath=".."
-        data-revision="Wed Mar 16 2016 18:06:03 GMT+0800 (CST)"
+        data-revision="Wed Mar 16 2016 21:02:10 GMT+0800 (CST)"
         data-innerlanguage="">
     
 
@@ -403,6 +403,82 @@ $ mvn clean install</code></pre>
 {
     <span class="hljs-string">&quot;outcome&quot;</span> =&gt; <span class="hljs-string">&quot;success&quot;</span>,
     <span class="hljs-string">&quot;result&quot;</span> =&gt; <span class="hljs-number">20000L</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>&#x4FEE;&#x6539;show-cool-deployments&#x503C;:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">[standalone<span class="hljs-annotation">@localhost</span>:<span class="hljs-number">9990</span> /] /subsystem=tracker:write-attribute(name=show-cool-deployments,value=<span class="hljs-keyword">false</span>)
+{
+    <span class="hljs-string">&quot;outcome&quot;</span> =&gt; <span class="hljs-string">&quot;success&quot;</span>,
+    <span class="hljs-string">&quot;result&quot;</span> =&gt; <span class="hljs-keyword">true</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>&#x8BFB;&#x53D6;show-cool-deployments&#x503C;:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">[standalone<span class="hljs-annotation">@localhost</span>:<span class="hljs-number">9990</span> /] /subsystem=tracker:read-attribute(name=show-cool-deployments)
+{
+    <span class="hljs-string">&quot;outcome&quot;</span> =&gt; <span class="hljs-string">&quot;success&quot;</span>,
+    <span class="hljs-string">&quot;result&quot;</span> =&gt; <span class="hljs-keyword">false</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>&#x505C;&#x6B62;&#x6240;&#x6709; Tracker:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">[standalone<span class="hljs-annotation">@localhost</span>:<span class="hljs-number">9990</span> /] /subsystem=tracker:disable-all-tracker()
+{
+    <span class="hljs-string">&quot;outcome&quot;</span> =&gt; <span class="hljs-string">&quot;success&quot;</span>,
+    <span class="hljs-string">&quot;result&quot;</span> =&gt; <span class="hljs-keyword">true</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>&#x505C;&#x6B62;&#x4E00;&#x4E2A; Tracker:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">[standalone<span class="hljs-annotation">@localhost</span>:<span class="hljs-number">9990</span> /] /subsystem=tracker/type=sar:disable-tracker()
+{
+    <span class="hljs-string">&quot;outcome&quot;</span> =&gt; <span class="hljs-string">&quot;success&quot;</span>,
+    <span class="hljs-string">&quot;result&quot;</span> =&gt; <span class="hljs-keyword">true</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>&#x67E5;&#x770B;&#x90E8;&#x7F72;&#x5217;&#x8868;:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">[standalone<span class="hljs-annotation">@localhost</span>:<span class="hljs-number">9990</span> /] /subsystem=tracker:list-deployments()
+{
+    <span class="hljs-string">&quot;outcome&quot;</span> =&gt; <span class="hljs-string">&quot;success&quot;</span>,
+    <span class="hljs-string">&quot;result&quot;</span> =&gt; [
+        <span class="hljs-string">&quot;example.war&quot;</span>,
+        <span class="hljs-string">&quot;test.war&quot;</span>,
+        <span class="hljs-string">&quot;cool.war&quot;</span>
+    ]
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>&#x67E5;&#x770B;Cool&#x90E8;&#x7F72;&#x5217;&#x8868;:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">[standalone<span class="hljs-annotation">@localhost</span>:<span class="hljs-number">9990</span> /] /subsystem=tracker:list-cool-deployments()
+{
+    <span class="hljs-string">&quot;outcome&quot;</span> =&gt; <span class="hljs-string">&quot;success&quot;</span>,
+    <span class="hljs-string">&quot;result&quot;</span> =&gt; [<span class="hljs-string">&quot;cool.war&quot;</span>]
 }</code></pre>
 </div>
 </div>
