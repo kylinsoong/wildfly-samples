@@ -65,10 +65,13 @@ $ ./bin/standalone.sh -c standalone-wildfly10.xml
 [standalone@localhost:9990 /] /subsystem=tracker:read-resource(include-defaults=true,recursive=true)
 {
     "outcome" => "success",
-    "result" => {"type" => {
-        "war" => {"tick" => 10000L},
-        "sar" => {"tick" => 10000L}
-    }}
+    "result" => {
+        "show-cool-deployments" => true,
+        "type" => {
+            "sar" => {"tick" => 10000L},
+            "war" => {"tick" => 10000L}
+        }
+    }
 }
 ----
 

@@ -10,6 +10,9 @@ import org.jboss.as.controller.descriptions.StandardResourceDescriptionResolver;
 import org.jboss.as.controller.parsing.ExtensionParsingContext;
 import org.jboss.as.controller.registry.OperationEntry;
 
+import com.acme.corp.tracker.handler.SubsystemAddHandler;
+import com.acme.corp.tracker.handler.SubsystemRemoveHandler;
+
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.SUBSYSTEM;
 
 public class TrackerExtension implements Extension {
@@ -32,8 +35,6 @@ public class TrackerExtension implements Extension {
     private static final String RESOURCE_NAME = TrackerExtension.class.getPackage().getName() + ".LocalDescriptions";
 
     protected static final String TYPE = "type";
-    
-    protected static final String TICK = "tick";
     
     protected static final PathElement SUBSYSTEM_PATH = PathElement.pathElement(SUBSYSTEM, SUBSYSTEM_NAME);
     

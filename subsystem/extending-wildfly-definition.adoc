@@ -24,8 +24,11 @@ ResourceDefinition 实现必需遵循如下规则:
 
 1. ResourceDefinition 实现类构造方法中必需初始化节点的路径，例如 root 节点对应的的路径为 _"subsystem" => "tracker"_, 二级节点对应的的路径为 _"type" => "*"_
 2. ResourceDefinition 实现类构造方法中必需初始化一个 ResourceDescriptionResolver，对应一个 LocalDescriptions.properties 文件，该文件中包含 Subsystem 中所有 **操作**，**属性**，**节点** 等的名称，参照附件-1 
-3. ResourceDefinition 实现类构造方法中需要指定相应的节点 ResourceDefinition 添加处理器和移除处理器，参照 ResourceDefinition 实现初始化
-4. 重写 registerOperations(), registerAttributes(), registerChildren() 添加相应的 **操作**，**属性**，**子节点**，参照附件-2
+3. ResourceDefinition 实现类构造方法中需要指定相应的节点的 `添加处理器` 和 `移除处理器`，附件-2 为 ResourceDefinition 实现类构造方法中初始化节点的路径，ResourceDescriptionResolver，和 `添加处理器`/`移除处理器` 的示例
+4. 重写 registerOperations(), registerAttributes(), registerChildren() 添加相应的 **操作**，**属性**，**子节点**，参照附件-3
+5. 任意一个节点上所有 **属性** 都有相应的 `读处理器` 和 `写处理器`
+
+规则3 和 规则5 中的所有 `处理器` 都实现 `OperationStepHandler` 接口，详细内容参照 link:extending-wildfly-handler.adoc[OperationStepHandler 实现]
 
 [source,java]
 .*附件-1*
@@ -42,6 +45,27 @@ tracker.show-cool-deployments=Show cool deployments
 
 [source,java]
 .*附件-2*
+----
+Parameters parameters = new Parameters(SUBSYSTEM_PATH, getResourceDescriptionResolver(null));
+parameters.setAddHandler(SubsystemAddHandler.INSTANCE)
+          .setRemoveHandler(SubsystemRemoveHandler.INSTANCE)
+          .setAddRestartLevel(OperationEntry.Flag.RESTART_NONE)
+          .setRemoveRestartLevel(OperationEntry.Flag.RESTART_RESOURCE_SERVICES)
+          .setDeprecationData(null)
+          .setCapabilities();
+TrackerSubsystemDefinition resourceDefinition = new TrackerSubsystemDefinition(parameters);
+
+private TrackerTypeDefinition() {
+    super(TYPE_PATH, TrackerExtension.getResourceDescriptionResolver(TYPE), TypeAddHandler.INSTANCE, TypeRemoveHandler.INSTANCE);
+}
+----
+
+* SUBSYSTEM_PATH 为 root 节点的路径，TYPE_PATH 为二级节点 type 的路径
+* getResourceDescriptionResolver() 方法返回一个 ResourceDescriptionResolver
+* SubsystemAddHandler 和 TypeAddHandler 为 `添加处理器`，SubsystemRemoveHandler 和 TypeRemoveHandler 为 `移除处理器`.
+
+[source,java]
+.*附件-3*
 ----
 @Override
 public void registerOperations(ManagementResourceRegistration resourceRegistration) {
@@ -62,27 +86,3 @@ public void registerAttributes(ManagementResourceRegistration resourceRegistrati
 
 详细关于重写 registerOperations(), registerAttributes(), registerChildren() 的代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerSubsystemDefinition.java[TrackerSubsystemDefinition.java], link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerTypeDefinition.java[TrackerTypeDefinition.java]
 
-=== ResourceDefinition 实现初始化
-
-`TrackerSubsystemDefinition` 继承了 `SimpleResourceDefinition`, 它初始化是在 `TrackerExtension` 的 initialize() 方法中进行的，相关代码段:
-
-[source,java]
-----
-Parameters parameters = new Parameters(SUBSYSTEM_PATH, getResourceDescriptionResolver(null));
-parameters.setAddHandler(SubsystemAddHandler.INSTANCE)
-          .setRemoveHandler(SubsystemRemoveHandler.INSTANCE)
-          .setAddRestartLevel(OperationEntry.Flag.RESTART_NONE)
-          .setRemoveRestartLevel(OperationEntry.Flag.RESTART_RESOURCE_SERVICES)
-          .setDeprecationData(null)
-          .setCapabilities();    
-TrackerSubsystemDefinition resourceDefinition = new TrackerSubsystemDefinition(parameters);
-----
-
-`TrackerTypeDefinition` 继承了 `SimpleResourceDefinition`, 它初始化代码如下:
-
-[source,java]
-----
-private TrackerTypeDefinition() {
-    super(TYPE_PATH, TrackerExtension.getResourceDescriptionResolver(TYPE), TypeAdd.INSTANCE, TypeRemove.INSTANCE);
-}
-----

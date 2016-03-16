@@ -1,0 +1,79 @@
+
+== Service 实现
+
+image:img/wildfly-msc-service.png[WildFly MSC Service]
+
+Service 的两个方法 start() 和 stop() 在实现是不能够有阻塞操作，start() 和 stop() 中不能有以下操作
+
+1. 连接或等待网络连接 
+2. Sleep
+3. Wait on a condition
+4. Wait on a count down latch
+5. 等待线程池终止或等待其他 Service 
+6. 等待其他 Service 的状态变化
+
+link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerService.java[TrackerService] start(), stop() 实现分别为启动和停止 tracker 线程：
+
+[source,java]
+----
+public class TrackerService implements Service<TrackerService> {
+    ...
+    @Override
+    public void start(StartContext context) throws StartException {
+        OUTPUT.start();
+    }
+
+    @Override
+    public void stop(StopContext context) {
+        OUTPUT.interrupt();
+    }
+}
+----
+
+link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerDeploymentService.java[TrackerDeploymentService] start(), stop() 实现分别为初始化和销毁变量：
+
+[source,java]
+----
+public class TrackerDeploymentService implements Service<TrackerDeploymentService> {
+    ...
+    @Override
+    public void start(StartContext context) throws StartException {
+        isShowCool = true;
+        deployments = Collections.synchronizedSet(new HashSet<String>());
+        coolDeployments = Collections.synchronizedSet(new HashSet<String>());
+    }
+
+    @Override
+    public void stop(StopContext context) {
+        isShowCool = false;
+        deployments.clear();
+        coolDeployments.clear();    
+    }
+}
+----
+
+=== Service 之间依赖注入
+
+link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerService.java[TrackerService] 依赖 link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerDeploymentService.java[TrackerDeploymentService]，它们之间的依赖注入如下
+
+**TrackerService 中添加 InjectedValue 属性**
+
+link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerService.java[TrackerService] 中添加 InjectedValue 属性
+
+[source,java]
+----
+private final InjectedValue<TrackerDeploymentService> deploymentService = new InjectedValue<TrackerDeploymentService>();
+----
+
+**TrackerService 启动时添加依赖说明**
+
+[source,java]
+----
+context.getServiceTarget()
+       .addService(name, service)
+       .addDependency(TrackerDeploymentService.NAME, TrackerDeploymentService.class, service.getDeploymentService())
+       .setInitialMode(Mode.ACTIVE)
+       .install();
+----
+
+完整关于 link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerService.java[TrackerService] 启动的代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeAddHandler.java[TypeAddHandler] performRuntime() 方法。

@@ -4,5 +4,7 @@
 .. link:subsystem/extending-wildfly-schema.adoc[创建 schema 模型]
 .. link:subsystem/extending-wildfly-extension.adoc[Extension 实现]
 .. link:subsystem/extending-wildfly-definition.adoc[ResourceDefinition 实现]
-.. link:subsystem/extending-wildfly-deployers.adoc[添加 deployers hook]
+... link:subsystem/extending-wildfly-handler.adoc[OperationStepHandler 实现]
+... link:subsystem/extending-wildfly-deployers.adoc[添加 deployers hook]
+.. link:subsystem/extending-wildfly-services.adoc[Service 实现]
 .. link:subsystem/extending-wildfly-test.adoc[安装测试]

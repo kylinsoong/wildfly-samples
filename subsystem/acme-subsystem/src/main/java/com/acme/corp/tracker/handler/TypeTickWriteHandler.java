@@ -1,4 +1,4 @@
-package com.acme.corp.tracker.extension;
+package com.acme.corp.tracker.handler;
 
 import org.jboss.as.controller.AbstractWriteAttributeHandler;
 import org.jboss.as.controller.OperationContext;
@@ -8,16 +8,19 @@ import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
 import org.jboss.dmr.ModelNode;
 
+import com.acme.corp.tracker.extension.TrackerService;
+import com.acme.corp.tracker.extension.TrackerTypeDefinition;
+
 /**
  * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
  * @author <a href="ksoong.org">Kylin Soong</a>
  */
-class TrackerTickHandler extends AbstractWriteAttributeHandler<Void> {
+public class TypeTickWriteHandler extends AbstractWriteAttributeHandler<Void> {
 
-    public static final TrackerTickHandler INSTANCE = new TrackerTickHandler();
+    public static final TypeTickWriteHandler INSTANCE = new TypeTickWriteHandler();
 
-    private TrackerTickHandler() {
-        super(TrackerTypeDefinition.TICK);
+    private TypeTickWriteHandler() {
+        super(TrackerTypeDefinition.TICK_ATTR);
     }
 
 
@@ -36,9 +39,8 @@ class TrackerTickHandler extends AbstractWriteAttributeHandler<Void> {
      *         value change; {@code false} if not
      */
 
-    protected boolean applyUpdateToRuntime(OperationContext context, ModelNode operation, String attributeName,
-                                           ModelNode resolvedValue, ModelNode currentValue, HandbackHolder<Void> handbackHolder) throws OperationFailedException {
-        if (attributeName.equals(TrackerExtension.TICK)) {
+    protected boolean applyUpdateToRuntime(OperationContext context, ModelNode operation, String attributeName, ModelNode resolvedValue, ModelNode currentValue, HandbackHolder<Void> handbackHolder) throws OperationFailedException {
+        if (attributeName.equals(TrackerTypeDefinition.TICK)) {
             final String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
             TrackerService service = (TrackerService) context.getServiceRegistry(true).getRequiredService(TrackerService.createServiceName(suffix)).getValue();
             service.setTick(resolvedValue.asLong());

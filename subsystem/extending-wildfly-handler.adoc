@@ -1,0 +1,225 @@
+
+== OperationStepHandler 实现
+
+如 link:extending-wildfly-definition.adoc[ResourceDefinition 实现] 中 Subsystem 树状结构图中所示，本部分说明实线连接的 root 节点和二级 type 节点对应的 `处理器` 的实现, 共有三类处理器：
+
+1. 节点`添加处理器`和`移除处理器` - `SubsystemAddHandler`, `SubsystemRemoveHandler`, `TypeAddHandler`, `TypeRemoveHandler`
+2. 属性`读处理器`和`写处理器` - TrackerShowCoolReadHandler`, `TrackerShowCoolWriteHandler`, `TypeTickReadHandler`, `TypeTickWriteHandler`
+3. 节点`操作处理器` - `TrackerDisableAllHandler`, `TypeDisableHandler`, `TypeEnableHandler`
+
+其中以 Subsystem 或 Tracker 开头的处理器与 root 节点相关，以 Type 开头的则与二级 type 节点，其 UML 类图如下:
+
+image:img/extending-wildfly-acme-hanlder.png[Wildfly Extending Acme]
+
+=== 节点`添加处理器`和`移除处理器`实现
+
+**SubsystemAddHandler**
+
+root 节点(Subsystem)的 `添加处理器` 实现类 `SubsystemAddHandler` 继承了抽象类 `AbstractBoottimeAddStepHandler`，它主要功能是在 WildFly 启动添加 Tracker Subsystem 时注册一个 deployer hook，创建一个新的 TrackerDeploymentService:
+
+[source,java]
+----
+@Override
+protected void performBoottime(OperationContext context, ModelNode operation, ModelNode model)throws OperationFailedException {
+                
+    log.info("Add a deployer hook, add a new service: " + TrackerDeploymentService.NAME);
+        
+    // Add a hook into deployers, which subsystem will be noticed once a deployment be deploy 
+    context.addStep(new AbstractDeploymentChainStep() {
+        public void execute(DeploymentProcessorTarget processorTarget) {
+            processorTarget.addDeploymentProcessor(SUBSYSTEM_NAME, SubsystemDeploymentProcessor.PHASE, SubsystemDeploymentProcessor.PRIORITY, new SubsystemDeploymentProcessor());
+            }
+    }, OperationContext.Stage.RUNTIME);
+        
+    // Add TrackerRuntimeService
+    context.getServiceTarget()
+           .addService(TrackerDeploymentService.NAME, new TrackerDeploymentService())
+           .setInitialMode(Mode.ACTIVE)
+           .install();        
+}
+----
+
+完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/SubsystemAddHandler.java[SubsystemAddHandler.java]
+
+`SubsystemDeploymentProcessor` 实现参照 link:extending-wildfly-deployers.adoc[添加 deployers hook]
+
+**SubsystemRemoveHandler**
+
+root 节点(Subsystem)的 `移除处理器` 实现类 `SubsystemRemoveHandler` 继承了抽象类 `AbstractRemoveStepHandler`，它的主要功能是在 Tracker Subsystem 移除时移除 TrackerDeploymentService:
+
+[source,java]
+----
+@Override
+protected void performRuntime(OperationContext context,ModelNode operation, ModelNode model)throws OperationFailedException {
+        
+    log.info("Remove Service: " + TrackerDeploymentService.NAME);
+        
+    context.removeService(TrackerDeploymentService.NAME);
+}
+----
+
+完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/SubsystemRemoveHandler.java[SubsystemRemoveHandler.java]
+
+**TypeAddHandler**
+
+二级 type 节点的 `添加处理器` 实现类 `TypeAddHandler` 继承抽象类 `AbstractAddStepHandler`，它的主要功能是初始化添加一个 TrackerService:
+
+[source,java]
+----
+@Override
+protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model) throws OperationFailedException {
+        
+    String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
+    long tick = TICK.resolveModelAttribute(context,model).asLong();
+    TrackerService service = new TrackerService(suffix, tick);
+    ServiceName name = TrackerService.createServiceName(suffix);
+        
+    log.info("Add a new service: " + name);
+        
+    context.getServiceTarget()
+           .addService(name, service)
+	   .addDependency(TrackerDeploymentService.NAME, TrackerDeploymentService.class, service.getDeploymentService())
+           .setInitialMode(Mode.ACTIVE)
+           .install();
+}
+----
+
+完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeAddHandler.java[TypeAddHandler.java]
+
+**TypeRemoveHandler**
+
+二级 type 节点的 `移除处理器` 实现类 `TypeAddHandler` 继承了抽象类 `AbstractRemoveStepHandler`，它的主要功能是在移除节点时移除对应的TrackerService:
+
+[source,java]
+----
+@Override
+protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model) throws OperationFailedException {
+    String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
+    ServiceName name = TrackerService.createServiceName(suffix);
+    log.info("Remove Service: " + name);
+    context.removeService(name);
+}
+----
+
+完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeRemoveHandler.java[TypeRemoveHandler.java]
+
+=== 属性`读处理器`和`写处理器`实现
+
+root 节点(Subsystem)有一个属性 `show-cool-deployments`，通过管理命令行可以进行读写操作
+
+[source,java]
+----
+/subsystem=tracker:read-attribute(name=show-cool-deployments)
+/subsystem=tracker:write-attribute(name=show-cool-deployments,value=false)
+----
+
+读写操作是通过属性的 `TrackerShowCoolReadHandler` 和 `TrackerShowCoolWriteHandler` 实现的,  `TrackerShowCoolReadHandler` 实现了接口 `OperationStepHandler`，它主要功能是从 TrackerDeploymentService 中读取 ShowCool 变量的值并设定给返回结果:
+
+[source,java]
+----
+@Override
+public void execute(OperationContext context, ModelNode operation) throws OperationFailedException {
+        
+    ServiceController<?> controller = context.getServiceRegistry(true).getService(TrackerDeploymentService.NAME);
+    if(controller != null) {
+        TrackerDeploymentService service = (TrackerDeploymentService) controller.getValue();
+        context.getResult().set(service.isShowCool());
+    } else {
+        context.getResult().set(TrackerSubsystemDefinition.SHOW_COOL_DEPLOYMENTS.getDefaultValue());
+    }        
+}
+----
+
+完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TrackerShowCoolReadHandler.java[TrackerShowCoolReadHandler.java]
+
+`TrackerShowCoolWriteHandler` 继承了抽象类 `AbstractWriteAttributeHandler`，它主要功能是从属性 DMR 模型中读取输入值，设定读取值给TrackerDeploymentService:
+
+[source,java]
+----
+if (attributeName.equals(TrackerSubsystemDefinition.SHOW_COOL)){
+    TrackerDeploymentService service = (TrackerDeploymentService) context.getServiceRegistry(true).getRequiredService(TrackerDeploymentService.NAME).getValue();
+    service.setShowCool(resolvedValue.asBoolean());
+    context.getResult().set(true);
+    context.completeStep(RollbackHandler.NOOP_ROLLBACK_HANDLER);
+}
+----
+
+完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TrackerShowCoolReadHandler.java[TrackerShowCoolReadHandler.java]
+
+二级 type 节点有一个属性 `tick`，它代表 Tracker 的时间间隔，通过管理命令行可以进行读写操作
+
+[source,java]
+----
+/subsystem=tracker/type=war:read-attribute(name=tick)
+/subsystem=tracker/type=war:write-attribute(name=tick,value=20000)
+----
+
+读写操作是通过属性的 `TypeTickReadHandler` 和 `TypeTickWriteHandler` 实现的, `TypeTickReadHandler` 实现了接口 `OperationStepHandler`，它主要功能是从 TrackerService 中读取 tick 变量的值并设定给返回结果:
+
+[source,java]
+----
+final String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
+ServiceName serviceName = TrackerService.createServiceName(suffix);
+ServiceController<?> controller = context.getServiceRegistry(true).getService(serviceName);
+if(controller != null) {
+    TrackerService service = (TrackerService)controller.getValue();
+    context.getResult().set(service.getTick());
+} 
+----
+
+完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeTickReadHandler.java[TypeTickReadHandler.java]
+
+`TypeTickWriteHandler` 继承了抽象类 `AbstractWriteAttributeHandler`，它主要功能是从属性 DMR 模型中读取输入值，设定读取值给TrackerService:
+
+[source,java]
+----
+final String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
+TrackerService service = (TrackerService) context.getServiceRegistry(true).getRequiredService(TrackerService.createServiceName(suffix)).getValue();
+service.setTick(resolvedValue.asLong());
+----
+
+完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeTickWriteHandler.java[TypeTickWriteHandler.java]
+
+=== 节点`操作处理器`实现
+
+root 节点(Subsystem) 定义了一个 `disable-all-tracker` 操作，二级 type 节点定义了两个操作: `disable-tracker` 和 `enable-tracker`，，通过管理命令行可以执行操作
+
+[source,java]
+----
+/subsystem=tracker:disable-all-tracker()
+/subsystem=tracker/type=war:disable-tracker()
+/subsystem=tracker/type=war:enable-tracker()
+----
+
+这些操作的执行分别通过`操作处理器` TrackerDisableAllHandler, TypeDisableHandler, TypeEnableHandler 来完成的。`TrackerDisableAllHandler` 实现了接口 `OperationStepHandler`，它主要功能是将 TrackerDeploymentService 的 showcool 变量设置为 false:
+
+[source,java]
+----
+TrackerDeploymentService service = (TrackerDeploymentService) context.getServiceRegistry(true).getRequiredService(TrackerDeploymentService.NAME).getValue();
+service.setShowCool(false);
+----
+
+完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TrackerDisableAllHandler.java[TrackerDisableAllHandler.java]
+
+`TypeDisableHandler` 实现了接口 `OperationStepHandler`，它主要功能是将 TrackerService 的 showcool 变量设置为 false:
+
+[source,java]
+----
+final String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
+TrackerService service = (TrackerService) context.getServiceRegistry(true).getRequiredService(TrackerService.createServiceName(suffix)).getValue();
+service.setShowCool(false);
+----
+
+完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeDisableHandler.java[TypeDisableHandler.java]
+
+`TypeEnableHandler` 实现了接口 `OperationStepHandler`，它主要功能是将 TrackerService 的 showcool 变量设置为 true:
+
+[source,java]
+----
+final String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
+TrackerService service = (TrackerService) context.getServiceRegistry(true).getRequiredService(TrackerService.createServiceName(suffix)).getValue();
+service.setShowCool(true);
+----
+
+完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeEnableHandler.java[TypeEnableHandler.java]
+

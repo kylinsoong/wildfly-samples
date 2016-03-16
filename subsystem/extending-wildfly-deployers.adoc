@@ -1,34 +1,19 @@
 
 == 添加 deployer hook
 
-`SubsystemAddHandler` 负责添加 subsystem resource 到 model， 继承了 `AbstractBoottimeAddStepHandler`
-
-image:img/wildfly-controller-boottimeaddstephandler.png[Wildfly Controller API: AbstractBoottimeAddStepHandler]
-
-重写 performBoottime() 方法添加 deployers’s hook
+如 link:subsystem/extending-wildfly-handler.adoc[OperationStepHandler 实现] 中，Subsystem `添加处理器` 在 Subsystem 添加时注册了一个 deployer hook
 
 [source,java]
 ----
-@Override
-public void performBoottime(OperationContext context, 
-                            ModelNode operation, 
-                            ModelNode model,
-                            ServiceVerificationHandler verificationHandler, 
-                            List<ServiceController<?>> newControllers) throws OperationFailedException {
-        
-    log.info("Populating the model");
-
     context.addStep(new AbstractDeploymentChainStep() {
         public void execute(DeploymentProcessorTarget processorTarget) {
             processorTarget.addDeploymentProcessor(SUBSYSTEM_NAME, SubsystemDeploymentProcessor.PHASE, SubsystemDeploymentProcessor.PRIORITY, new SubsystemDeploymentProcessor());
          }
     }, OperationContext.Stage.RUNTIME);
-}
 ----
 
-详细实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/SubsystemAddHandler.java[SubsystemAddHandler.java]
 
-`SubsystemDeploymentProcessor` 实现了 WildFly deployment 接口 `DeploymentUnitProcessor`
+其中 `SubsystemDeploymentProcessor` 实现了 WildFly deployment 接口 `DeploymentUnitProcessor`
 
 image:img/wildfly-deployment-DeploymentUnitProcessor.png[WildFly deployment API: DeploymentUnitProcessor]
 
