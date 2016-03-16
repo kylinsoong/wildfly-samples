@@ -37,7 +37,7 @@
         
     
     
-    <link rel="next" href="../subsystem/extending-wildfly-deployers.html" />
+    <link rel="next" href="../subsystem/extending-wildfly-handler.html" />
     
     
     <link rel="prev" href="../subsystem/extending-wildfly-extension.html" />
@@ -53,7 +53,7 @@
         data-chapter-title="ResourceDefinition 实现"
         data-filepath="subsystem/extending-wildfly-definition.adoc"
         data-basepath=".."
-        data-revision="Tue Mar 15 2016 22:19:58 GMT+0800 (CST)"
+        data-revision="Wed Mar 16 2016 18:06:03 GMT+0800 (CST)"
         data-innerlanguage="">
     
 
@@ -163,18 +163,54 @@
                     </a>
             
             
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="subsystem/extending-wildfly-handler.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-handler.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.1.</b>
+                        
+                        OperationStepHandler 实现
+                    </a>
+            
+            
         </li>
     
-        <li class="chapter " data-level="1.5" data-path="subsystem/extending-wildfly-deployers.html">
+        <li class="chapter " data-level="1.4.2" data-path="subsystem/extending-wildfly-deployers.html">
             
                 
                     <a href="../subsystem/extending-wildfly-deployers.html">
                 
                         <i class="fa fa-check"></i>
                         
-                            <b>1.5.</b>
+                            <b>1.4.2.</b>
                         
                         添加 deployers hook
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="subsystem/extending-wildfly-services.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-services.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        Service 实现
                     </a>
             
             
@@ -272,12 +308,18 @@
 <p>ResourceDefinition &#x5B9E;&#x73B0;&#x7C7B;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#x4E2D;&#x5FC5;&#x9700;&#x521D;&#x59CB;&#x5316;&#x4E00;&#x4E2A; ResourceDescriptionResolver&#xFF0C;&#x5BF9;&#x5E94;&#x4E00;&#x4E2A; LocalDescriptions.properties &#x6587;&#x4EF6;&#xFF0C;&#x8BE5;&#x6587;&#x4EF6;&#x4E2D;&#x5305;&#x542B; Subsystem &#x4E2D;&#x6240;&#x6709; <strong>&#x64CD;&#x4F5C;</strong>&#xFF0C;<strong>&#x5C5E;&#x6027;</strong>&#xFF0C;<strong>&#x8282;&#x70B9;</strong> &#x7B49;&#x7684;&#x540D;&#x79F0;&#xFF0C;&#x53C2;&#x7167;&#x9644;&#x4EF6;-1</p>
 </li>
 <li>
-<p>ResourceDefinition &#x5B9E;&#x73B0;&#x7C7B;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#x4E2D;&#x9700;&#x8981;&#x6307;&#x5B9A;&#x76F8;&#x5E94;&#x7684;&#x8282;&#x70B9; ResourceDefinition &#x6DFB;&#x52A0;&#x5904;&#x7406;&#x5668;&#x548C;&#x79FB;&#x9664;&#x5904;&#x7406;&#x5668;&#xFF0C;&#x53C2;&#x7167; ResourceDefinition &#x5B9E;&#x73B0;&#x521D;&#x59CB;&#x5316;</p>
+<p>ResourceDefinition &#x5B9E;&#x73B0;&#x7C7B;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#x4E2D;&#x9700;&#x8981;&#x6307;&#x5B9A;&#x76F8;&#x5E94;&#x7684;&#x8282;&#x70B9;&#x7684; <code>&#x6DFB;&#x52A0;&#x5904;&#x7406;&#x5668;</code> &#x548C; <code>&#x79FB;&#x9664;&#x5904;&#x7406;&#x5668;</code>&#xFF0C;&#x9644;&#x4EF6;-2 &#x4E3A; ResourceDefinition &#x5B9E;&#x73B0;&#x7C7B;&#x6784;&#x9020;&#x65B9;&#x6CD5;&#x4E2D;&#x521D;&#x59CB;&#x5316;&#x8282;&#x70B9;&#x7684;&#x8DEF;&#x5F84;&#xFF0C;ResourceDescriptionResolver&#xFF0C;&#x548C; <code>&#x6DFB;&#x52A0;&#x5904;&#x7406;&#x5668;</code>/<code>&#x79FB;&#x9664;&#x5904;&#x7406;&#x5668;</code> &#x7684;&#x793A;&#x4F8B;</p>
 </li>
 <li>
-<p>&#x91CD;&#x5199; registerOperations(), registerAttributes(), registerChildren() &#x6DFB;&#x52A0;&#x76F8;&#x5E94;&#x7684; <strong>&#x64CD;&#x4F5C;</strong>&#xFF0C;<strong>&#x5C5E;&#x6027;</strong>&#xFF0C;<strong>&#x5B50;&#x8282;&#x70B9;</strong>&#xFF0C;&#x53C2;&#x7167;&#x9644;&#x4EF6;-2</p>
+<p>&#x91CD;&#x5199; registerOperations(), registerAttributes(), registerChildren() &#x6DFB;&#x52A0;&#x76F8;&#x5E94;&#x7684; <strong>&#x64CD;&#x4F5C;</strong>&#xFF0C;<strong>&#x5C5E;&#x6027;</strong>&#xFF0C;<strong>&#x5B50;&#x8282;&#x70B9;</strong>&#xFF0C;&#x53C2;&#x7167;&#x9644;&#x4EF6;-3</p>
+</li>
+<li>
+<p>&#x4EFB;&#x610F;&#x4E00;&#x4E2A;&#x8282;&#x70B9;&#x4E0A;&#x6240;&#x6709; <strong>&#x5C5E;&#x6027;</strong> &#x90FD;&#x6709;&#x76F8;&#x5E94;&#x7684; <code>&#x8BFB;&#x5904;&#x7406;&#x5668;</code> &#x548C; <code>&#x5199;&#x5904;&#x7406;&#x5668;</code></p>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>&#x89C4;&#x5219;3 &#x548C; &#x89C4;&#x5219;5 &#x4E2D;&#x7684;&#x6240;&#x6709; <code>&#x5904;&#x7406;&#x5668;</code> &#x90FD;&#x5B9E;&#x73B0; <code>OperationStepHandler</code> &#x63A5;&#x53E3;&#xFF0C;&#x8BE6;&#x7EC6;&#x5185;&#x5BB9;&#x53C2;&#x7167; <a href="extending-wildfly-handler.html">OperationStepHandler &#x5B9E;&#x73B0;</a></p>
 </div>
 <div class="listingblock">
 <div class="title"><strong>&#x9644;&#x4EF6;-1</strong></div>
@@ -294,6 +336,36 @@ tracker.show-cool-deployments=Show cool deployments</code></pre>
 </div>
 <div class="listingblock">
 <div class="title"><strong>&#x9644;&#x4EF6;-2</strong></div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">Parameters parameters = <span class="hljs-keyword">new</span> Parameters(SUBSYSTEM_PATH, getResourceDescriptionResolver(<span class="hljs-keyword">null</span>));
+parameters.setAddHandler(SubsystemAddHandler.INSTANCE)
+          .setRemoveHandler(SubsystemRemoveHandler.INSTANCE)
+          .setAddRestartLevel(OperationEntry.Flag.RESTART_NONE)
+          .setRemoveRestartLevel(OperationEntry.Flag.RESTART_RESOURCE_SERVICES)
+          .setDeprecationData(<span class="hljs-keyword">null</span>)
+          .setCapabilities();
+TrackerSubsystemDefinition resourceDefinition = <span class="hljs-keyword">new</span> TrackerSubsystemDefinition(parameters);
+
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">TrackerTypeDefinition</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">super</span>(TYPE_PATH, TrackerExtension.getResourceDescriptionResolver(TYPE), TypeAddHandler.INSTANCE, TypeRemoveHandler.INSTANCE);
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SUBSYSTEM_PATH &#x4E3A; root &#x8282;&#x70B9;&#x7684;&#x8DEF;&#x5F84;&#xFF0C;TYPE_PATH &#x4E3A;&#x4E8C;&#x7EA7;&#x8282;&#x70B9; type &#x7684;&#x8DEF;&#x5F84;</p>
+</li>
+<li>
+<p>getResourceDescriptionResolver() &#x65B9;&#x6CD5;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A; ResourceDescriptionResolver</p>
+</li>
+<li>
+<p>SubsystemAddHandler &#x548C; TypeAddHandler &#x4E3A; <code>&#x6DFB;&#x52A0;&#x5904;&#x7406;&#x5668;</code>&#xFF0C;SubsystemRemoveHandler &#x548C; TypeRemoveHandler &#x4E3A; <code>&#x79FB;&#x9664;&#x5904;&#x7406;&#x5668;</code>.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title"><strong>&#x9644;&#x4EF6;-3</strong></div>
 <div class="content">
 <pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-annotation">@Override</span>
 <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">registerOperations</span><span class="hljs-params">(ManagementResourceRegistration resourceRegistration)</span> </span>{
@@ -315,34 +387,6 @@ tracker.show-cool-deployments=Show cool deployments</code></pre>
 <div class="paragraph">
 <p>&#x8BE6;&#x7EC6;&#x5173;&#x4E8E;&#x91CD;&#x5199; registerOperations(), registerAttributes(), registerChildren() &#x7684;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerSubsystemDefinition.java">TrackerSubsystemDefinition.java</a>, <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerTypeDefinition.java">TrackerTypeDefinition.java</a></p>
 </div>
-<div class="sect2">
-<h3 id="_resourcedefinition_2">ResourceDefinition &#x5B9E;&#x73B0;&#x521D;&#x59CB;&#x5316;</h3>
-<div class="paragraph">
-<p><code>TrackerSubsystemDefinition</code> &#x7EE7;&#x627F;&#x4E86; <code>SimpleResourceDefinition</code>, &#x5B83;&#x521D;&#x59CB;&#x5316;&#x662F;&#x5728; <code>TrackerExtension</code> &#x7684; initialize() &#x65B9;&#x6CD5;&#x4E2D;&#x8FDB;&#x884C;&#x7684;&#xFF0C;&#x76F8;&#x5173;&#x4EE3;&#x7801;&#x6BB5;:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">Parameters parameters = <span class="hljs-keyword">new</span> Parameters(SUBSYSTEM_PATH, getResourceDescriptionResolver(<span class="hljs-keyword">null</span>));
-parameters.setAddHandler(SubsystemAddHandler.INSTANCE)
-          .setRemoveHandler(SubsystemRemoveHandler.INSTANCE)
-          .setAddRestartLevel(OperationEntry.Flag.RESTART_NONE)
-          .setRemoveRestartLevel(OperationEntry.Flag.RESTART_RESOURCE_SERVICES)
-          .setDeprecationData(<span class="hljs-keyword">null</span>)
-          .setCapabilities();
-TrackerSubsystemDefinition resourceDefinition = <span class="hljs-keyword">new</span> TrackerSubsystemDefinition(parameters);</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>TrackerTypeDefinition</code> &#x7EE7;&#x627F;&#x4E86; <code>SimpleResourceDefinition</code>, &#x5B83;&#x521D;&#x59CB;&#x5316;&#x4EE3;&#x7801;&#x5982;&#x4E0B;:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">TrackerTypeDefinition</span><span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">super</span>(TYPE_PATH, TrackerExtension.getResourceDescriptionResolver(TYPE), TypeAdd.INSTANCE, TypeRemove.INSTANCE);
-}</code></pre>
-</div>
-</div>
-</div>
 </div>
 </div>
                     
@@ -357,7 +401,7 @@ TrackerSubsystemDefinition resourceDefinition = <span class="hljs-keyword">new</
         <a href="../subsystem/extending-wildfly-extension.html" class="navigation navigation-prev " aria-label="Previous page: Extension 实现"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="../subsystem/extending-wildfly-deployers.html" class="navigation navigation-next " aria-label="Next page: 添加 deployers hook"><i class="fa fa-angle-right"></i></a>
+        <a href="../subsystem/extending-wildfly-handler.html" class="navigation navigation-next " aria-label="Next page: OperationStepHandler 实现"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>

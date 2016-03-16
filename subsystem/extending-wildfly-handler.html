@@ -1,0 +1,594 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>OperationStepHandler 实现 | </title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.6.7">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="../gitbook/style.css">
+    
+        
+        <link rel="stylesheet" href="../gitbook/plugins/gitbook-plugin-highlight/website.css">
+        
+    
+        
+        <link rel="stylesheet" href="../gitbook/plugins/gitbook-plugin-search/search.css">
+        
+    
+        
+        <link rel="stylesheet" href="../gitbook/plugins/gitbook-plugin-fontsettings/website.css">
+        
+    
+    
+
+        
+    
+    
+    <link rel="next" href="../subsystem/extending-wildfly-deployers.html" />
+    
+    
+    <link rel="prev" href="../subsystem/extending-wildfly-definition.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book"
+        data-level="1.4.1"
+        data-chapter-title="OperationStepHandler 实现"
+        data-filepath="subsystem/extending-wildfly-handler.adoc"
+        data-basepath=".."
+        data-revision="Wed Mar 16 2016 18:06:03 GMT+0800 (CST)"
+        data-innerlanguage="">
+    
+
+<div class="book-summary">
+    <nav role="navigation">
+        <ul class="summary">
+            
+            
+            
+                
+                <li>
+                    <a href="/wildfly-samples" target="blank" class="custom-link">WildFly Architecture</a>
+                </li>
+            
+            
+
+            
+            <li class="divider"></li>
+            
+
+            
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Introduction
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="subsystem/acme-subsystem/index.html">
+            
+                
+                    <a href="../subsystem/acme-subsystem/index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        扩展 WildFly
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.1" data-path="subsystem/extending-wildfly-template.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-template.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.1.</b>
+                        
+                        创建初始工程
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="subsystem/extending-wildfly-schema.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-schema.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.2.</b>
+                        
+                        创建 schema 模型
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="subsystem/extending-wildfly-extension.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-extension.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.3.</b>
+                        
+                        Extension 实现
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="subsystem/extending-wildfly-definition.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-definition.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.</b>
+                        
+                        ResourceDefinition 实现
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter active" data-level="1.4.1" data-path="subsystem/extending-wildfly-handler.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-handler.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.1.</b>
+                        
+                        OperationStepHandler 实现
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4.2" data-path="subsystem/extending-wildfly-deployers.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-deployers.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.2.</b>
+                        
+                        添加 deployers hook
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="subsystem/extending-wildfly-services.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-services.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        Service 实现
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="subsystem/extending-wildfly-test.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-test.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.6.</b>
+                        
+                        安装测试
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+
+            
+            <li class="divider"></li>
+            <li>
+                <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                    Published with GitBook
+                </a>
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header" role="navigation">
+    <!-- Actions Left -->
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../" ></a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1" role="main">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <div class="sect1">
+<h2 id="_operationstephandler">OperationStepHandler &#x5B9E;&#x73B0;</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>&#x5982; <a href="extending-wildfly-definition.html">ResourceDefinition &#x5B9E;&#x73B0;</a> &#x4E2D; Subsystem &#x6811;&#x72B6;&#x7ED3;&#x6784;&#x56FE;&#x4E2D;&#x6240;&#x793A;&#xFF0C;&#x672C;&#x90E8;&#x5206;&#x8BF4;&#x660E;&#x5B9E;&#x7EBF;&#x8FDE;&#x63A5;&#x7684; root &#x8282;&#x70B9;&#x548C;&#x4E8C;&#x7EA7; type &#x8282;&#x70B9;&#x5BF9;&#x5E94;&#x7684; <code>&#x5904;&#x7406;&#x5668;</code> &#x7684;&#x5B9E;&#x73B0;, &#x5171;&#x6709;&#x4E09;&#x7C7B;&#x5904;&#x7406;&#x5668;&#xFF1A;</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>&#x8282;&#x70B9;<code>&#x6DFB;&#x52A0;&#x5904;&#x7406;&#x5668;</code>&#x548C;<code>&#x79FB;&#x9664;&#x5904;&#x7406;&#x5668;</code> - <code>SubsystemAddHandler</code>, <code>SubsystemRemoveHandler</code>, <code>TypeAddHandler</code>, <code>TypeRemoveHandler</code></p>
+</li>
+<li>
+<p>&#x5C5E;&#x6027;<code>&#x8BFB;&#x5904;&#x7406;&#x5668;</code>&#x548C;<code>&#x5199;&#x5904;&#x7406;&#x5668;</code> - TrackerShowCoolReadHandler`, <code>TrackerShowCoolWriteHandler</code>, <code>TypeTickReadHandler</code>, <code>TypeTickWriteHandler</code></p>
+</li>
+<li>
+<p>&#x8282;&#x70B9;<code>&#x64CD;&#x4F5C;&#x5904;&#x7406;&#x5668;</code> - <code>TrackerDisableAllHandler</code>, <code>TypeDisableHandler</code>, <code>TypeEnableHandler</code></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>&#x5176;&#x4E2D;&#x4EE5; Subsystem &#x6216; Tracker &#x5F00;&#x5934;&#x7684;&#x5904;&#x7406;&#x5668;&#x4E0E; root &#x8282;&#x70B9;&#x76F8;&#x5173;&#xFF0C;&#x4EE5; Type &#x5F00;&#x5934;&#x7684;&#x5219;&#x4E0E;&#x4E8C;&#x7EA7; type &#x8282;&#x70B9;&#xFF0C;&#x5176; UML &#x7C7B;&#x56FE;&#x5982;&#x4E0B;:</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="img/extending-wildfly-acme-hanlder.png" alt="Wildfly Extending Acme"></span></p>
+</div>
+<div class="sect2">
+<h3 id="__code_code_code_code">&#x8282;&#x70B9;<code>&#x6DFB;&#x52A0;&#x5904;&#x7406;&#x5668;</code>&#x548C;<code>&#x79FB;&#x9664;&#x5904;&#x7406;&#x5668;</code>&#x5B9E;&#x73B0;</h3>
+<div class="paragraph">
+<p><strong>SubsystemAddHandler</strong></p>
+</div>
+<div class="paragraph">
+<p>root &#x8282;&#x70B9;(Subsystem)&#x7684; <code>&#x6DFB;&#x52A0;&#x5904;&#x7406;&#x5668;</code> &#x5B9E;&#x73B0;&#x7C7B; <code>SubsystemAddHandler</code> &#x7EE7;&#x627F;&#x4E86;&#x62BD;&#x8C61;&#x7C7B; <code>AbstractBoottimeAddStepHandler</code>&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x5728; WildFly &#x542F;&#x52A8;&#x6DFB;&#x52A0; Tracker Subsystem &#x65F6;&#x6CE8;&#x518C;&#x4E00;&#x4E2A; deployer hook&#xFF0C;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x7684; TrackerDeploymentService:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-annotation">@Override</span>
+<span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">performBoottime</span><span class="hljs-params">(OperationContext context, ModelNode operation, ModelNode model)</span><span class="hljs-keyword">throws</span> OperationFailedException </span>{
+
+    log.info(<span class="hljs-string">&quot;Add a deployer hook, add a new service: &quot;</span> + TrackerDeploymentService.NAME);
+
+    <span class="hljs-comment">// Add a hook into deployers, which subsystem will be noticed once a deployment be deploy</span>
+    context.addStep(<span class="hljs-keyword">new</span> AbstractDeploymentChainStep() {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">execute</span><span class="hljs-params">(DeploymentProcessorTarget processorTarget)</span> </span>{
+            processorTarget.addDeploymentProcessor(SUBSYSTEM_NAME, SubsystemDeploymentProcessor.PHASE, SubsystemDeploymentProcessor.PRIORITY, <span class="hljs-keyword">new</span> SubsystemDeploymentProcessor());
+            }
+    }, OperationContext.Stage.RUNTIME);
+
+    <span class="hljs-comment">// Add TrackerRuntimeService</span>
+    context.getServiceTarget()
+           .addService(TrackerDeploymentService.NAME, <span class="hljs-keyword">new</span> TrackerDeploymentService())
+           .setInitialMode(Mode.ACTIVE)
+           .install();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/SubsystemAddHandler.java">SubsystemAddHandler.java</a></p>
+</div>
+<div class="paragraph">
+<p><code>SubsystemDeploymentProcessor</code> &#x5B9E;&#x73B0;&#x53C2;&#x7167; <a href="extending-wildfly-deployers.html">&#x6DFB;&#x52A0; deployers hook</a></p>
+</div>
+<div class="paragraph">
+<p><strong>SubsystemRemoveHandler</strong></p>
+</div>
+<div class="paragraph">
+<p>root &#x8282;&#x70B9;(Subsystem)&#x7684; <code>&#x79FB;&#x9664;&#x5904;&#x7406;&#x5668;</code> &#x5B9E;&#x73B0;&#x7C7B; <code>SubsystemRemoveHandler</code> &#x7EE7;&#x627F;&#x4E86;&#x62BD;&#x8C61;&#x7C7B; <code>AbstractRemoveStepHandler</code>&#xFF0C;&#x5B83;&#x7684;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x5728; Tracker Subsystem &#x79FB;&#x9664;&#x65F6;&#x79FB;&#x9664; TrackerDeploymentService:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-annotation">@Override</span>
+<span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">performRuntime</span><span class="hljs-params">(OperationContext context,ModelNode operation, ModelNode model)</span><span class="hljs-keyword">throws</span> OperationFailedException </span>{
+
+    log.info(<span class="hljs-string">&quot;Remove Service: &quot;</span> + TrackerDeploymentService.NAME);
+
+    context.removeService(TrackerDeploymentService.NAME);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/SubsystemRemoveHandler.java">SubsystemRemoveHandler.java</a></p>
+</div>
+<div class="paragraph">
+<p><strong>TypeAddHandler</strong></p>
+</div>
+<div class="paragraph">
+<p>&#x4E8C;&#x7EA7; type &#x8282;&#x70B9;&#x7684; <code>&#x6DFB;&#x52A0;&#x5904;&#x7406;&#x5668;</code> &#x5B9E;&#x73B0;&#x7C7B; <code>TypeAddHandler</code> &#x7EE7;&#x627F;&#x62BD;&#x8C61;&#x7C7B; <code>AbstractAddStepHandler</code>&#xFF0C;&#x5B83;&#x7684;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x521D;&#x59CB;&#x5316;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A; TrackerService:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-annotation">@Override</span>
+<span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">performRuntime</span><span class="hljs-params">(OperationContext context, ModelNode operation, ModelNode model)</span> <span class="hljs-keyword">throws</span> OperationFailedException </span>{
+
+    String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
+    <span class="hljs-keyword">long</span> tick = TICK.resolveModelAttribute(context,model).asLong();
+    TrackerService service = <span class="hljs-keyword">new</span> TrackerService(suffix, tick);
+    ServiceName name = TrackerService.createServiceName(suffix);
+
+    log.info(<span class="hljs-string">&quot;Add a new service: &quot;</span> + name);
+
+    context.getServiceTarget()
+           .addService(name, service)
+	   .addDependency(TrackerDeploymentService.NAME, TrackerDeploymentService.class, service.getDeploymentService())
+           .setInitialMode(Mode.ACTIVE)
+           .install();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeAddHandler.java">TypeAddHandler.java</a></p>
+</div>
+<div class="paragraph">
+<p><strong>TypeRemoveHandler</strong></p>
+</div>
+<div class="paragraph">
+<p>&#x4E8C;&#x7EA7; type &#x8282;&#x70B9;&#x7684; <code>&#x79FB;&#x9664;&#x5904;&#x7406;&#x5668;</code> &#x5B9E;&#x73B0;&#x7C7B; <code>TypeAddHandler</code> &#x7EE7;&#x627F;&#x4E86;&#x62BD;&#x8C61;&#x7C7B; <code>AbstractRemoveStepHandler</code>&#xFF0C;&#x5B83;&#x7684;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x5728;&#x79FB;&#x9664;&#x8282;&#x70B9;&#x65F6;&#x79FB;&#x9664;&#x5BF9;&#x5E94;&#x7684;TrackerService:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-annotation">@Override</span>
+<span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">performRuntime</span><span class="hljs-params">(OperationContext context, ModelNode operation, ModelNode model)</span> <span class="hljs-keyword">throws</span> OperationFailedException </span>{
+    String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
+    ServiceName name = TrackerService.createServiceName(suffix);
+    log.info(<span class="hljs-string">&quot;Remove Service: &quot;</span> + name);
+    context.removeService(name);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeRemoveHandler.java">TypeRemoveHandler.java</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="__code_code_code_code_2">&#x5C5E;&#x6027;<code>&#x8BFB;&#x5904;&#x7406;&#x5668;</code>&#x548C;<code>&#x5199;&#x5904;&#x7406;&#x5668;</code>&#x5B9E;&#x73B0;</h3>
+<div class="paragraph">
+<p>root &#x8282;&#x70B9;(Subsystem)&#x6709;&#x4E00;&#x4E2A;&#x5C5E;&#x6027; <code>show-cool-deployments</code>&#xFF0C;&#x901A;&#x8FC7;&#x7BA1;&#x7406;&#x547D;&#x4EE4;&#x884C;&#x53EF;&#x4EE5;&#x8FDB;&#x884C;&#x8BFB;&#x5199;&#x64CD;&#x4F5C;</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">/subsystem=tracker:read-attribute(name=show-cool-deployments)
+/subsystem=tracker:write-attribute(name=show-cool-deployments,value=<span class="hljs-keyword">false</span>)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x8BFB;&#x5199;&#x64CD;&#x4F5C;&#x662F;&#x901A;&#x8FC7;&#x5C5E;&#x6027;&#x7684; <code>TrackerShowCoolReadHandler</code> &#x548C; <code>TrackerShowCoolWriteHandler</code> &#x5B9E;&#x73B0;&#x7684;,  <code>TrackerShowCoolReadHandler</code> &#x5B9E;&#x73B0;&#x4E86;&#x63A5;&#x53E3; <code>OperationStepHandler</code>&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x4ECE; TrackerDeploymentService &#x4E2D;&#x8BFB;&#x53D6; ShowCool &#x53D8;&#x91CF;&#x7684;&#x503C;&#x5E76;&#x8BBE;&#x5B9A;&#x7ED9;&#x8FD4;&#x56DE;&#x7ED3;&#x679C;:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-annotation">@Override</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">execute</span><span class="hljs-params">(OperationContext context, ModelNode operation)</span> <span class="hljs-keyword">throws</span> OperationFailedException </span>{
+
+    ServiceController&lt;?&gt; controller = context.getServiceRegistry(<span class="hljs-keyword">true</span>).getService(TrackerDeploymentService.NAME);
+    <span class="hljs-keyword">if</span>(controller != <span class="hljs-keyword">null</span>) {
+        TrackerDeploymentService service = (TrackerDeploymentService) controller.getValue();
+        context.getResult().set(service.isShowCool());
+    } <span class="hljs-keyword">else</span> {
+        context.getResult().set(TrackerSubsystemDefinition.SHOW_COOL_DEPLOYMENTS.getDefaultValue());
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TrackerShowCoolReadHandler.java">TrackerShowCoolReadHandler.java</a></p>
+</div>
+<div class="paragraph">
+<p><code>TrackerShowCoolWriteHandler</code> &#x7EE7;&#x627F;&#x4E86;&#x62BD;&#x8C61;&#x7C7B; <code>AbstractWriteAttributeHandler</code>&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x4ECE;&#x5C5E;&#x6027; DMR &#x6A21;&#x578B;&#x4E2D;&#x8BFB;&#x53D6;&#x8F93;&#x5165;&#x503C;&#xFF0C;&#x8BBE;&#x5B9A;&#x8BFB;&#x53D6;&#x503C;&#x7ED9;TrackerDeploymentService:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-keyword">if</span> (attributeName.equals(TrackerSubsystemDefinition.SHOW_COOL)){
+    TrackerDeploymentService service = (TrackerDeploymentService) context.getServiceRegistry(<span class="hljs-keyword">true</span>).getRequiredService(TrackerDeploymentService.NAME).getValue();
+    service.setShowCool(resolvedValue.asBoolean());
+    context.getResult().set(<span class="hljs-keyword">true</span>);
+    context.completeStep(RollbackHandler.NOOP_ROLLBACK_HANDLER);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TrackerShowCoolReadHandler.java">TrackerShowCoolReadHandler.java</a></p>
+</div>
+<div class="paragraph">
+<p>&#x4E8C;&#x7EA7; type &#x8282;&#x70B9;&#x6709;&#x4E00;&#x4E2A;&#x5C5E;&#x6027; <code>tick</code>&#xFF0C;&#x5B83;&#x4EE3;&#x8868; Tracker &#x7684;&#x65F6;&#x95F4;&#x95F4;&#x9694;&#xFF0C;&#x901A;&#x8FC7;&#x7BA1;&#x7406;&#x547D;&#x4EE4;&#x884C;&#x53EF;&#x4EE5;&#x8FDB;&#x884C;&#x8BFB;&#x5199;&#x64CD;&#x4F5C;</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">/subsystem=tracker/type=war:read-attribute(name=tick)
+/subsystem=tracker/type=war:write-attribute(name=tick,value=<span class="hljs-number">20000</span>)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x8BFB;&#x5199;&#x64CD;&#x4F5C;&#x662F;&#x901A;&#x8FC7;&#x5C5E;&#x6027;&#x7684; <code>TypeTickReadHandler</code> &#x548C; <code>TypeTickWriteHandler</code> &#x5B9E;&#x73B0;&#x7684;, <code>TypeTickReadHandler</code> &#x5B9E;&#x73B0;&#x4E86;&#x63A5;&#x53E3; <code>OperationStepHandler</code>&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x4ECE; TrackerService &#x4E2D;&#x8BFB;&#x53D6; tick &#x53D8;&#x91CF;&#x7684;&#x503C;&#x5E76;&#x8BBE;&#x5B9A;&#x7ED9;&#x8FD4;&#x56DE;&#x7ED3;&#x679C;:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-keyword">final</span> String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
+ServiceName serviceName = TrackerService.createServiceName(suffix);
+ServiceController&lt;?&gt; controller = context.getServiceRegistry(<span class="hljs-keyword">true</span>).getService(serviceName);
+<span class="hljs-keyword">if</span>(controller != <span class="hljs-keyword">null</span>) {
+    TrackerService service = (TrackerService)controller.getValue();
+    context.getResult().set(service.getTick());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeTickReadHandler.java">TypeTickReadHandler.java</a></p>
+</div>
+<div class="paragraph">
+<p><code>TypeTickWriteHandler</code> &#x7EE7;&#x627F;&#x4E86;&#x62BD;&#x8C61;&#x7C7B; <code>AbstractWriteAttributeHandler</code>&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x4ECE;&#x5C5E;&#x6027; DMR &#x6A21;&#x578B;&#x4E2D;&#x8BFB;&#x53D6;&#x8F93;&#x5165;&#x503C;&#xFF0C;&#x8BBE;&#x5B9A;&#x8BFB;&#x53D6;&#x503C;&#x7ED9;TrackerService:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-keyword">final</span> String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
+TrackerService service = (TrackerService) context.getServiceRegistry(<span class="hljs-keyword">true</span>).getRequiredService(TrackerService.createServiceName(suffix)).getValue();
+service.setTick(resolvedValue.asLong());</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeTickWriteHandler.java">TypeTickWriteHandler.java</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="__code_code">&#x8282;&#x70B9;<code>&#x64CD;&#x4F5C;&#x5904;&#x7406;&#x5668;</code>&#x5B9E;&#x73B0;</h3>
+<div class="paragraph">
+<p>root &#x8282;&#x70B9;(Subsystem) &#x5B9A;&#x4E49;&#x4E86;&#x4E00;&#x4E2A; <code>disable-all-tracker</code> &#x64CD;&#x4F5C;&#xFF0C;&#x4E8C;&#x7EA7; type &#x8282;&#x70B9;&#x5B9A;&#x4E49;&#x4E86;&#x4E24;&#x4E2A;&#x64CD;&#x4F5C;: <code>disable-tracker</code> &#x548C; <code>enable-tracker</code>&#xFF0C;&#xFF0C;&#x901A;&#x8FC7;&#x7BA1;&#x7406;&#x547D;&#x4EE4;&#x884C;&#x53EF;&#x4EE5;&#x6267;&#x884C;&#x64CD;&#x4F5C;</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">/subsystem=tracker:disable-all-tracker()
+/subsystem=tracker/type=war:disable-tracker()
+/subsystem=tracker/type=war:enable-tracker()</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x8FD9;&#x4E9B;&#x64CD;&#x4F5C;&#x7684;&#x6267;&#x884C;&#x5206;&#x522B;&#x901A;&#x8FC7;<code>&#x64CD;&#x4F5C;&#x5904;&#x7406;&#x5668;</code> TrackerDisableAllHandler, TypeDisableHandler, TypeEnableHandler &#x6765;&#x5B8C;&#x6210;&#x7684;&#x3002;<code>TrackerDisableAllHandler</code> &#x5B9E;&#x73B0;&#x4E86;&#x63A5;&#x53E3; <code>OperationStepHandler</code>&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x5C06; TrackerDeploymentService &#x7684; showcool &#x53D8;&#x91CF;&#x8BBE;&#x7F6E;&#x4E3A; false:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">TrackerDeploymentService service = (TrackerDeploymentService) context.getServiceRegistry(<span class="hljs-keyword">true</span>).getRequiredService(TrackerDeploymentService.NAME).getValue();
+service.setShowCool(<span class="hljs-keyword">false</span>);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TrackerDisableAllHandler.java">TrackerDisableAllHandler.java</a></p>
+</div>
+<div class="paragraph">
+<p><code>TypeDisableHandler</code> &#x5B9E;&#x73B0;&#x4E86;&#x63A5;&#x53E3; <code>OperationStepHandler</code>&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x5C06; TrackerService &#x7684; showcool &#x53D8;&#x91CF;&#x8BBE;&#x7F6E;&#x4E3A; false:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-keyword">final</span> String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
+TrackerService service = (TrackerService) context.getServiceRegistry(<span class="hljs-keyword">true</span>).getRequiredService(TrackerService.createServiceName(suffix)).getValue();
+service.setShowCool(<span class="hljs-keyword">false</span>);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeDisableHandler.java">TypeDisableHandler.java</a></p>
+</div>
+<div class="paragraph">
+<p><code>TypeEnableHandler</code> &#x5B9E;&#x73B0;&#x4E86;&#x63A5;&#x53E3; <code>OperationStepHandler</code>&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x529F;&#x80FD;&#x662F;&#x5C06; TrackerService &#x7684; showcool &#x53D8;&#x91CF;&#x8BBE;&#x7F6E;&#x4E3A; true:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-keyword">final</span> String suffix = PathAddress.pathAddress(operation.get(ModelDescriptionConstants.ADDRESS)).getLastElement().getValue();
+TrackerService service = (TrackerService) context.getServiceRegistry(<span class="hljs-keyword">true</span>).getRequiredService(TrackerService.createServiceName(suffix)).getValue();
+service.setShowCool(<span class="hljs-keyword">true</span>);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#x5B8C;&#x6574;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeEnableHandler.java">TypeEnableHandler.java</a></p>
+</div>
+</div>
+</div>
+</div>
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../subsystem/extending-wildfly-definition.html" class="navigation navigation-prev " aria-label="Previous page: ResourceDefinition 实现"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../subsystem/extending-wildfly-deployers.html" class="navigation navigation-next " aria-label="Next page: 添加 deployers hook"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="../gitbook/app.js"></script>
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-collapsible-menu/plugin.js"></script>
+    
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-search/lunr.min.js"></script>
+    
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-search/search.js"></script>
+    
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-sharing/buttons.js"></script>
+    
+
+    
+    <script src="../gitbook/plugins/gitbook-plugin-fontsettings/buttons.js"></script>
+    
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"collapsible-menu":{},"highlight":{},"search":{"maxIndexSize":1000000},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>

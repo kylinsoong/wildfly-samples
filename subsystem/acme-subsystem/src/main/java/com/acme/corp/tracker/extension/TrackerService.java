@@ -5,6 +5,7 @@ import org.jboss.msc.service.ServiceName;
 import org.jboss.msc.service.StartContext;
 import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
+import org.jboss.msc.value.InjectedValue;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -13,6 +14,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class TrackerService implements Service<TrackerService> {
     
+    private final InjectedValue<TrackerDeploymentService> deploymentService = new InjectedValue<TrackerDeploymentService>();
+    
     private AtomicLong tick = new AtomicLong(10000);
 
     private Set<String> deployments = Collections.synchronizedSet(new HashSet<String>());
@@ -20,6 +23,8 @@ public class TrackerService implements Service<TrackerService> {
     private Set<String> coolDeployments = Collections.synchronizedSet(new HashSet<String>());
 
     private final String suffix;
+    
+    private boolean isShowCool = true;
 
     private Thread OUTPUT = new Thread() {
         @Override
@@ -28,7 +33,10 @@ public class TrackerService implements Service<TrackerService> {
                 Thread.currentThread().setName("tracker-" + suffix + "-thread");
                 try {
                     Thread.sleep(tick.get());
-                    System.out.println("Current deployments deployed while " + suffix + " tracking active:" + deployments + ", Cool: " + coolDeployments.size());
+                    while(isShowCool() && deploymentService.getValue().getValue().isShowCool()){
+                        System.out.println("Current deployments deployed while " + suffix + " tracking active:" + deployments + ", Cool: " + coolDeployments.size());
+                        Thread.sleep(tick.get());
+                    }
                 } catch (InterruptedException e) {
                     interrupted();
                     break;
@@ -40,6 +48,18 @@ public class TrackerService implements Service<TrackerService> {
     public TrackerService(String suffix, long tick) {
         this.suffix = suffix;
         this.tick.set(tick);
+    }
+
+    public boolean isShowCool() {
+        return isShowCool;
+    }
+
+    public void setShowCool(boolean isShowCool) {
+        this.isShowCool = isShowCool;
+    }
+
+    public InjectedValue<TrackerDeploymentService> getDeploymentService() {
+        return deploymentService;
     }
 
     @Override
@@ -63,18 +83,22 @@ public class TrackerService implements Service<TrackerService> {
 
     public void addDeployment(String name) {
         deployments.add(name);
+        deploymentService.getValue().addDeployments(name);
     }
 
     public void addCoolDeployment(String name) {
         coolDeployments.add(name);
+        deploymentService.getValue().addCoolDeployments(name);
     }
 
     public void removeDeployment(String name) {
         deployments.remove(name);
         coolDeployments.remove(name);
+        deploymentService.getValue().getDeployments().remove(name);
+        deploymentService.getValue().getCoolDeployments().remove(name);
     }
 
-    void setTick(long tick) {
+    public void setTick(long tick) {
         this.tick.set(tick);
     }
 

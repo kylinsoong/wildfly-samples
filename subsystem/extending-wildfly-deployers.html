@@ -37,10 +37,10 @@
         
     
     
-    <link rel="next" href="../subsystem/extending-wildfly-test.html" />
+    <link rel="next" href="../subsystem/extending-wildfly-services.html" />
     
     
-    <link rel="prev" href="../subsystem/extending-wildfly-definition.html" />
+    <link rel="prev" href="../subsystem/extending-wildfly-handler.html" />
     
 
         
@@ -49,11 +49,11 @@
         
         
     <div class="book"
-        data-level="1.5"
+        data-level="1.4.2"
         data-chapter-title="添加 deployers hook"
         data-filepath="subsystem/extending-wildfly-deployers.adoc"
         data-basepath=".."
-        data-revision="Tue Mar 15 2016 22:19:58 GMT+0800 (CST)"
+        data-revision="Wed Mar 16 2016 18:06:03 GMT+0800 (CST)"
         data-innerlanguage="">
     
 
@@ -163,18 +163,54 @@
                     </a>
             
             
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="subsystem/extending-wildfly-handler.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-handler.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.1.</b>
+                        
+                        OperationStepHandler 实现
+                    </a>
+            
+            
         </li>
     
-        <li class="chapter active" data-level="1.5" data-path="subsystem/extending-wildfly-deployers.html">
+        <li class="chapter active" data-level="1.4.2" data-path="subsystem/extending-wildfly-deployers.html">
             
                 
                     <a href="../subsystem/extending-wildfly-deployers.html">
                 
                         <i class="fa fa-check"></i>
                         
-                            <b>1.5.</b>
+                            <b>1.4.2.</b>
                         
                         添加 deployers hook
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="subsystem/extending-wildfly-services.html">
+            
+                
+                    <a href="../subsystem/extending-wildfly-services.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        Service 实现
                     </a>
             
             
@@ -237,38 +273,19 @@
 <h2 id="__deployer_hook">&#x6DFB;&#x52A0; deployer hook</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><code>SubsystemAddHandler</code> &#x8D1F;&#x8D23;&#x6DFB;&#x52A0; subsystem resource &#x5230; model&#xFF0C; &#x7EE7;&#x627F;&#x4E86; <code>AbstractBoottimeAddStepHandler</code></p>
-</div>
-<div class="paragraph">
-<p><span class="image"><img src="img/wildfly-controller-boottimeaddstephandler.png" alt="Wildfly Controller API: AbstractBoottimeAddStepHandler"></span></p>
-</div>
-<div class="paragraph">
-<p>&#x91CD;&#x5199; performBoottime() &#x65B9;&#x6CD5;&#x6DFB;&#x52A0; deployers&#x2019;s hook</p>
+<p>&#x5982; <a href="subsystem/extending-wildfly-handler.adoc">OperationStepHandler &#x5B9E;&#x73B0;</a> &#x4E2D;&#xFF0C;Subsystem <code>&#x6DFB;&#x52A0;&#x5904;&#x7406;&#x5668;</code> &#x5728; Subsystem &#x6DFB;&#x52A0;&#x65F6;&#x6CE8;&#x518C;&#x4E86;&#x4E00;&#x4E2A; deployer hook</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-annotation">@Override</span>
-<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">performBoottime</span><span class="hljs-params">(OperationContext context,
-                            ModelNode operation,
-                            ModelNode model,
-                            ServiceVerificationHandler verificationHandler,
-                            List&lt;ServiceController&lt;?&gt;&gt; newControllers)</span> <span class="hljs-keyword">throws</span> OperationFailedException </span>{
-
-    log.info(<span class="hljs-string">&quot;Populating the model&quot;</span>);
-
-    context.addStep(<span class="hljs-keyword">new</span> AbstractDeploymentChainStep() {
+<pre class="highlight"><code class="language-java" data-lang="java">    context.addStep(<span class="hljs-keyword">new</span> AbstractDeploymentChainStep() {
         <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">execute</span><span class="hljs-params">(DeploymentProcessorTarget processorTarget)</span> </span>{
             processorTarget.addDeploymentProcessor(SUBSYSTEM_NAME, SubsystemDeploymentProcessor.PHASE, SubsystemDeploymentProcessor.PRIORITY, <span class="hljs-keyword">new</span> SubsystemDeploymentProcessor());
          }
-    }, OperationContext.Stage.RUNTIME);
-}</code></pre>
+    }, OperationContext.Stage.RUNTIME);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>&#x8BE6;&#x7EC6;&#x5B9E;&#x73B0;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/extension/SubsystemAddHandler.java">SubsystemAddHandler.java</a></p>
-</div>
-<div class="paragraph">
-<p><code>SubsystemDeploymentProcessor</code> &#x5B9E;&#x73B0;&#x4E86; WildFly deployment &#x63A5;&#x53E3; <code>DeploymentUnitProcessor</code></p>
+<p>&#x5176;&#x4E2D; <code>SubsystemDeploymentProcessor</code> &#x5B9E;&#x73B0;&#x4E86; WildFly deployment &#x63A5;&#x53E3; <code>DeploymentUnitProcessor</code></p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="img/wildfly-deployment-DeploymentUnitProcessor.png" alt="WildFly deployment API: DeploymentUnitProcessor"></span></p>
@@ -319,10 +336,10 @@
         </div>
 
         
-        <a href="../subsystem/extending-wildfly-definition.html" class="navigation navigation-prev " aria-label="Previous page: ResourceDefinition 实现"><i class="fa fa-angle-left"></i></a>
+        <a href="../subsystem/extending-wildfly-handler.html" class="navigation navigation-prev " aria-label="Previous page: OperationStepHandler 实现"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="../subsystem/extending-wildfly-test.html" class="navigation navigation-next " aria-label="Next page: 安装测试"><i class="fa fa-angle-right"></i></a>
+        <a href="../subsystem/extending-wildfly-services.html" class="navigation navigation-next " aria-label="Next page: Service 实现"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>
