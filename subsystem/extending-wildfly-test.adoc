@@ -109,3 +109,73 @@ $ ./bin/standalone.sh -c standalone-wildfly10.xml
     "result" => 20000L
 }
 ----
+
+**修改show-cool-deployments值:**
+
+[source,java]
+----
+[standalone@localhost:9990 /] /subsystem=tracker:write-attribute(name=show-cool-deployments,value=false)
+{
+    "outcome" => "success",
+    "result" => true
+}
+----
+
+**读取show-cool-deployments值:**
+
+[source,java]
+----
+[standalone@localhost:9990 /] /subsystem=tracker:read-attribute(name=show-cool-deployments)
+{
+    "outcome" => "success",
+    "result" => false
+}
+----
+
+**停止所有 Tracker:**
+
+[source,java]
+----
+[standalone@localhost:9990 /] /subsystem=tracker:disable-all-tracker()
+{
+    "outcome" => "success",
+    "result" => true
+}
+----
+
+**停止一个 Tracker:**
+
+[source,java]
+----
+[standalone@localhost:9990 /] /subsystem=tracker/type=sar:disable-tracker()
+{
+    "outcome" => "success",
+    "result" => true
+}
+----
+
+**查看部署列表:**
+
+[source,java]
+----
+[standalone@localhost:9990 /] /subsystem=tracker:list-deployments()
+{
+    "outcome" => "success",
+    "result" => [
+        "example.war",
+        "test.war",
+        "cool.war"
+    ]
+}
+----
+
+**查看Cool部署列表:**
+
+[source,java]
+----
+[standalone@localhost:9990 /] /subsystem=tracker:list-cool-deployments()
+{
+    "outcome" => "success",
+    "result" => ["cool.war"]
+}
+----

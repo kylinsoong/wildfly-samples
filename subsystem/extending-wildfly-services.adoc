@@ -58,8 +58,6 @@ link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerService
 
 **TrackerService 中添加 InjectedValue 属性**
 
-link:acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerService.java[TrackerService] 中添加 InjectedValue 属性
-
 [source,java]
 ----
 private final InjectedValue<TrackerDeploymentService> deploymentService = new InjectedValue<TrackerDeploymentService>();

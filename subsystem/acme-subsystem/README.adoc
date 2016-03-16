@@ -1,5 +1,28 @@
 
 == acme-subsystem
 
+|===
+|名称 |说明
 
+|内容简介 
+|通过`扩展 WildFly`示例理解 WildFly 模块化的架构/WildFly Core API，演示如何开发一个 Subsystem
+
+|Server版本
+|支持 WildFly 10.x, JBoss EAP 7.x
+
+|版本号
+|V_2_0
+
+|作者
+|Kylin Soong
+
+|===
+
+== 相关链接
+
+1. http://ksoong.org/jboss/2015/06/21/msc-api/[JBoss MSC API]
+2. http://ksoong.org/jboss/2015/06/22/msc-examples/[JBoss MSC 示例]
+3. http://ksoong.org/jboss/2015/04/02/jboss-dmr/[JBoss DMR]
+4. http://ksoong.org/jboss/2015/04/05/staxmapper/[JBoss staxmapper]
+5. http://ksoong.org/jboss/2015/07/05/wildfly-contoller-api/[WildFly Controller API]
 

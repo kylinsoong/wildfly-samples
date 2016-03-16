@@ -4,8 +4,8 @@
 如 link:extending-wildfly-definition.adoc[ResourceDefinition 实现] 中 Subsystem 树状结构图中所示，本部分说明实线连接的 root 节点和二级 type 节点对应的 `处理器` 的实现, 共有三类处理器：
 
 1. 节点`添加处理器`和`移除处理器` - `SubsystemAddHandler`, `SubsystemRemoveHandler`, `TypeAddHandler`, `TypeRemoveHandler`
-2. 属性`读处理器`和`写处理器` - TrackerShowCoolReadHandler`, `TrackerShowCoolWriteHandler`, `TypeTickReadHandler`, `TypeTickWriteHandler`
-3. 节点`操作处理器` - `TrackerDisableAllHandler`, `TypeDisableHandler`, `TypeEnableHandler`
+2. 属性`读处理器`和`写处理器` - `TrackerShowCoolReadHandler`, `TrackerShowCoolWriteHandler`, `TypeTickReadHandler`, `TypeTickWriteHandler`
+3. 节点`操作处理器` - `TrackerDisableAllHandler`, `TrackerListAllHandler`, `TrackerListCoolHandler`, `TypeDisableHandler`, `TypeEnableHandler`
 
 其中以 Subsystem 或 Tracker 开头的处理器与 root 节点相关，以 Type 开头的则与二级 type 节点，其 UML 类图如下:
 
@@ -182,16 +182,22 @@ service.setTick(resolvedValue.asLong());
 
 === 节点`操作处理器`实现
 
-root 节点(Subsystem) 定义了一个 `disable-all-tracker` 操作，二级 type 节点定义了两个操作: `disable-tracker` 和 `enable-tracker`，，通过管理命令行可以执行操作
+root 节点(Subsystem) 定义了一个 `disable-all-tracker` 操作，二级 type 节点定义了两个操作: `disable-tracker` 和 `enable-tracker`，通过管理命令行可以执行操作
 
 [source,java]
 ----
 /subsystem=tracker:disable-all-tracker()
+/subsystem=tracker:list-deployments()
+/subsystem=tracker:list-cool-deployments()
 /subsystem=tracker/type=war:disable-tracker()
 /subsystem=tracker/type=war:enable-tracker()
 ----
 
-这些操作的执行分别通过`操作处理器` TrackerDisableAllHandler, TypeDisableHandler, TypeEnableHandler 来完成的。`TrackerDisableAllHandler` 实现了接口 `OperationStepHandler`，它主要功能是将 TrackerDeploymentService 的 showcool 变量设置为 false:
+这些操作的执行分别通过`操作处理器` TrackerDisableAllHandler, TrackerListAllHandler, TrackerListCoolHandler, TypeDisableHandler, TypeEnableHandler 来完成的。
+
+**TrackerDisableAllHandler**
+
+`TrackerDisableAllHandler` 实现了接口 `OperationStepHandler`，它主要功能是将 TrackerDeploymentService 的 showcool 变量设置为 false:
 
 [source,java]
 ----
@@ -200,6 +206,50 @@ service.setShowCool(false);
 ----
 
 完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TrackerDisableAllHandler.java[TrackerDisableAllHandler.java]
+
+**TrackerListAllHandler**
+
+`TrackerListAllHandler` 实现了接口 `OperationStepHandler`，它主要功能是列出所有部署文件:
+
+[source,java]
+----
+TrackerDeploymentService service = (TrackerDeploymentService) context.getServiceRegistry(true).getRequiredService(TrackerDeploymentService.NAME).getValue();
+        Set<String> deployments = service.getDeployments();
+        final ModelNode result = new ModelNode();
+        if(deployments.isEmpty()){
+            result.setEmptyList();
+        } else {
+            for(String deployment : deployments) {
+                result.add(deployment);
+            }
+        }
+        context.getResult().set(result);
+----
+
+完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TrackerListAllHandler.java[TrackerListAllHandler.java]
+
+**TrackerListCoolHandler**
+
+`TrackerListCoolHandler` 实现了接口 `OperationStepHandler`，它主要功能是列出所有部署文件:
+
+[source,java]
+----
+TrackerDeploymentService service = (TrackerDeploymentService) context.getServiceRegistry(true).getRequiredService(TrackerDeploymentService.NAME).getValue();
+        Set<String> deployments = service.getCoolDeployments();
+        final ModelNode result = new ModelNode();
+        if(deployments.isEmpty()){
+            result.setEmptyList();
+        } else {
+            for(String deployment : deployments) {
+                result.add(deployment);
+            }
+        }
+        context.getResult().set(result);
+----
+
+完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TrackerListCoolHandler.java[TrackerListCoolHandler.java]
+
+**TypeDisableHandler**
 
 `TypeDisableHandler` 实现了接口 `OperationStepHandler`，它主要功能是将 TrackerService 的 showcool 变量设置为 false:
 
@@ -211,6 +261,8 @@ service.setShowCool(false);
 ----
 
 完整实现代码参照 link:acme-subsystem/src/main/java/com/acme/corp/tracker/handler/TypeDisableHandler.java[TypeDisableHandler.java]
+
+**TypeEnableHandler**
 
 `TypeEnableHandler` 实现了接口 `OperationStepHandler`，它主要功能是将 TrackerService 的 showcool 变量设置为 true:
 
