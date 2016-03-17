@@ -1,7 +1,7 @@
 
 == 添加 deployer hook
 
-如 link:subsystem/extending-wildfly-handler.adoc[OperationStepHandler 实现] 中，Subsystem `添加处理器` 在 Subsystem 添加时注册了一个 deployer hook
+如 link:extending-wildfly-handler.adoc[OperationStepHandler 实现] 中，Subsystem `添加处理器` 在 Subsystem 添加时注册了一个 deployer hook
 
 [source,java]
 ----
