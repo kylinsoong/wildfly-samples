@@ -1,0 +1,4 @@
+<module rename-to="app">
+    <inherits name="org.jboss.as.console.composite.WildFlyDev"/>
+    <stylesheet src="acme.css" />
+</module>

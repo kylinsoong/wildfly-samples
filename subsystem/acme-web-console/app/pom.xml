@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <name>Tracker Console :: Webapp</name>
+    <groupId>com.acme.corp</groupId>
+    <artifactId>acme-console-app</artifactId>
+    <packaging>war</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <!-- Parent -->
+    <parent>
+        <groupId>org.jboss.as</groupId>
+        <artifactId>jboss-as-console-build</artifactId>
+        <version>2.8.12.Final</version>
+        <relativePath />
+    </parent>
+
+    <!-- the GUI extensions -->
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.as</groupId>
+            <artifactId>jboss-as-console-core</artifactId>
+        </dependency>    
+        <dependency>
+            <groupId>com.acme.corp</groupId>
+            <artifactId>acme-console-gui</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.acme.corp</groupId>
+            <artifactId>acme-console-gui</artifactId>
+            <version>${project.version}</version>
+            <classifier>sources</classifier>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+		  <plugin>
+		    <groupId>org.codehaus.mojo</groupId>
+		    <artifactId>gwt-maven-plugin</artifactId>
+		    <configuration>
+		      <extraJvmArgs>-Xmx2048M -Xss1024k</extraJvmArgs>
+		    </configuration>
+		  </plugin>
+            <!--
+                Make sure changes to the 'gui' module are picked up in hosted mode.
+                Without appending the source path this would not be possible.
+             -->
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>../gui/src/main/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-resource</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-resource</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>../gui/src/main/resources</directory>
+                                    <targetPath>resources</targetPath>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>                    
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.bsc.maven</groupId>
+                <artifactId>maven-processor-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- Must match the id from the parent POM -->
+                        <id>process-spi</id>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <processSourceArtifacts>
+                                <processSourceArtifact>org.jboss.as:jboss-as-console-core:sources</processSourceArtifact>
+                                <processSourceArtifact>com.acme.corp:acme-console-gui:sources</processSourceArtifact>
+                            </processSourceArtifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>            
+        </plugins>
+    </build>
+</project>
