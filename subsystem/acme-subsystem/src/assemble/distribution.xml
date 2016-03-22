@@ -21,7 +21,7 @@
     <files>
         <file>
             <source>${project.build.directory}/${project.artifactId}.jar</source>
-            <outputDirectory>modules/com/acme/corp/tracker/main</outputDirectory>
+            <outputDirectory>modules/system/layers/acme/com/acme/corp/tracker/main</outputDirectory>
         </file>
     </files>
     

@@ -7,7 +7,6 @@ import org.jboss.ballroom.client.widgets.forms.CheckBoxItem;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
-
 public class ConfigurationEditor {
     
     private SubsystemPresenter presenter; 
@@ -35,7 +34,7 @@ public class ConfigurationEditor {
         
         OneToOneLayout layoutBuilder = new OneToOneLayout()
                 .setPlain(true)
-                .setTitle("Query Engine")
+                .setTitle("Tracking Deployments")
                 .setHeadlineWidget(title)
                 .setDescription("Tracking Deployments")
                 .addDetail("Common", this.commonForm.asWidget());

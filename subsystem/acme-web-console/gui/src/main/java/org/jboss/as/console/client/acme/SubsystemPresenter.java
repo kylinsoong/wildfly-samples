@@ -1,4 +1,4 @@
-package org.jboss.as.console.client.acme;
+  package org.jboss.as.console.client.acme;
 
 import static org.jboss.dmr.client.ModelDescriptionConstants.ADDRESS;
 import static org.jboss.dmr.client.ModelDescriptionConstants.INCLUDE_RUNTIME;

@@ -36,13 +36,13 @@
 
     <build>
         <plugins>
-		  <plugin>
-		    <groupId>org.codehaus.mojo</groupId>
-		    <artifactId>gwt-maven-plugin</artifactId>
-		    <configuration>
-		      <extraJvmArgs>-Xmx2048M -Xss1024k</extraJvmArgs>
-		    </configuration>
-		  </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <configuration>
+                    <extraJvmArgs>-Xmx2048M -Xss1024k</extraJvmArgs>
+                </configuration>
+            </plugin>
             <!--
                 Make sure changes to the 'gui' module are picked up in hosted mode.
                 Without appending the source path this would not be possible.

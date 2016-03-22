@@ -18,12 +18,12 @@
         </file>
         <file>
             <source>${project.basedir}/src/main/assembly/module.xml</source>
-            <outputDirectory>modules/system/layers/dv/org/jboss/as/console/${module.slot}</outputDirectory>
+            <outputDirectory>modules/system/layers/acme/org/jboss/as/console/${module.slot}</outputDirectory>
             <filtered>true</filtered>
         </file>
         <file>
             <source>${project.build.directory}/${project.build.finalName}-${classifier}.jar</source>
-            <outputDirectory>modules/system/layers/dv/org/jboss/as/console/${module.slot}</outputDirectory>
+            <outputDirectory>modules/system/layers/acme/org/jboss/as/console/${module.slot}</outputDirectory>
             <filtered>false</filtered>
         </file>
     </files>

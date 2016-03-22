@@ -66,7 +66,7 @@ public class TrackerModelForm<T> {
             @Override
             public ModelNode getAddress() {
                 ModelNode address = Baseadress.get();
-                address.add("subsystem", "teiid");
+                address.add("subsystem", "tracker");
                 return address;
             }
         }, this.form);
