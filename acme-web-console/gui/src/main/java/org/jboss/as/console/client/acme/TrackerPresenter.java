@@ -12,7 +12,7 @@ import static org.jboss.dmr.client.ModelDescriptionConstants.WRITE_ATTRIBUTE_OPE
 import java.util.Map;
 
 import org.jboss.as.console.client.Console;
-import org.jboss.as.console.client.acme.model.SubsystemConfiguration;
+import org.jboss.as.console.client.acme.model.TrackerSubsystem;
 import org.jboss.as.console.client.domain.model.SimpleCallback;
 import org.jboss.as.console.client.shared.subsys.Baseadress;
 import org.jboss.as.console.client.shared.subsys.RevealStrategy;
@@ -36,34 +36,39 @@ import com.gwtplatform.mvp.client.proxy.Place;
 import com.gwtplatform.mvp.client.proxy.Proxy;
 
 
-public class SubsystemPresenter extends Presenter<SubsystemPresenter.TrackerView, SubsystemPresenter.TrackerProxy> implements Persistable<SubsystemConfiguration> {
+public class TrackerPresenter extends Presenter<TrackerPresenter.MyView, TrackerPresenter.MyProxy> implements Persistable<TrackerSubsystem> {
+    
+    @ProxyCodeSplit
+    @NameToken("tracker")
+    @SearchIndex(keywords = {"tracker", "tick"})  
+    @SubsystemExtension(name="Tracker", group = "Tracker", key="tracker")
+    @RequiredResources(resources = {"{selected.profile}/subsystem=tracker"})
+    public interface MyProxy extends Proxy<TrackerPresenter>, Place {
+    }
+    
+    public interface MyView extends View {
+        void setPresenter(TrackerPresenter presenter);
+        void updateFrom(TrackerSubsystem bean);
+    }
     
     private DispatchAsync dispatcher;
     private RevealStrategy revealStrategy;
     
-    private EntityAdapter<SubsystemConfiguration> configurationEntityAdapter;
-    
-    public interface TrackerView extends View {
-        void setPresenter(SubsystemPresenter presenter);
-        void setConfigurationBean(SubsystemConfiguration bean);
-    }
-    
-    @ProxyCodeSplit
-    @NameToken("tracker")
-    @SubsystemExtension(name="Tracker", group = "Tracker", key="tracker")
-    @RequiredResources(resources = {"{selected.profile}/subsystem=tracker"})
-    @SearchIndex(keywords = {"tracker", "tick"})  
-    public interface TrackerProxy extends Proxy<SubsystemPresenter>, Place {
-    }
+    private EntityAdapter<TrackerSubsystem> configurationEntityAdapter;
     
     @Inject
-    public SubsystemPresenter(EventBus eventBus, TrackerView view, TrackerProxy proxy, DispatchAsync dispatcher, RevealStrategy revealStrategy, ApplicationMetaData metadata) {
+    public TrackerPresenter(EventBus eventBus, 
+                            MyView view, 
+                            MyProxy proxy, 
+                            DispatchAsync dispatcher, 
+                            RevealStrategy revealStrategy, 
+                            ApplicationMetaData metadata) {
         super(eventBus, view, proxy);
 
         this.dispatcher = dispatcher;
         this.revealStrategy = revealStrategy;
 
-        this.configurationEntityAdapter = new EntityAdapter<>(SubsystemConfiguration.class, metadata);
+        this.configurationEntityAdapter = new EntityAdapter<>(TrackerSubsystem.class, metadata);
     }
 
     @Override
@@ -80,10 +85,10 @@ public class SubsystemPresenter extends Presenter<SubsystemPresenter.TrackerView
     @Override
     protected void onReset() {
         super.onReset();
-        loadConfigurationModel();
+        loadSubsystem();
     }
     
-    private void loadConfigurationModel() {
+    private void loadSubsystem() {
         ModelNode operation = new ModelNode();
         operation.get(OP).set(READ_RESOURCE_OPERATION);
         operation.get(ADDRESS).set(Baseadress.get());
@@ -94,8 +99,8 @@ public class SubsystemPresenter extends Presenter<SubsystemPresenter.TrackerView
             @Override
             public void onSuccess(DMRResponse dmrResponse) {
                 ModelNode response = dmrResponse.get();
-                SubsystemConfiguration bean = configurationEntityAdapter.fromDMR(response.get(RESULT));
-                getView().setConfigurationBean(bean);
+                TrackerSubsystem bean = configurationEntityAdapter.fromDMR(response.get(RESULT));
+                getView().updateFrom(bean);
             }
             @Override
             public void onFailure(Throwable caught) {
@@ -105,7 +110,7 @@ public class SubsystemPresenter extends Presenter<SubsystemPresenter.TrackerView
     }
 
     @Override
-    public void save(SubsystemConfiguration t, Map<String, Object> changeset) {
+    public void save(TrackerSubsystem t, Map<String, Object> changeset) {
         ModelNode address = new ModelNode();
         address.get(ADDRESS).set(Baseadress.get());
         address.get(ADDRESS).add("subsystem", "tracker");
@@ -122,15 +127,14 @@ public class SubsystemPresenter extends Presenter<SubsystemPresenter.TrackerView
                 if (success) {
                     Console.info(Console.MESSAGES.saved("Tracker configuration modified"));
                 } else {
-                    Console.error(Console.MESSAGES.saveFailed("Tracker configuration modification failed"),
-                            response.getFailureDescription());
+                    Console.error(Console.MESSAGES.saveFailed("Tracker configuration modification failed"), response.getFailureDescription());
                 }
-                loadConfigurationModel();
+                loadSubsystem();
             }
             @Override
             public void onFailure(Throwable caught) {
                 super.onFailure(caught);
-                loadConfigurationModel();
+                loadSubsystem();
             }            
         }); 
     }

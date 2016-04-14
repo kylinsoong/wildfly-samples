@@ -69,7 +69,7 @@ Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
 
 == 版本控制
 
-<<创建初始工程, 创建初始工程>> 中创建一个模板工程，我们首先要对依赖的版本进行控制
+通常在 WildFly 上扩展 subsystem 需要注意对应的 `wildfly-controller` 和 `wildfly-server` 的版本，  如上在 **创建初始工程** 中创建的工程，它对应的 `wildfly-controller` 和 `wildfly-server` 的版本较老，如果要将扩展的 subsystem 部署到 WildFly 10，则开发过程中 `wildfly-controller` 和 `wildfly-server` 的版本应和 WildFly 10 对应。参照下表对依赖的版本进行控制。
 
 |===
 |WildFly Dist |WildFly 版本 |WildFly Core 版本

@@ -7,5 +7,5 @@ import com.google.gwt.inject.client.AsyncProvider;
 
 @GinExtension
 public interface Extension {
-    AsyncProvider<SubsystemPresenter> getSubsystemPresenter();
+    AsyncProvider<TrackerPresenter> getSubsystemPresenter();
 }

@@ -6,34 +6,34 @@ import org.jboss.as.console.client.v3.ResourceDescriptionRegistry;
 import org.jboss.as.console.client.widgets.pages.PagedView;
 import org.jboss.as.console.client.widgets.tabs.DefaultTabLayoutPanel;
 import org.jboss.as.console.client.acme.ConfigurationEditor;
-import org.jboss.as.console.client.acme.model.SubsystemConfiguration;
+import org.jboss.as.console.client.acme.model.TrackerSubsystem;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 
-public class SubsystemView extends SuspendableViewImpl implements SubsystemPresenter.TrackerView {
+public class TrackerSubsystemView extends SuspendableViewImpl implements TrackerPresenter.MyView {
     
     private final ResourceDescriptionRegistry descriptionRegistry;
     private final SecurityFramework securityFramework;
     
     private ConfigurationEditor configurationEditor;
     
-    private SubsystemPresenter presenter;
+    private TrackerPresenter presenter;
     
     @Inject
-    public SubsystemView(ResourceDescriptionRegistry descriptionRegistry, SecurityFramework securityFramework) {
+    public TrackerSubsystemView(ResourceDescriptionRegistry descriptionRegistry, SecurityFramework securityFramework) {
         this.descriptionRegistry = descriptionRegistry;
         this.securityFramework = securityFramework;
     }
     
     @Override
-    public void setPresenter(SubsystemPresenter presenter) {
+    public void setPresenter(TrackerPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void setConfigurationBean(SubsystemConfiguration bean) {
+    public void updateFrom(TrackerSubsystem bean) {
         this.configurationEditor.setConfigurationBean(bean);
     }
 

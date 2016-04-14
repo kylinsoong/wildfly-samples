@@ -1,6 +1,6 @@
 package org.jboss.as.console.client.acme;
 
-import org.jboss.as.console.client.acme.model.SubsystemConfiguration;
+import org.jboss.as.console.client.acme.model.TrackerSubsystem;
 import org.jboss.as.console.client.layout.OneToOneLayout;
 import org.jboss.ballroom.client.widgets.forms.CheckBoxItem;
 
@@ -9,15 +9,15 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class ConfigurationEditor {
     
-    private SubsystemPresenter presenter; 
+    private TrackerPresenter presenter; 
     
-    private TrackerModelForm<SubsystemConfiguration> commonForm;
+    private TrackerModelForm<TrackerSubsystem> commonForm;
     
-    public ConfigurationEditor(SubsystemPresenter presenter) {
+    public ConfigurationEditor(TrackerPresenter presenter) {
         this.presenter = presenter;
     }
     
-    public void setConfigurationBean(SubsystemConfiguration bean) {
+    public void setConfigurationBean(TrackerSubsystem bean) {
         this.commonForm.edit(bean);
     }
     
@@ -26,7 +26,7 @@ public class ConfigurationEditor {
         // common
         CheckBoxItem allowEnvFunction = new CheckBoxItem("showCoolDeployments", "Show Cool Deployments");
         
-        this.commonForm = new TrackerModelForm<SubsystemConfiguration>(SubsystemConfiguration.class, this.presenter, allowEnvFunction);
+        this.commonForm = new TrackerModelForm<TrackerSubsystem>(TrackerSubsystem.class, this.presenter, allowEnvFunction);
         
         HTML title = new HTML();
         title.setStyleName("content-header-label");

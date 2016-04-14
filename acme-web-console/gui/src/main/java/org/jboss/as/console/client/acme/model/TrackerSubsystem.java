@@ -4,7 +4,7 @@ import org.jboss.as.console.client.widgets.forms.Address;
 import org.jboss.as.console.client.widgets.forms.Binding;
 
 @Address("/subsystem=tracker")
-public interface SubsystemConfiguration {
+public interface TrackerSubsystem {
 
     @Binding(detypedName= "show-cool-deployments")
     public boolean isShowCoolDeployments();
