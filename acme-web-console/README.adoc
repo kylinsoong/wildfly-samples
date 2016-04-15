@@ -1,0 +1,24 @@
+
+= Acme Web Console
+
+基于 WildFly 模块化的架构，link:../subsystem/acme-subsystem/README.adoc[扩展 WildFly] 演示了开发一个 tracker subsystem，本部分基于该 subsystem，说明如何扩展 WildFly Web Consle, 本部分将演示开发一个 acme-web-console，用来管理 tracker subsystem。
+
+== 注意事项
+
+开发过程中可通过 mvn 进行快速测试
+
+* `mvn gwt:run`
+* `mvn gwt:run|debug -Dgwt.superDevMode=false`
+
+执行如上命令需要在 `app` 目录，且 WildFly 需要处于运行状态，且需要配置 allowed-origins 如下:
+
+[source,xml]
+----
+/core-service=management/management-interface=http-interface:list-add(name=allowed-origins,value=http://localhost:8888)
+reload
+----
+
+== 帮助文档
+
+* http://hal.gitbooks.io/dev/content/building-blocks/index.html[HAL 文档]
+* http://hpehl.info/extending-hal-management-console.html[如何扩展 HAL Management Console]

@@ -8,3 +8,5 @@
 ... link:subsystem/extending-wildfly-deployers.adoc[添加 deployers hook]
 .. link:subsystem/extending-wildfly-services.adoc[Service 实现]
 .. link:subsystem/extending-wildfly-test.adoc[安装测试]
+. link:acme-web-console/README.adoc[扩展 WildFly Web Console]
+.. link:acme-web-console/wildfly-console-create-gui.adoc[创建初始工程]

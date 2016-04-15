@@ -5,7 +5,11 @@
 
 [source,xml]
 ----
-$ mvn archetype:generate -DarchetypeArtifactId=wildfly-subsystem -DarchetypeGroupId=org.wildfly.archetypes -DarchetypeVersion=8.0.0.Final -DarchetypeRepository=http://repository.jboss.org/nexus/content/groups/public
+$ mvn archetype:generate \
+        -DarchetypeArtifactId=wildfly-subsystem \
+        -DarchetypeGroupId=org.wildfly.archetypes \
+        -DarchetypeVersion=8.0.0.Final \
+        -DarchetypeRepository=http://repository.jboss.org/nexus/content/groups/public
 ----
 
 mvn 会提示输入相关的信息，如下所示：

@@ -10,7 +10,7 @@
     "plugins": ["collapsible-menu"],
     "links": {
         "sidebar": {
-            "WildFly Architecture": "/wildfly-samples"
+            "WildFly 架构": "/wildfly-samples"
         }
     },
     "pluginsConfig": {}

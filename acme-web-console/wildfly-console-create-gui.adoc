@@ -1,0 +1,81 @@
+
+== 创建初始工程
+
+通过如下 mvn 命令创建初始化工程：
+
+[source,xml]
+----
+mvn archetype:generate \
+    -DarchetypeCatalog=https://repository.jboss.org \
+    -DarchetypeGroupId=org.jboss.hal.archetypes \
+    -DarchetypeArtifactId=hal-subsystem-extension-archetype
+----
+
+mvn 会提示输入相关的信息，如下所示：
+
+|===
+|名称 |输入值
+
+|'groupId'
+|com.acme.corp
+
+|'artifactId'
+|acme-web-console
+
+|'version'
+|1.0-SNAPSHOT
+
+|'package'
+|com.acme.corp.tracker
+
+|'extensionName'
+|Tracker
+
+|'gwtModule'
+|TrackerExtension
+
+|'subsystem'
+|tracker
+
+|'nameToken'
+|tracker
+
+|===
+
+创建初始化工程完成以后，进入 acme-web-console 目录会发现两个目录：
+
+* gui - 包括 UI 相关的类
+* app - 测试所需要的配置文件
+
+详细查看link:gui/pom.xml[pom.xml].
+
+同样类似于link:../subsystem/extending-wildfly-template.adoc[扩展 WildFly 中版本控制]，扩展 Wildfly Web Console 同样需要注意 Wildfly 对应的 `jboss-as-console-extension` 版本，参照下表:
+
+|===
+|WildFly Dist |jboss-as-console-extension 版本
+
+|wildfly-10.0.0.Final
+|2.8.19.Final
+
+|wildfly-9.0.2.Final
+|2.8.13.Final
+
+|wildfly-9.0.0.Final
+|2.7.4.Final
+
+|wildfly-8.2.0.Final
+|2.4.9.Final
+|===
+ 
+例如，将 acme-web-console 部署到 wildfly-10.0.0.Final，则对应的 jboss-as-console-extension 版本为2.8.19.Final:
+
+[source,xml]
+----
+<parent>
+    <groupId>org.jboss.as</groupId>
+    <artifactId>jboss-as-console-extension</artifactId>
+    <version>2.8.19.Final</version>
+    <relativePath />
+</parent>
+----
+
