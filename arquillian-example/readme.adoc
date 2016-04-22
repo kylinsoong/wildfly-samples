@@ -1,0 +1,110 @@
+
+= 使用 Arquillian 和 Maven 测试基于容器的复杂应用
+:toc: manual
+:toc-placement: preamble
+
+使用 Arquillian 和 Maven 测试基于容器的负杂应用
+
+== 快速入门示例
+
+本部分示例来源于 http://arquillian.org/guides/getting_started/?utm_source=cta[Arquillian Getting Started].
+
+获取代码:
+
+[source,java]
+----
+$ git clone git@github.com:kylinsoong/wildfly-samples.git
+$ cd wildfly-samples/arquillian-example
+----
+
+=== Weld EE 嵌入式容器
+
+依赖配置:
+
+[source,xml]
+----
+<profile>
+    <id>arquillian-weld-ee-embedded</id>
+    <dependencies>
+        <dependency>
+	    <groupId>org.jboss.arquillian.container</groupId>
+	    <artifactId>arquillian-weld-ee-embedded-1.1</artifactId>
+	    <version>1.0.0.CR9</version>
+	    <scope>test</scope>
+        </dependency>
+	<dependency>
+	    <groupId>org.jboss.weld</groupId>
+	    <artifactId>weld-core</artifactId>
+	    <version>2.3.3.Final</version>
+	    <scope>test</scope>
+        </dependency>
+        <dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-simple</artifactId>
+	    <version>1.6.4</version>
+	    <scope>test</scope>
+        </dependency>
+    </dependencies>
+</profile>
+----
+
+运行测试:
+
+[source,java]
+----
+$ mvn clean test -Parquillian-weld-ee-embedded
+----
+
+=== WildFly 容器
+
+依赖配置:
+
+[source,xml]
+----
+<profile>
+    <id>arquillian-wildfly-managed</id>
+    <dependencies>
+        <dependency>
+            <groupId>org.wildfly.arquillian</groupId>
+            <artifactId>wildfly-arquillian-container-managed</artifactId>
+            <version>2.0.0.Final</version>
+        </dependency>
+    </dependencies>
+</profile>
+----
+
+arquillian.xml 配置文件需要添加在 `src/test/resources/` 路径下，添加内容如下
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<arquillian xmlns="http://jboss.org/schema/arquillian" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+
+    <container qualifier="jboss" default="true">
+        <configuration>
+             <!-- ${jbossHome} -->
+             <property name="jbossHome">/home/kylin/server/wildfly-10.0.0.Final</property>
+             <property name="serverConfig">standalone.xml</property>
+             <property name="javaVmArguments">-Xmx2048m -Xms512m -XX:MaxPermSize=128m -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n -Dteiid.vdb.UseConnectorMetadata=custom</property>
+
+            <property name="allowConnectingToRunningServer">true</property>
+            <property name="managementAddress">${node0:127.0.0.1}</property>
+            <property name="managementPort">${as.managementPort:9990}</property>
+
+            <property name="waitForPorts">${as.debug.port:8787} ${as.managementPort:9990}</property>
+            <property name="waitForPortsTimeoutInSeconds">8</property>
+        </configuration>
+    </container>
+
+</arquillian>
+----
+
+运行测试:
+
+[source,java]
+----
+$ mvn clean test -Parquillian-wildfly-managed
+----
+
+NOTE: 如果测试过程中不希望在命令行终端显示 WildFly 的日志输出，可配置 maven-surefire-plugin，设置redirectTestOutputToFile 为 true，具体参照 link:pom.xml[pom.xml].

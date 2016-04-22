@@ -10,3 +10,5 @@
 .. link:subsystem/extending-wildfly-test.adoc[安装测试]
 . link:acme-web-console/README.adoc[扩展 WildFly Web Console]
 .. link:acme-web-console/wildfly-console-create-gui.adoc[创建初始工程]
+. link:arquillian-example/readme.adoc[使用 Arquillian 和 Maven 测试基于容器的负杂应用]
+
