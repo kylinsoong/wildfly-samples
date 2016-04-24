@@ -16,6 +16,8 @@ import org.jboss.as.console.client.v3.ResourceDescriptionRegistry;
 import org.jboss.as.console.client.v3.behaviour.CrudOperationDelegate;
 import org.jboss.as.console.client.v3.dmr.AddressTemplate;
 import org.jboss.as.console.client.v3.widgets.AddResourceDialog;
+import org.jboss.as.console.spi.RequiredResources;
+import org.jboss.as.console.spi.SubsystemExtension;
 import org.jboss.ballroom.client.widgets.window.DefaultWindow;
 import org.jboss.dmr.client.ModelNode;
 import org.jboss.dmr.client.Property;
@@ -45,6 +47,8 @@ public class ExtensionPresenter extends Presenter<ExtensionPresenter.MyView, Ext
 
     @ProxyCodeSplit
     @NameToken("tracker")
+    @SubsystemExtension(name="Tracker", group = "Tracker", key="tracker")
+    @RequiredResources(resources = {"{selected.profile}/subsystem=tracker"})
     public interface MyProxy extends ProxyPlace<ExtensionPresenter> {}
 
 
@@ -115,7 +119,7 @@ public class ExtensionPresenter extends Presenter<ExtensionPresenter.MyView, Ext
         ModelNode operation = new ModelNode();
         operation.get(OP).set(READ_RESOURCE_OPERATION);
         operation.get(ADDRESS).set(Baseadress.get());
-        operation.get(ADDRESS).add("subsystem", "logging");
+        operation.get(ADDRESS).add("subsystem", "tracker");
         operation.get("recursive-depth").set(1);
         dispatcher.execute(new DMRAction(operation), new SimpleCallback<DMRResponse>() {
             @Override

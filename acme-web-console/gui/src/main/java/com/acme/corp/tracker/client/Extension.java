@@ -18,10 +18,13 @@
  */
 package com.acme.corp.tracker.client;
 
+import com.acme.corp.tracker.client.runtime.DeploymentPresenter;
 import com.google.gwt.inject.client.AsyncProvider;
+
 import org.jboss.as.console.spi.GinExtension;
 
 @GinExtension
 public interface Extension {
     AsyncProvider<ExtensionPresenter> getExtensionPresenter();
+    AsyncProvider<DeploymentPresenter> getDeploymentPresenter();
 }

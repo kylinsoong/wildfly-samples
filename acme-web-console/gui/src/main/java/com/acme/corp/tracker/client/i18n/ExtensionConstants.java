@@ -23,4 +23,6 @@ import com.google.gwt.i18n.client.Constants;
 public interface ExtensionConstants extends Constants {
 
     String load_failed();
+    String load_deployment_failed();
+    String load_cool_deployment_failed();
 }

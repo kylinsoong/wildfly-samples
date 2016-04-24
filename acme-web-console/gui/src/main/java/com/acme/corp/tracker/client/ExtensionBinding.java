@@ -19,8 +19,12 @@
 package com.acme.corp.tracker.client;
 
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
+
 import org.jboss.as.console.spi.GinExtensionBinding;
+
 import com.acme.corp.tracker.client.i18n.I18nModule;
+import com.acme.corp.tracker.client.runtime.DeploymentPresenter;
+import com.acme.corp.tracker.client.runtime.DeploymentView;
 
 @GinExtensionBinding
 public class ExtensionBinding extends AbstractPresenterModule {
@@ -29,9 +33,14 @@ public class ExtensionBinding extends AbstractPresenterModule {
     protected void configure() {
         install(new I18nModule());
 
-        bindPresenter(ExtensionPresenter.class,
-                ExtensionPresenter.MyView.class,
-                ExtensionView.class,
-                ExtensionPresenter.MyProxy.class);
+        bindPresenter(ExtensionPresenter.class
+                    , ExtensionPresenter.MyView.class
+                    , ExtensionView.class
+                    , ExtensionPresenter.MyProxy.class);
+        
+        bindPresenter(DeploymentPresenter.class
+                    , DeploymentPresenter.MyView.class
+                    , DeploymentView.class
+                    , DeploymentPresenter.MyProxy.class);
     }
 }
