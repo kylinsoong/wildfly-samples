@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>创建 schema 模型 | </title>
+        <title>扩展 WildFly Web Console | </title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.6.7">
@@ -37,10 +37,10 @@
         
     
     
-    <link rel="next" href="../subsystem/extending-wildfly-extension.html" />
+    <link rel="next" href="../acme-web-console/wildfly-console-create-gui.html" />
     
     
-    <link rel="prev" href="../subsystem/extending-wildfly-template.html" />
+    <link rel="prev" href="../subsystem/extending-wildfly-test.html" />
     
 
         
@@ -49,9 +49,9 @@
         
         
     <div class="book"
-        data-level="1.2"
-        data-chapter-title="创建 schema 模型"
-        data-filepath="subsystem/extending-wildfly-schema.adoc"
+        data-level="2"
+        data-chapter-title="扩展 WildFly Web Console"
+        data-filepath="acme-web-console/README.adoc"
         data-basepath=".."
         data-revision="Sun Apr 24 2016 18:04:05 GMT+0800 (CST)"
         data-innerlanguage="">
@@ -120,7 +120,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="1.2" data-path="subsystem/extending-wildfly-schema.html">
+        <li class="chapter " data-level="1.2" data-path="subsystem/extending-wildfly-schema.html">
             
                 
                     <a href="../subsystem/extending-wildfly-schema.html">
@@ -236,7 +236,7 @@
             
         </li>
     
-        <li class="chapter " data-level="2" data-path="acme-web-console/index.html">
+        <li class="chapter active" data-level="2" data-path="acme-web-console/index.html">
             
                 
                     <a href="../acme-web-console/index.html">
@@ -320,92 +320,53 @@
                 
                     <section class="normal" id="section-">
                     
-                        <div class="sect1">
-<h2 id="__schema">&#x521B;&#x5EFA; schema</h2>
+                        <h1 id="acme-web-console">Acme Web Console</h1>
+<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>&#x57FA;&#x4E8E; <a href="extending-wildfly-template.html">&#x521B;&#x5EFA;&#x521D;&#x59CB;&#x5DE5;&#x7A0B;</a>, &#x91CD;&#x547D;&#x540D; <code>src/main/resources/schema/mysubsystem.xsd</code> &#x4E3A; <code>src/main/resources/schema/wildfly_acme_1_0.xsd</code>&#xFF0C;&#x7F16;&#x8F91; <code>wildfly_acme_1_0.xsd</code> &#x5185;&#x5BB9;&#x5982;&#x4E0B;&#xFF1A;</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="hljs-tag">&lt;<span class="hljs-title">xs:schema</span> <span class="hljs-attribute">xmlns:xs</span>=<span class="hljs-value">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
-            <span class="hljs-attribute">targetNamespace</span>=<span class="hljs-value">&quot;urn:com.acme.corp.tracker:1.0&quot;</span>
-            <span class="hljs-attribute">xmlns</span>=<span class="hljs-value">&quot;urn:com.acme.corp.tracker:1.0&quot;</span>
-            <span class="hljs-attribute">elementFormDefault</span>=<span class="hljs-value">&quot;qualified&quot;</span>
-            <span class="hljs-attribute">attributeFormDefault</span>=<span class="hljs-value">&quot;unqualified&quot;</span>
-            <span class="hljs-attribute">version</span>=<span class="hljs-value">&quot;1.0&quot;</span>&gt;</span>
-
-   <span class="hljs-comment">&lt;!-- The subsystem root element --&gt;</span>
-   <span class="hljs-tag">&lt;<span class="hljs-title">xs:element</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">&quot;subsystem&quot;</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">&quot;subsystemType&quot;</span>/&gt;</span>
-   <span class="hljs-tag">&lt;<span class="hljs-title">xs:complexType</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">&quot;subsystemType&quot;</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">xs:all</span>&gt;</span>
-         <span class="hljs-tag">&lt;<span class="hljs-title">xs:element</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">&quot;deployment-types&quot;</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">&quot;deployment-typesType&quot;</span>/&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-title">xs:all</span>&gt;</span>
-   <span class="hljs-tag">&lt;/<span class="hljs-title">xs:complexType</span>&gt;</span>
-   <span class="hljs-tag">&lt;<span class="hljs-title">xs:complexType</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">&quot;deployment-typesType&quot;</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">xs:choice</span> <span class="hljs-attribute">minOccurs</span>=<span class="hljs-value">&quot;0&quot;</span> <span class="hljs-attribute">maxOccurs</span>=<span class="hljs-value">&quot;unbounded&quot;</span>&gt;</span>
-         <span class="hljs-tag">&lt;<span class="hljs-title">xs:element</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">&quot;deployment-type&quot;</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">&quot;deployment-typeType&quot;</span>/&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-title">xs:choice</span>&gt;</span>
-   <span class="hljs-tag">&lt;/<span class="hljs-title">xs:complexType</span>&gt;</span>
-   <span class="hljs-tag">&lt;<span class="hljs-title">xs:complexType</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">&quot;deployment-typeType&quot;</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">xs:attribute</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">&quot;suffix&quot;</span> <span class="hljs-attribute">use</span>=<span class="hljs-value">&quot;required&quot;</span>/&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">xs:attribute</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">&quot;tick&quot;</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">&quot;xs:long&quot;</span> <span class="hljs-attribute">use</span>=<span class="hljs-value">&quot;optional&quot;</span> <span class="hljs-attribute">default</span>=<span class="hljs-value">&quot;10000&quot;</span>/&gt;</span>
-   <span class="hljs-tag">&lt;/<span class="hljs-title">xs:complexType</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-title">xs:schema</span>&gt;</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>&#x5982;&#x4E0A;&#x8FF0; schema:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>xmlns</strong> &#x548C; <strong>targetNamespace</strong> &#x7684;&#x503C;&#x8BBE;&#x5B9A;&#x4E3A; <strong>urn:com.acme.corp.tracker:1.0</strong></p>
-</li>
-<li>
-<p>&#x65B0;&#x6DFB;&#x52A0;&#x7684; subsystem &#x53EA;&#x6709;&#x4E00;&#x4E2A; <strong>deployment-types</strong> &#x5143;&#x7D20;&#xFF0C;&#x4E00;&#x4E2A; <strong>deployment-types</strong> &#x53EF;&#x5305;&#x62EC;&#x591A;&#x4E2A; <strong>deployment-type</strong>&#xFF0C;&#x800C;&#x6BCF;&#x4E2A; <strong>deployment-type</strong> &#x6709;&#x4E24;&#x4E2A;&#x5C5E;&#x6027;&#xFF1A;<strong>suffix</strong> &#x548C; <strong>tick</strong></p>
-</li>
-</ol>
+<p>&#x57FA;&#x4E8E; WildFly &#x6A21;&#x5757;&#x5316;&#x7684;&#x67B6;&#x6784;&#xFF0C;<a href="../subsystem/acme-subsystem/index.html">&#x6269;&#x5C55; WildFly</a> &#x6F14;&#x793A;&#x4E86;&#x5F00;&#x53D1;&#x4E00;&#x4E2A; tracker subsystem&#xFF0C;&#x672C;&#x90E8;&#x5206;&#x57FA;&#x4E8E;&#x8BE5; subsystem&#xFF0C;&#x8BF4;&#x660E;&#x5982;&#x4F55;&#x6269;&#x5C55; WildFly Web Consle, &#x672C;&#x90E8;&#x5206;&#x5C06;&#x6F14;&#x793A;&#x5F00;&#x53D1;&#x4E00;&#x4E2A; acme-web-console&#xFF0C;&#x7528;&#x6765;&#x7BA1;&#x7406; tracker subsystem&#x3002;</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_model_structure">Model Structure</h2>
+<h2 id="__">&#x6CE8;&#x610F;&#x4E8B;&#x9879;</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>&#x6839;&#x636E;&#x4E0A;&#x9762;&#x521B;&#x5EFA; schema  &#x4E2D;&#x8BBE;&#x8BA1;&#x7684; schema, &#x5BF9;&#x5E94;&#x7684;&#x6A21;&#x578B;&#x7ED3;&#x6784;&#x5982;&#x4E0B;</p>
+<p>&#x5F00;&#x53D1;&#x8FC7;&#x7A0B;&#x4E2D;&#x53EF;&#x901A;&#x8FC7; mvn &#x8FDB;&#x884C;&#x5FEB;&#x901F;&#x6D4B;&#x8BD5;</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>mvn gwt:run</code></p>
+</li>
+<li>
+<p><code>mvn gwt:run|debug -Dgwt.superDevMode=false</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>&#x6267;&#x884C;&#x5982;&#x4E0A;&#x547D;&#x4EE4;&#x9700;&#x8981;&#x5728; <code>app</code> &#x76EE;&#x5F55;&#xFF0C;&#x4E14; WildFly &#x9700;&#x8981;&#x5904;&#x4E8E;&#x8FD0;&#x884C;&#x72B6;&#x6001;&#xFF0C;&#x4E14;&#x9700;&#x8981;&#x914D;&#x7F6E; allowed-origins &#x5982;&#x4E0B;:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-xml" data-lang="xml"><span class="hljs-tag">&lt;<span class="hljs-title">subsystem</span> <span class="hljs-attribute">xmlns</span>=<span class="hljs-value">&quot;urn:com.acme.corp.tracker:1.0&quot;</span>&gt;</span>
-   <span class="hljs-tag">&lt;<span class="hljs-title">deployment-types</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">deployment-type</span> <span class="hljs-attribute">suffix</span>=<span class="hljs-value">&quot;sar&quot;</span> <span class="hljs-attribute">tick</span>=<span class="hljs-value">&quot;10000&quot;</span>/&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">deployment-type</span> <span class="hljs-attribute">suffix</span>=<span class="hljs-value">&quot;war&quot;</span> <span class="hljs-attribute">tick</span>=<span class="hljs-value">&quot;10000&quot;</span>/&gt;</span>
-   <span class="hljs-tag">&lt;/<span class="hljs-title">deployment-types</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-title">subsystem</span>&gt;</span></code></pre>
+<pre class="highlight"><code class="language-xml" data-lang="xml">/core-service=management/management-interface=http-interface:list-add(name=allowed-origins,value=http://localhost:8888)
+reload</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>WildFly &#x4E2D;&#x4E0D;&#x540C;&#x7684; Subsystem &#x5BF9;&#x5E94;&#x4E0D;&#x540C;&#x7684; SubsystemParser&#xFF0C;XML &#x6587;&#x4EF6;&#x7684;&#x89E3;&#x6790;&#xFF08;&#x8BFB;/&#x5199;&#xFF09;&#x662F;&#x901A;&#x8FC7; <a href="http://ksoong.org/jboss/2015/04/05/staxmapper" target="_blank">JBoss staxmapper</a> &#x6765;&#x5B8C;&#x6210;&#x7684;&#xFF0C;&#x901A;&#x5E38; SubsystemParser &#x7684;&#x5B9E;&#x73B0;&#x5982;&#x4E0B;&#x6240;&#x793A;:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TrackerSubsystemParser</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">XMLStreamConstants</span>, <span class="hljs-title">XMLElementReader</span>&lt;<span class="hljs-title">List</span>&lt;<span class="hljs-title">ModelNode</span>&gt;&gt;, <span class="hljs-title">XMLElementWriter</span>&lt;<span class="hljs-title">SubsystemMarshallingContext</span>&gt; </span>{
-    <span class="hljs-annotation">@Override</span>
-    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">readElement</span><span class="hljs-params">(XMLExtendedStreamReader reader, List&lt;ModelNode&gt; list)</span> <span class="hljs-keyword">throws</span> XMLStreamException </span>{
-    }
-
-    <span class="hljs-annotation">@Override</span>
-    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">writeContent</span><span class="hljs-params">(<span class="hljs-keyword">final</span> XMLExtendedStreamWriter writer, <span class="hljs-keyword">final</span> SubsystemMarshallingContext context)</span> <span class="hljs-keyword">throws</span> XMLStreamException </span>{
-    }
-}</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>readElement() &#x8D1F;&#x8D23;&#x8BFB; subsystem xml&#xFF0C; writeContent&#xFF08;&#xFF09;&#x8D1F;&#x8D23;&#x5199; subsystem xml&#x3002;</p>
-</div>
-<div class="paragraph">
-<p>&#x8BE6;&#x7EC6;&#x5173;&#x4E8E; XML &#x89E3;&#x6790;&#x7684;&#x4EE3;&#x7801;&#x53C2;&#x7167; <a href="acme-subsystem/src/main/java/com/acme/corp/tracker/extension/TrackerSubsystemParser.java">TrackerSubsystemParser</a>.</p>
+<div class="sect1">
+<h2 id="___2">&#x5E2E;&#x52A9;&#x6587;&#x6863;</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://hal.gitbooks.io/dev/content/building-blocks/index.html" target="_blank">HAL &#x6587;&#x6863;</a></p>
+</li>
+<li>
+<p><a href="http://hpehl.info/extending-hal-management-console.html" target="_blank">&#x5982;&#x4F55;&#x6269;&#x5C55; HAL Management Console</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -418,10 +379,10 @@
         </div>
 
         
-        <a href="../subsystem/extending-wildfly-template.html" class="navigation navigation-prev " aria-label="Previous page: 创建初始工程"><i class="fa fa-angle-left"></i></a>
+        <a href="../subsystem/extending-wildfly-test.html" class="navigation navigation-prev " aria-label="Previous page: 安装测试"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="../subsystem/extending-wildfly-extension.html" class="navigation navigation-next " aria-label="Next page: Extension 实现"><i class="fa fa-angle-right"></i></a>
+        <a href="../acme-web-console/wildfly-console-create-gui.html" class="navigation navigation-next " aria-label="Next page: 创建初始工程"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>
