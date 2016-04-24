@@ -16,3 +16,5 @@ target
 /.idea
 
 _book
+war
+gwt-unitCache
