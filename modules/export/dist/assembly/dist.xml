@@ -1,0 +1,45 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+
+    <id>dist</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    
+    <includeBaseDirectory>true</includeBaseDirectory>
+
+    <baseDirectory>modules-export</baseDirectory>
+    
+    <fileSets>
+        <fileSet>
+            <directory>${project.basedir}/kits</directory>
+            <outputDirectory>/</outputDirectory>
+            <fileMode>755</fileMode>
+            <filtered>true</filtered>
+        </fileSet>
+    </fileSets> 
+    
+    <files>
+        <file>
+            <source>${project.basedir}/../A/target/A.jar</source>
+            <outputDirectory>modules/system/layers/base/A/main</outputDirectory>
+        </file>
+        <file>
+            <source>${project.basedir}/../B/target/B.jar</source>
+            <outputDirectory>modules/system/layers/base/B/main</outputDirectory>
+        </file>
+        <file>
+            <source>${project.basedir}/../C/target/C.jar</source>
+            <outputDirectory>modules/system/layers/base/C/main</outputDirectory>
+        </file>
+    </files>
+    
+    <dependencySets>
+        <dependencySet>
+            <includes>
+                <include>org.jboss.modules:jboss-modules:jar</include>
+            </includes>
+        </dependencySet>      
+    </dependencySets>
+</assembly>

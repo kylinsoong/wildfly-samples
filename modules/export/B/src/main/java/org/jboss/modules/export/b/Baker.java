@@ -4,17 +4,16 @@ import org.jboss.modules.export.c.Cast;
 
 public class Baker {
 
-	public void baker() {
-		new Cast().cast();
-		loadclass("B");
+	public Object baker() {
+	    
+	    System.out.println(" -> B");
+	    
+	    // depend on C
+	    new Cast().cast();
+	    
+	    System.out.println(this.getClass().getClassLoader());
+		System.out.println("B -> \n");
+		return this;
 	}
 	
-	private void loadclass(String flag) {
-		try {
-			Class cls = Class.forName("org.jboss.modules.export.c.Cast").newInstance().getClass();
-			System.out.println(flag + " -> " + cls);
-		} catch (Exception e) {
-			System.out.println(flag + " Error " + e.getMessage());
-		}
-	}
 }
