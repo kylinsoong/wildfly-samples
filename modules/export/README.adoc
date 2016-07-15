@@ -1,0 +1,153 @@
+
+= 概述
+:toc: manual
+:toc-placement: preamble
+
+JBoss Modules module.xml 中dependencies有export="true"配置，如下：
+
+[source,xml]
+----
+<dependencies>  
+    <module name="C" export="true" />  
+</dependencies>  
+----
+
+本文通过一个示例来验证 export="true" 的作用。
+
+== 示例描述
+ 
+有三个module：A，B，C 关系如下图：
+
+image:img/jboss_module_class_load.png[module 依赖关系]
+
+1. A 依赖于 B
+2. B 依赖于 C
+3. B 中 dependencies 定义 export
+4. C 中定义了类 `org.jboss.modules.export.c.Cast`, 在 A 中尝试加载 `org.jboss.modules.export.c.Cast`
+
+== 下载编译
+
+[source,java]
+----
+$ git clone git@github.com:kylinsoong/wildfly-samples.git
+$ cd wildfly-samples/modules/export/
+$ mvn clean install
+----
+
+编译完成后生成 `modules-export-dist.zip`，位于 dist/target/ 目录下, 解压 zip 包，
+
+[source,java]
+----
+$ cd dist/target/
+$ unzip modules-export-dist.zip 
+----
+
+目录结构如下
+
+image:img/modules-export-example.png[module export 目录结构]
+
+* jboss-modules-1.5.2.Final.jar
+
+JBoss Modules 类加载模型不依赖任何第三方jar。
+
+* A - module.xml
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.1" name="A">
+
+        <main-class name="org.jboss.modules.export.a.Afirm" />
+
+        <resources>
+                <resource-root path="A.jar" />
+        </resources>
+
+        <dependencies>
+                <module name="B" />
+        </dependencies>
+</module>
+----
+
+A.jar 中定义了 java 类 link:A/src/main/java/org/jboss/modules/export/a/Afirm.java[Afirm.java], 且定义了一个 dependency module B. 
+
+* B - module.xml
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.1" name="B">
+
+        <resources>
+                <resource-root path="B.jar" />
+        </resources>
+
+        <dependencies>
+                <module name="C" export="true" />
+        </dependencies>
+</module>
+----
+
+B.jar 中定义了 java 类 link:B/src/main/java/org/jboss/modules/export/b/Baker.java[Baker.java], 且定义了一个 dependency module C, 且 **export="true"**。
+
+* C - module.xml
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.1" name="C">
+
+        <resources>
+                <resource-root path="C.jar" />
+        </resources>
+
+        <dependencies>
+        </dependencies>
+</module>
+----
+
+C.jar 中定义了 java 类 link:B/src/main/java/org/jboss/modules/export/c/Cast.java[Cast.java]
+
+* run.sh
+
+run.sh 内容如下:
+
+[source,java]
+----
+java -jar jboss-modules-1.5.2.Final.jar -mp modules A
+----
+
+== 运行示例
+
+[source,java]
+----
+$ ./run.sh
+----
+
+运行输出结果: `A load C class org.jboss.modules.export.c.Cast success`
+
+修改 modules/system/layers/base/B/main/module.xml，将 export 修改为 false,
+
+[source,java]
+----
+<module name="C" export="false" />
+----
+
+再次运行示例，抛出错误如下:
+
+[source,java]
+----
+Exception in thread "main" java.lang.ClassNotFoundException: org.jboss.modules.export.c.Cast from [Module "A:main" from local module loader @3caeaf62 (finder: local module finder @e6ea0c6 (roots: /home/kylin/src/wildfly-samples/modules/export/dist/target/modules-export/modules,/home/kylin/src/wildfly-samples/modules/export/dist/target/modules-export/modules/system/layers/base))]
+	at org.jboss.modules.ModuleClassLoader.findClass(ModuleClassLoader.java:198)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClassUnchecked(ConcurrentClassLoader.java:363)
+	at org.jboss.modules.ConcurrentClassLoader.performLoadClass(ConcurrentClassLoader.java:351)
+	at org.jboss.modules.ConcurrentClassLoader.loadClass(ConcurrentClassLoader.java:93)
+	at org.jboss.modules.export.a.Afirm.afirm(Afirm.java:14)
+	at org.jboss.modules.export.a.Afirm.main(Afirm.java:23)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:483)
+	at org.jboss.modules.Module.run(Module.java:330)
+	at org.jboss.modules.Main.main(Main.java:505)
+----

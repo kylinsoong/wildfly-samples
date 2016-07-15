@@ -72,3 +72,76 @@ JBoss Modules 与 OSGI 相比：
 * JBoss Modules更简单。一个Jar文件是你所有需要去运行模块化的应用
 * 它更为小巧：没有osgi的sevice层，或者其他OSGI提供的更高层次的功能。它只做一件事情，并且要把它做好
 * 同时，它的功能又十分强劲。它可以成为OSGI实现的可以使用的类加载框架
+
+== Hello World 示例
+
+下载编译：
+
+[source,java]
+----
+$ git clone git@github.com:kylinsoong/wildfly-samples.git
+$ cd wildfly-samples/modules/helloworld/
+$ mvn clean install
+----
+
+编译完成后生成 `jboss-modules-helloworld-dist.zip`，解压，
+
+[source,java]
+----
+$ unzip jboss-modules-helloworld-dist.zip
+$ cd jboss-modules-helloworld/
+----
+
+目录结构如下图
+
+image:img/modules-helloworld-example.png[目录结构]
+
+运行 Hello World 示例
+
+[source,java]
+----
+$ java -jar jboss-modules-1.5.2.Final.jar -mp modules/ org.jboss.modules.examples
+Hello World
+----
+
+* jboss-modules-1.5.2.Final.jar
+
+JBoss Modules 类加载模型不依赖任何第三方jar。
+
+* jboss-modules-helloworld.jar
+
+包含一个输出 Hello World 的 Main 方法，如下
+
+[source,java]
+----
+package org.jboss.modules.examples;
+
+public class Main {
+	
+	public static void main(String[] args) {
+		
+		System.out.println("Hello World");	
+	}
+}
+----
+
+* module.xml
+
+定义了 JBoss Modules 的 XML 定义，内容如下
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.1" name="org.jboss.modules.examples">
+
+    <main-class name="org.jboss.modules.examples.Main"/>
+
+        <resources>
+        <resource-root path="jboss-modules-helloworld.jar"/>
+    </resources>
+
+    <dependencies>
+    </dependencies>
+</module>
+----
+

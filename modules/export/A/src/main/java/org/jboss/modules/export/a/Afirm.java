@@ -4,17 +4,22 @@ import org.jboss.modules.export.b.Baker;
 
 public class Afirm {
 	
-	public void afirm() {
+    @SuppressWarnings({"rawtypes" })
+	public void afirm() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	    
+	    System.out.println(" -> A");
+	    
+	    //depend on B
 		new Baker().baker();
-		loadclass("A");
+		Class clas = this.getClass().getClassLoader().loadClass("org.jboss.modules.export.c.Cast");
+//		Class.forName("org.jboss.modules.export.c.Cast").newInstance().getClass();
+		System.out.println("A load C " + clas + " success");
+		System.out.println(this.getClass().getClassLoader());
+		System.out.println("A -> ");
 	}
 
-	private void loadclass(String flag) {
-		try {
-			Class cls = Class.forName("org.jboss.modules.export.c.Cast").newInstance().getClass();
-			System.out.println(flag + " -> " + cls);
-		} catch (Exception e) {
-			System.out.println(flag + " Error " + e.getMessage());
-		}
+	
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	    new Afirm().afirm();
 	}
 }

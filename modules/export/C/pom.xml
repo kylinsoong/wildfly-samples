@@ -1,59 +1,19 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+	    <groupId>org.jboss.modules</groupId>
+	    <artifactId>modules-export-parent</artifactId>
+	    <version>1.0</version>
+	</parent>
 	<modelVersion>4.0.0</modelVersion>
-
-	<groupId>org.jboss.modules</groupId>
 	<artifactId>modules-export-C</artifactId>
-	<version>1.0</version>
 	<packaging>jar</packaging>
-	<name>Service Module Loader export</name>
-	<description>Service Module Loader export</description>
-
-	<url>https://github.com/kylinsoong</url>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<compiler.plugin.version>2.3.1</compiler.plugin.version>
-		<exec.plugin.version>1.2.1</exec.plugin.version>
-
-		<maven.compiler.target>1.6</maven.compiler.target>
-		<maven.compiler.source>1.6</maven.compiler.source>
-	</properties>
-
-	<dependencies>
-
-	</dependencies>
-
+	<name>Service Module Loader export C</name>
+	<description>Service Module Loader export C</description>
 
 	<build>
 		<finalName>C</finalName>
-		<plugins>
-			<!-- Enforce Java 1.6 -->
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${compiler.plugin.version}</version>
-				<configuration>
-					<source>${maven.compiler.source}</source>
-					<target>${maven.compiler.target}</target>
-				</configuration>
-			</plugin>
-			<!-- Make jar achieve executable -->
-			<plugin>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>org.jboss.modules.quickstart.Main</mainClass>
-						</manifest>
-						<manifestEntries>
-							<Jar-Version>${project.version}</Jar-Version>
-							<Jar-Name>${project.artifactId}</Jar-Name>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 
 </project>

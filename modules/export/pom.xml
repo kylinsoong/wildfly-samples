@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.jboss.modules</groupId>
-    <artifactId>modules-export</artifactId>
+    <artifactId>modules-export-parent</artifactId>
     <version>1.0</version>
     <name>Service Module Loader export Parent</name>
     <description>Service Module Loader export Parent</description>
@@ -14,14 +14,59 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <compiler.plugin.version>2.3.1</compiler.plugin.version>
+		<version.assembly.plugin>2.4</version.assembly.plugin>
+		
+		<version.jboss-modules>1.5.2.Final</version.jboss-modules>
+
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
     </properties>
 
     <modules>
         <module>A</module>
         <module>B</module>
-	<module>C</module>
-	<module>dist</module>
+	    <module>C</module>
+	    <module>dist</module>
     </modules>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+            <groupId>org.jboss.modules</groupId>
+            <artifactId>modules-export-A</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.modules</groupId>
+            <artifactId>modules-export-B</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.modules</groupId>
+            <artifactId>modules-export-C</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+		<dependency>
+            <groupId>org.jboss.modules</groupId>
+            <artifactId>jboss-modules</artifactId>
+            <version>${version.jboss-modules}</version>
+        </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+    <build>
+        <plugins>
+            <plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${compiler.plugin.version}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+        </plugins>
+    </build>
 
 </project>
 
