@@ -18,7 +18,7 @@ JBoss Modules module.xml 中dependencies有export="true"配置，如下：
  
 有三个module：A，B，C 关系如下图：
 
-image:img/jboss_module_class_load.png[module 依赖关系]
+image:img/jboss_modules_export.png[module 依赖关系]
 
 1. A 依赖于 B
 2. B 依赖于 C

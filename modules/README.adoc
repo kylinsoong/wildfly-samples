@@ -17,7 +17,9 @@ Java 一直使用 扁平 classpat h的方式来加载所有 class 和 jar 等资
 * 通过使用 module.xml 描述文件定义模块，在这个描述文件中要包含模块的名称，都包含哪些资源（一般一个模块对应一个jar文件，也可以包含多个jar或其它资源），这些资源的版本号，以及这个模块都依赖于哪些模块。
 * 每一个模块都可以实时地加载或卸掉。这样做有很多好处：首先是资源方面的节省，只有需要的模块才被加载（这一点是通过module.xml中定义的模块之间的依赖关系来实现的），这一方式同时来带的好处是：整个系统的加载速度大大提升了
 
-== JBoss Modules 定义 
+== JBoss Modules 定义
+
+image:img/jboss_module_class_load.png[JBoss modules] 
 
 JBoss Modules 是一个适用于Java的模块化(非分层)类加载以及执行环境的实现。换句话说，不同于Java传统的使用单个类加载器载入classpath中的所有JAR文件，每一个库(library,可以理解为完成某一个功能的一系列jar的组合)成为一个module，该module仅链接其依赖的其他module，而不再依赖其它任何资源。JBoss Module实现了一个线程安全的，快速的，高并发的类加载器委派(delegating)模型，再加上一个可扩展的模块解析引擎，形成一个独特的，简单的，强大的应用程序执行和分布系统。
 
