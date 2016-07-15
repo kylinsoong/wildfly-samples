@@ -1,4 +1,5 @@
 
+. link:modules/README.adoc[JBoss Modules]
 . link:subsystem/acme-subsystem/README.adoc[扩展 WildFly]
 .. link:subsystem/extending-wildfly-template.adoc[创建初始工程]
 .. link:subsystem/extending-wildfly-schema.adoc[创建 schema 模型]

@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <groupId>org.jboss.modules</groupId>
+   <artifactId>jboss-modules-helloworld</artifactId>
+   <version>1.0</version>
+   <packaging>jar</packaging>
+   <name>JBoss Modules Hello World</name>
+   <description>JBoss Modules Hello World</description>
+
+   <url>https://github.com/kylinsoong</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<version.jboss-modules>1.5.2.Final</version.jboss-modules>
+
+		<compiler.plugin.version>2.3.1</compiler.plugin.version>
+		<exec.plugin.version>1.2.1</exec.plugin.version>
+		<war.plugin.version>2.1.1</war.plugin.version>
+		<version.assembly.plugin>2.4</version.assembly.plugin>
+
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+	</properties>
+
+	<dependencies>
+		<dependency>
+            <groupId>org.jboss.modules</groupId>
+            <artifactId>jboss-modules</artifactId>
+            <version>${version.jboss-modules}</version>
+        </dependency>
+	</dependencies>
+
+
+	<build>
+		<finalName>${artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${compiler.plugin.version}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>${version.assembly.plugin}</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>assembly/dist.xml</descriptor>
+                    </descriptors>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>create-assemblies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+		</plugins>
+	</build>
+
+</project>

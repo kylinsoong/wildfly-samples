@@ -31,8 +31,7 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 
 public class DeploymentPresenter extends Presenter<DeploymentPresenter.MyView, DeploymentPresenter.MyProxy>{
-    
-    
+      
     @ProxyCodeSplit
     @NameToken("tracker-deployments")
     @RuntimeExtension(name="Tracker", key="tracker")

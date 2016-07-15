@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.1" name="org.jboss.modules.examples">
+
+    <main-class name="org.jboss.modules.examples.Main"/>
+
+	<resources>
+        <resource-root path="jboss-modules-helloworld.jar"/>
+    </resources>
+
+    <dependencies>
+    </dependencies>
+</module>
