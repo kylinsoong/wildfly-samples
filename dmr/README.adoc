@@ -1,0 +1,228 @@
+
+= 概述
+:toc: manual
+:toc-placement: preamble
+
+JBoss DMR 是 JBoss/WildFly/WildFly-swarm 底层用于数据交换传输的数据模型，本文主要从概念和示例两个方向去解释说明 JBoss DMR.
+
+== JBoss DMR
+
+JBoss DMR(Dynamic Model Representation) is a siample management API of JBoss 7/WildFly. It’s key API is ModelNode which can be thought as a datastructure of all management activities. It has 2 main characteristics:
+
+* Dynamic Structure
+* JSON-like Format(can output JSON)
+
+The following code snippet show how to form a **ModelNode**:
+
+[source,java]
+----
+ModelNode node = new ModelNode();
+node.get("description").set("A managable resource");
+node.get("type").set(ModelType.OBJECT);
+node.get("tail-comment-allowed").set(false);
+node.get("attributes").get("foo").set("some description of foo");
+node.get("attributes").get("bar").set("some description of bar");
+node.get("attributes").get("list").add("value1");
+node.get("attributes").get("list").add("value2");
+node.get("attributes").get("list").add("value3");
+node.get("value-type").get("size").set(ModelType.INT);
+node.get("value-type").get("color").set(ModelType.STRING);
+node.get("big-decimal-value").set(BigDecimal.valueOf(10.0));
+node.get("big-integer-value").set(BigInteger.TEN);
+node.get("bytes-value").set(new byte[] { (byte) 0, (byte) 55 });
+node.get("double-value").set(Double.valueOf("55"));
+node.get("max-double-value").set(Double.MAX_VALUE);
+node.get("int-value").set(Integer.valueOf("12"));
+node.get("max-int-value").set(Integer.MAX_VALUE);
+node.get("long-value").set(Long.valueOf("14"));
+node.get("max-long-value").set(Long.MAX_VALUE);
+node.get("property-value").set("property", ModelType.PROPERTY);
+node.get("expression-value").set(new ValueExpression("$expression"));
+node.get("true-value").set(true);
+node.get("false-value").set(false);
+        
+System.out.println(node);
+----
+
+Run the code will show it’s JSON-like Format:
+
+[source,java]
+----
+{
+    "description" => "A managable resource",
+    "type" => OBJECT,
+    "tail-comment-allowed" => false,
+    "attributes" => {
+        "foo" => "some description of foo",
+        "bar" => "some description of bar",
+        "list" => [
+            "value1",
+            "value2",
+            "value3"
+        ]
+    },
+    "value-type" => {
+        "size" => INT,
+        "color" => STRING
+    },
+    "big-decimal-value" => big decimal 10.0,
+    "big-integer-value" => big integer 10,
+    "bytes-value" => bytes {
+        0x00, 0x37
+    },
+    "double-value" => 55.0,
+    "max-double-value" => 1.7976931348623157E308,
+    "int-value" => 12,
+    "max-int-value" => 2147483647,
+    "long-value" => 14L,
+    "max-long-value" => 9223372036854775807L,
+    "property-value" => ("property" => PROPERTY),
+    "expression-value" => expression "$expression",
+    "true-value" => true,
+    "false-value" => false
+}
+----
+
+In WildFly, all the management actions will be translated into the management commands that are encapsulated in the DMR format. For example, if we deploy `cluster-demo.war` to WildFly, it will send the following JSON-like DMR commands to the deployment module:
+
+[source,java]
+----
+[{
+    "operation" =>"composite",
+    "address" => [],
+    "steps" => [
+    {
+	"operation" =>"add",
+	"address" => [("deployment" =>"cluster-demo.war")],
+	"content" => [{
+	    "path" =>"deployments/cluster-demo.war",
+	    "relative-to" =>"jboss.server.base.dir",
+	}],
+    },
+    {
+	"operation" =>"deploy",
+	"address" => [("deployment" =>"cluster-demo1.war")]
+    }
+}]
+----
+
+=== Key Method of ModelNode
+
+[source,java]
+----
+String toString() 
+String toJSONString(false);
+writeString(writer, false);
+ModelNode formatAsJSON(writer, 0, true);
+writeJSONString(writer, false);
+ModelNode fromBase64(in);
+long asLong()
+long asLong(final long defVal)
+int asInt()
+int asInt(final int defVal)
+boolean asBoolean()
+boolean asBoolean(final boolean defVal)
+String asString()
+double asDouble()
+double asDouble(final double defVal)
+ModelType asType()
+----
+
+== Examples
+
+=== Example.1 - Form and Operate matrix Data
+
+A matrix data, like a SQL Query, assuming a query have 2 columns and 2 rows.
+
+[source,java]
+----
+final ModelNode outcome = new ModelNode();
+outcome.get("outcome").set("success");
+ModelNode resultsNode = new ModelNode();
+ModelNode row1 = new ModelNode();
+row1.get("column_1").set("value_11");
+row1.get("column_2").set("value_12");
+resultsNode.add(row1);
+ModelNode row2 = new ModelNode();
+row2.get("column_1").set("value_21");
+row2.get("column_2").set("value_22");
+resultsNode.add(row2);
+outcome.get("result").set(resultsNode);
+  
+System.out.println(outcome);
+
+List<ModelNode> list = outcome.get("result").asList();
+System.out.println("column_1  column_2");
+for(ModelNode rowNode : list) {
+    System.out.println(rowNode.get("column_1").asString() + "  " + rowNode.get("column_2").asString());
+}
+----
+
+Run above code the output like
+
+[source,java]
+---- 
+{
+    "outcome" => "success",
+    "result" => [
+        {
+            "column_1" => "value_11",
+            "column_2" => "value_12"
+        },
+        {
+            "column_1" => "value_21",
+            "column_2" => "value_22"
+        }
+    ]
+}
+column_1  column_2
+value_11  value_12
+value_21  value_22
+----
+
+=== Example.2 - WildFly interface
+
+[source,java]
+----
+ModelNode interface = new ModelNode();
+interface.get("interface").set("public");
+ModelNode node = new ModelNode();
+node.get(OP).set(ADD);
+node.get(OP_ADDR).set("interface", interface);
+node.get(INET_ADDRESS).set(new ValueExpression("${swarm.bind.address:0.0.0.0}"));
+----
+
+The WildFly interface looks
+
+[source,java]
+----
+{
+    "operation" => "add",
+    "address" => ("interface" => "public"),
+    "inet-address" => expression "${swarm.bind.address:0.0.0.0}"
+}
+----
+
+=== Example.3 - WildFly Socket Binding Group
+
+[source,java]
+----
+ModelNode node = new ModelNode();
+PathAddress address = PathAddress.pathAddress("socket-binding-group", "default-sockets");
+node.get(OP).set(ADD);
+node.get(OP_ADDR).set(address.toModelNode());
+node.get(DEFAULT_INTERFACE).set("public");
+node.get(PORT_OFFSET).set(new ValueExpression("${swarm.port.offset:0}"));
+----
+
+The WildFly Socket Binding Group looks
+
+[source,java]
+----
+{
+    "operation" => "add",
+    "address" => [("socket-binding-group" => "default-sockets")],
+    "default-interface" => "public",
+    "port-offset" => expression "${swarm.port.offset:0}"
+}
+----
