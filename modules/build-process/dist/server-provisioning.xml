@@ -1,0 +1,6 @@
+<server-provisioning xmlns="urn:wildfly:server-provisioning:1.1" extract-schemas="true" copy-module-artifacts="true" extract-schemas-groups="org.wildfly.core">
+    <feature-packs>
+        <feature-pack groupId="org.wildfly.build.example" artifactId="build-example-feature-pack" version="${project.version}" />
+    </feature-packs>
+</server-provisioning>
+

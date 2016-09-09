@@ -15,7 +15,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
-		<version.jboss-modules>1.5.2.Final</version.jboss-modules>
+		<version.jboss-modules>1.5.1.Final</version.jboss-modules>
 
 		<compiler.plugin.version>2.3.1</compiler.plugin.version>
 		<exec.plugin.version>1.2.1</exec.plugin.version>
@@ -31,6 +31,11 @@
             <groupId>org.jboss.modules</groupId>
             <artifactId>jboss-modules</artifactId>
             <version>${version.jboss-modules}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>2016.7-SNAPSHOT</version>
         </dependency>
 	</dependencies>
 

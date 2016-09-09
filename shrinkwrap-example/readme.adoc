@@ -1,0 +1,5 @@
+
+= shrinkwrap 示例
+:toc: manual
+:toc-placement: preamble
+

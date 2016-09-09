@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.1" name="org.jboss.modules.quickstart">
+
+    <main-class name="org.jboss.modules.quickstart.Main"/>
+
+	<resources>
+        <resource-root path="modules-quickstart.jar"/>
+    </resources>
+
+    <dependencies>
+    </dependencies>
+</module>

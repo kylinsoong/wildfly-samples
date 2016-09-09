@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <parent>
+	    <groupId>org.wildfly.build.example</groupId>
+	    <artifactId>build-example-parent</artifactId>
+	    <version>1.0.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+   <artifactId>build-example-feature-pack</artifactId>
+   <packaging>pom</packaging>
+   <name>WildFly Build Process Example feature pack</name>
+   <description>WildFly Build Process Example feature pack</description>
+
+	<dependencies>
+	    <dependency>
+            <groupId>org.wildfly.build.example</groupId>
+            <artifactId>build-example-A</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.build.example</groupId>
+            <artifactId>build-example-B</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.build.example</groupId>
+            <artifactId>build-example-C</artifactId>
+        </dependency>
+		<dependency>
+            <groupId>org.jboss.modules</groupId>
+            <artifactId>jboss-modules</artifactId>
+        </dependency>
+	</dependencies>
+
+
+	<build>
+		<finalName>${project.artifactId}-${project.version}</finalName>
+		<plugins>
+		  <plugin>
+                <groupId>org.wildfly.build</groupId>
+                <artifactId>wildfly-feature-pack-build-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>feature-pack-build</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <config-file>feature-pack-build.xml</config-file>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                  <execution>
+                    <id>assemble</id>
+                    <phase>package</phase>
+                    <goals>
+                      <goal>single</goal>
+                    </goals>
+                    <configuration>
+                      <descriptors>
+                        <descriptor>assembly.xml</descriptor>
+                      </descriptors>
+                      <recompressZippedFiles>true</recompressZippedFiles>
+                      <finalName>${project.artifactId}-${project.version}</finalName>
+                      <appendAssemblyId>false</appendAssemblyId>
+                      <outputDirectory>target/</outputDirectory>
+                      <workDirectory>target/assembly/work</workDirectory>
+                      <tarLongFileMode>gnu</tarLongFileMode>
+                    </configuration>
+                  </execution>
+                </executions>
+            </plugin>
+		</plugins>
+	</build>
+
+</project>

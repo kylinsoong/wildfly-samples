@@ -1,0 +1,10 @@
+<build xmlns="urn:wildfly:feature-pack-build:1.1">
+    <copy-artifacts>
+        <copy-artifact artifact="org.jboss.modules:jboss-modules" to-location="jboss-modules.jar"/>
+    </copy-artifacts>
+    <file-permissions>
+        <permission value="755">
+            <filter pattern="*.sh" include="true"/>
+        </permission>
+    </file-permissions>
+</build>
