@@ -1,13 +1,11 @@
 package org.jboss.modules.examples;
 
 import org.jboss.modules.Module;
-import org.jboss.modules.ModuleFinder;
 import org.jboss.modules.ModuleIdentifier;
 import org.jboss.modules.ModuleLoadException;
 import org.jboss.modules.ModuleLoader;
 import org.jboss.modules.log.ModuleLogger;
 import org.wildfly.swarm.bootstrap.modules.BootModuleLoader;
-import org.wildfly.swarm.bootstrap.modules.BootstrapClasspathModuleFinder;
 
 
 public class ModuleTest {
@@ -37,8 +35,7 @@ public class ModuleTest {
             }
 
             @Override
-            public void trace(String format, Object arg1, Object arg2,
-                    Object arg3) {
+            public void trace(String format, Object arg1, Object arg2, Object arg3) {
                 // TODO Auto-generated method stub
                 
             }
@@ -69,8 +66,7 @@ public class ModuleTest {
             }
 
             @Override
-            public void trace(Throwable t, String format, Object arg1,
-                    Object arg2, Object arg3) {
+            public void trace(Throwable t, String format, Object arg1, Object arg2, Object arg3) {
                 // TODO Auto-generated method stub
                 
             }
@@ -88,15 +84,13 @@ public class ModuleTest {
             }
 
             @Override
-            public void moduleDefined(ModuleIdentifier identifier,
-                    ModuleLoader moduleLoader) {
+            public void moduleDefined(ModuleIdentifier identifier, ModuleLoader moduleLoader) {
                 // TODO Auto-generated method stub
                 
             }
 
             @Override
-            public void classDefineFailed(Throwable throwable,
-                    String className, Module module) {
+            public void classDefineFailed(Throwable throwable, String className, Module module) {
                 // TODO Auto-generated method stub
                 
             }
@@ -126,16 +120,4 @@ public class ModuleTest {
 //        System.out.println(module);
     }
     
-    public static class MyModuleLoader extends ModuleLoader {
-        
-        public MyModuleLoader(){
-            super(new ModuleFinder[]{
-                    new BootstrapClasspathModuleFinder(),
-//                    new BootstrapModuleFinder()
-            });
-        }
-        
-    }
-    
-
 }
